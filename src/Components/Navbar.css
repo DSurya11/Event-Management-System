@@ -1,0 +1,41 @@
+.navbar{
+    background-color: white;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: fixed;
+}
+.navbar h2{
+    margin-left: 10px;
+}
+.nb-button {
+    margin-left: 67%;
+}
+.nb-button .btn{
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-right: 10px; 
+    margin-left: 10px;
+    margin-top: 23px;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    border: none;
+}
+.nb-button .btn:hover{
+    background-color: grey;
+    
+    
+}
+.profilepic{
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    margin-left: 30px;
+    position: fixed;
+    top: 2%;
+    right: 3%;
+    
+}
