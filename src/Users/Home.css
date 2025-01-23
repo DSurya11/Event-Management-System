@@ -1,0 +1,47 @@
+.maindiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    
+}
+
+.content {
+    height: auto;
+    width: 18%;
+    margin: 20px;
+    
+    border-radius: 18px;
+    
+    
+
+}
+
+.contenth1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 5%;
+}
+
+.contenttext {
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    line-height: 30px;
+    height: 30%;
+}
+
+.contentimg img {
+    width: 100%;
+
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+
+    
+}
