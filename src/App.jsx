@@ -1,6 +1,8 @@
 function App() {
   return (
-    <html></html>
+    <div className="App">
+      <h1 className="App-heading">Event Management System</h1>
+    </div>
   )
 }
 export default App;
