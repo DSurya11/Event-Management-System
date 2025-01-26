@@ -1,5 +1,7 @@
-.navbar{
-    background-color: #e8eddf;
+.navbar {
+    background-color: #E8EDDF;
+
+    color: lightseagreen;
     display: flex;
     top: 0;
     left: 0;
@@ -8,7 +10,10 @@
 }
 
 .navbar h2 {
+    margin: 20px;
     margin-left: 25px;
+    font: normal 30px 'Open Sans', cursive;
+    padding: 0;
 }
 
 .nb-button {
@@ -23,19 +28,19 @@
     padding-right: 10px;
     margin-left: 10px;
     margin-top: 23px;
-    background-color: white;
+    background-color: inherit;
     color: black;
     border-radius: 5px;
     border: none;
 }
 
 .nb-button .btn:hover {
-    background-color: grey;
 
+    color: lightseagreen;
 
 }
 
-.profilepic {
+.profilesvg {
     height: 40px;
     width: 40px;
     border-radius: 100%;
