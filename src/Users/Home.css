@@ -5,17 +5,16 @@
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
-    
+
 }
 
 .content {
     height: auto;
-    width: 18%;
+    width: 23%;
     margin: 20px;
-    
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     border-radius: 18px;
-    
-    
+    background-color: #FFF2C2;
 
 }
 
@@ -38,10 +37,10 @@
 .contentimg img {
     width: 100%;
 
-    aspect-ratio: 1/1;
+    aspect-ratio: 1/0.7;
     object-fit: cover;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 
-    
+
 }
