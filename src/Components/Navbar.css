@@ -1,5 +1,6 @@
 .navbar{
     background-color: #e8eddf;
+    color: lightseagreen;
     display: flex;
     top: 0;
     left: 0;
@@ -28,6 +29,7 @@
     border: none;
 }
 .nb-button .btn:hover{
+    color: lightseagreen;;
     cursor: pointer;
     
     

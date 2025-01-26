@@ -8,6 +8,7 @@ import Home from './Users/Home.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Navbar/>
+    <Home/>
     <Footer />
     
   </StrictMode>
