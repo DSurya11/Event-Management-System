@@ -4,12 +4,11 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color:black;
-  background-color:rgb(207, 219, 213);
+  color: black;
+  background-color: #CFDBD5;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-

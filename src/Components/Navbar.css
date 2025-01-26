@@ -1,5 +1,5 @@
-.navbar{
-    background-color: #e8eddf;
+.navbar {
+    background-color: #E8EDDF;
     display: flex;
     top: 0;
     left: 0;
@@ -34,7 +34,7 @@
 
 }
 
-.profilepic {
+.profilesvg {
     height: 40px;
     width: 40px;
     border-radius: 100%;
