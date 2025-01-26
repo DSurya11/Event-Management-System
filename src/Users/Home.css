@@ -1,11 +1,18 @@
-.maindiv {
+.home {
+    padding-top: 50px;
+    text-align: center;
+}
+.home p{
+    padding-bottom: 20px;
+}
+.event-cardholder {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
-
+    padding-bottom: 30px;
 }
 
 .content {
@@ -14,7 +21,7 @@
     margin: 20px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     border-radius: 18px;
-    background-color: #E8EDDF;
+    background-color: #e8eddf;
 
 }
 
