@@ -1,19 +1,25 @@
-.navbar{
-    background-color: #e8eddf;
+.navbar {
+    background-color: #E8EDDF;
+
     color: lightseagreen;
     display: flex;
     top: 0;
     left: 0;
     width: 100%;
     position: fixed;
+    z-index: 10;
 }
 
 .navbar h2 {
+    margin: 20px;
     margin-left: 25px;
+    font: normal 30px 'Open Sans', cursive;
+    padding: 0;
 }
 
 .nb-button {
-    margin-left: 67%;
+    position: absolute;
+    right: 100px;
 }
 
 .nb-button .btn {
@@ -23,7 +29,7 @@
     padding-right: 10px;
     margin-left: 10px;
     margin-top: 23px;
-    background-color:inherit;
+    background-color: inherit;
     color: black;
     border-radius: 5px;
     border: none;
@@ -35,13 +41,13 @@
     
 }
 
-.profilepic {
+.profilesvg {
     height: 40px;
     width: 40px;
     border-radius: 100%;
     margin-left: 40px;
     position: fixed;
     top: 2.5%;
-    right: 3%;
+    right: 2.5%;
 
 }

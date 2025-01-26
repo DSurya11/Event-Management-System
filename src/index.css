@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color:black;
-  background-color:rgb(207, 219, 213);
+  color: black;
+  background-color: #CFDBD5;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,5 +14,12 @@
 }
 .Main{
   margin-top: 80px ;
+}
+html{
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+.html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 

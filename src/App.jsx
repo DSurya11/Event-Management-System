@@ -2,7 +2,7 @@ import Regevent from './Users/Regevent.jsx'
 function App() {
     return (
         <div className='Main'>
-            <Regevent></Regevent>
+            <Home/>
         </div>
     )
 }

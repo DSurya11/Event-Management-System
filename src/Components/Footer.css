@@ -5,7 +5,7 @@
 }
 
 .footer-distributed{
-	background: #e8eddf;
+	background: #E8EDDF;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
 	box-sizing: border-box;
 	width: 100%;
@@ -17,7 +17,7 @@
 	margin: 0;
     left: -7px;
     bottom: -7.5px;
-	overflow-x: hidden;
+	overflow-x:unset;
 }
 
 .footer-distributed .footer-left,
