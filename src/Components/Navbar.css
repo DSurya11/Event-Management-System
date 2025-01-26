@@ -12,7 +12,8 @@
 }
 
 .nb-button {
-    margin-left: 67%;
+    position: absolute;
+    right: 120px;
 }
 
 .nb-button .btn {
