@@ -2,9 +2,11 @@
     padding-top: 40px;
     text-align: center;
 }
-.home p{
+
+.home p {
     padding-bottom: 20px;
 }
+
 .event-cardholder {
     display: flex;
     justify-content: center;
@@ -22,7 +24,13 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
     border-radius: 18px;
     background-color: #e8eddf;
+    padding-bottom: 15px;
 
+}
+
+.content:hover {
+    transform: scale(1.039);
+    transition-duration: 0.2s;
 }
 
 .contenth1 {
@@ -38,7 +46,7 @@
     padding-bottom: 20px;
     text-align: center;
     line-height: 30px;
-    height: 30%;
+    height: 25%;
 }
 
 .contentimg img {
@@ -50,4 +58,16 @@
     border-top-right-radius: 12px;
 
 
+}
+
+.contenta {
+    text-decoration: none;
+
+
+    color: lightseagreen;
+}
+
+.asvg {
+    margin-bottom: -6px;
+    
 }
