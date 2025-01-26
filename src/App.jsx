@@ -1,6 +1,9 @@
+import Home from './Users/Home.jsx'
 function App() {
-  return (
-    <html></html>
-  )
+    return (
+        <div className='Main'>
+            <Home></Home>
+        </div>
+    )
 }
 export default App;
