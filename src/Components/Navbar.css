@@ -18,7 +18,7 @@
 
 .nb-button {
     position: absolute;
-    right: 120px;
+    right: 100px;
 }
 
 .nb-button .btn {
@@ -47,6 +47,6 @@
     margin-left: 30px;
     position: fixed;
     top: 2.5%;
-    right: 3%;
+    right: 2.5%;
 
 }
