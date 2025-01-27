@@ -25,12 +25,15 @@
     border-radius: 18px;
     background-color: #e8eddf;
     padding-bottom: 15px;
+    transition-duration: 0.2s;
 
 }
 
 .content:hover {
     transform: scale(1.039);
     transition-duration: 0.2s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
 }
 
 .contenth1 {
@@ -70,4 +73,50 @@
 .asvg {
     margin-bottom: -6px;
     
+}
+.cta-button {
+    background-color: lightseagreen;
+    width: 220px;
+    height: 50px;
+    border: 0;
+    border-radius: 6px;
+    font-size: larger;
+    justify-self: end;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
+    transition-duration: 0.2s;
+    
+}
+.cta-button:hover {
+    transform: scale(1.039);
+    transition-duration: 0.2s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+}
+.quick-signup p{
+    width: 70%;
+    margin-left: 15%;
+}
+.quick-signup input{
+    width: 25%;
+    background-color: #E8EDDF;
+    height: 40px;
+    color: #333533;
+    outline: lightseagreen;
+    border: none;
+    border-radius: 4px;
+    margin-right: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
+    padding-left: 14px;
+    font-size: medium;
+}
+.quick-signup button{
+    margin-left: 5px;
+    height: 40px;
+    width: 90px;
+    font-size: medium;
+    background-color: lightseagreen;
+    border: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
+    border-radius: 3px;
+    margin-bottom: 100px;
 }
