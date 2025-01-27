@@ -1,5 +1,4 @@
-import Browse from './Users/Browse.jsx'
-import Home from './Users/Home.jsx'
+import Regevent from './Users/Regevent.jsx'
 function App() {
     return (
         <div className='Main'>
