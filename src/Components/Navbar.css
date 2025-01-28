@@ -1,0 +1,53 @@
+.navbar {
+    background-color: #E8EDDF;
+
+    color: lightseagreen;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 10;
+}
+
+.navbar h2 {
+    margin: 20px;
+    margin-left: 25px;
+    font: normal 30px 'Open Sans', cursive;
+    padding: 0;
+}
+
+.nb-button {
+    position: absolute;
+    right: 100px;
+}
+
+.nb-button .btn {
+    padding-left: 10px;
+    padding-top: 6.5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    margin-left: 10px;
+    margin-top: 23px;
+    background-color: inherit;
+    color: black;
+    border-radius: 5px;
+    border: none;
+}
+.nb-button .btn:hover{
+    color: lightseagreen;;
+    cursor: pointer;
+    
+    
+}
+
+.profilesvg {
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    margin-left: 40px;
+    position: fixed;
+    top: 2.5%;
+    right: 2.5%;
+
+}

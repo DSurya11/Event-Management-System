@@ -1,0 +1,94 @@
+.regevent .banner{
+    margin-top: 20px;
+    width:90%;
+    aspect-ratio: 3/1;
+    object-fit: cover;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.event{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.event .event_info .event_details{
+    display: flex;
+    justify-content: space-between;
+}
+.event_reg{
+    display: flex;
+    justify-content: space-between;
+}
+.Register{
+    padding-top:1%;
+    padding-bottom: 1%;
+    padding-right: 2.5%;
+    padding-left: 2.5%;
+    border: none;
+    background-color: #333533;
+}
+.Register:hover{
+    background-color:lightseagreen ;
+    cursor: pointer;
+}
+.event_info2{
+    display: flex;
+}
+.artists{
+background-color:  #e8eddf;
+height: 700px;
+width:20%;
+margin-bottom: 70px;
+}
+.event_motto{
+    background-color: #e8eddf;
+    height: 700px;
+    width:60%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.uc_event{
+background-color:  #e8eddf;
+height: 700px;
+width:20%;
+margin-bottom: 70px;
+}
+.artist_photo{
+border-radius: 100%;
+display: flex;
+height: 60%;
+width:60%;
+margin-left: 20%;
+margin-top: 6%;
+}
+.artist_name{
+    text-align: center;
+}
+.Artist_header{
+    text-align:center;
+}
+.motto_bp{
+    padding: 4%;
+}
+.motto_header{
+    margin-left: 10%;
+}
+.uc_event_header{
+    margin-left: 15%;
+}
+.event_photo{
+  height: 150px;
+  width: 150px;
+  margin-left: 20%;
+margin-top: 6%;
+}
+.event_info{
+    margin-bottom: 20px;
+}
+.location_symbol{
+    position: relative;
+    top: 5px;
+}
+.event_location p{
+    display: inline-flex;
+    margin: 0;
+}

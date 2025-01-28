@@ -1,8 +1,9 @@
+import Regevent from './Users/Regevent.jsx'
 function App() {
-  return (
-    <div className="App">
-      <h1 className="App-heading">Event Management System</h1>
-    </div>
-  )
+    return (
+        <div className='Main'>
+            <Home/>
+        </div>
+    )
 }
 export default App;
