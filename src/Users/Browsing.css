@@ -94,7 +94,7 @@ h5,
 
 }
 .descriptionlocation .location p{
-    margin-left: 25px;
+    /* margin-left: 25px; */
 }
 
 .description {
@@ -134,7 +134,7 @@ h5,
 .location {
 
 
-    text-align: center;
+    text-align: end;
     padding: 3px;
 
 }
