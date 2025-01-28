@@ -29,7 +29,7 @@
 }
 
 .browsingtext {
-
+    width:fit-content ;
     margin-left: 30px;
     justify-self: center;
     overflow: auto;
@@ -74,9 +74,18 @@ h5,
 .descriptionlocation {
     display: flex;
     margin: 3px;
+    text-align:right;
 
 
-
+}
+.descriptionlocation{
+    justify-content: space-between;
+}
+.typetime{
+    justify-content: space-between;
+}
+.headingdate{
+    justify-content: space-between;
 }
 
 .descriptionlocation {
@@ -84,9 +93,12 @@ h5,
     display: flex;
 
 }
+.descriptionlocation .location p{
+    margin-left: 25px;
+}
 
 .description {
-    width: 82%;
+    width: 84%;
     margin-right: 5%;
     text-align: start;
     padding: 5px;
@@ -94,22 +106,24 @@ h5,
 
 .location {
     width: 13%;
-
+    
 }
 
-.headingdate h2 {
+
+.headingdate div h2 {
     margin-bottom: 0;
     margin-top: 3px;
 }
 
 
 .date {
-    margin-left: 36vw;
+    text-align: end;
+    
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .time {
-    margin-left: 48vw;
+    
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -126,7 +140,7 @@ h5,
 }
 
 .time {
-    margin-left: 94vh;
+    /* margin-left: 94vh; */
 
 
 }

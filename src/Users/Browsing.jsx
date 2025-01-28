@@ -10,7 +10,7 @@ function Browsing() {
 
                 <div className='browsingtext'>
                     <div className='headingdate'>
-                        <h2>Heading </h2>
+                        <div><h2>Heading </h2></div>
                         <div class="date">January 25, 2025</div>
                     </div>
                     <div className='typetime'>
@@ -20,7 +20,7 @@ function Browsing() {
                     <div className='descriptionlocation'>
                         <div className='description'><b>Description:</b> Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe deserunt maiores sit? Est beatae dolore nostrum possimus ab rerum vel eveniet aliquid consequatur facere explicabo sit fuga voluptatem, id eius.   </div>
                         <div class="location"><p>Location</p>
-                        <button>Register Now</button></div>
+                            <button>Register Now</button></div>
                     </div>
 
 
@@ -34,7 +34,7 @@ function Browsing() {
 
                 <div className='browsingtext'>
                     <div className='headingdate'>
-                        <h2>Heading </h2>
+                        <div><h2>Heading </h2></div>
                         <div class="date">January 25, 2025</div>
                     </div>
                     <div className='typetime'>
@@ -57,7 +57,7 @@ function Browsing() {
 
                 <div className='browsingtext'>
                     <div className='headingdate'>
-                        <h2>Heading </h2>
+                        <div><h2>Heading </h2></div>
                         <div class="date">January 25, 2025</div>
                     </div>
                     <div className='typetime'>
