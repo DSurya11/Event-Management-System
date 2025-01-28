@@ -4,7 +4,7 @@ function Navbar(){
         <div className="navbar">
         <h2 className='title'>Planova</h2>
         <div className='nb-button'>
-            <button className='btn'>Home</button>
+            <button className='btn'>Browse</button>
             <button className='btn'>Home</button>
             <button className='btn'>Home</button>
             <button className='btn'>Home</button>  

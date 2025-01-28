@@ -19,7 +19,7 @@
 
 .nb-button {
     position: absolute;
-    right: 120px;
+    right: 100px;
 }
 
 .nb-button .btn {
@@ -34,20 +34,20 @@
     border-radius: 5px;
     border: none;
 }
-
-.nb-button .btn:hover {
-
-    color: lightseagreen;
-
+.nb-button .btn:hover{
+    color: lightseagreen;;
+    cursor: pointer;
+    
+    
 }
 
 .profilesvg {
     height: 40px;
     width: 40px;
     border-radius: 100%;
-    margin-left: 30px;
+    margin-left: 40px;
     position: fixed;
     top: 2.5%;
-    right: 3%;
+    right: 2.5%;
 
 }
