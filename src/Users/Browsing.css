@@ -1,0 +1,171 @@
+.browselist {
+    width: 77%;
+    margin-left: 20%;
+    margin-right: 3%;
+    margin-top: 100px;
+    background-color: #CFDBD5;
+
+}
+
+.browseitem {
+    display: flex;
+    height: 26vh;
+    margin-top: 18px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    background-color: #f4e8c6;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+}
+
+.browsingimg {
+    object-fit: cover;
+
+
+    width: 27%;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+
+}
+
+.browsingtext {
+
+    margin-left: 30px;
+    justify-self: center;
+    overflow: auto;
+    padding-right: 20px;
+    text-align: justify;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.browsingtext title {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.browsingtext p {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.browsingtext::-webkit-scrollbar {
+    width: 12px;
+    display: none;
+    /* Width of the scrollbar */
+}
+
+.browsingtext::-webkit-scrollbar-track {
+    background: #919191;
+    /* Background color of the track */
+    border-radius: 6px;
+    /* Rounded track corners */
+}
+
+.browsingtext h2,
+h3,
+h4,
+h5,
+.time,
+.location,
+.type {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.headingdate,
+.typetime,
+.descriptionlocation {
+    display: flex;
+    margin: 3px;
+
+
+
+}
+
+.descriptionlocation {
+    width: 100%;
+    display: flex;
+
+}
+
+.description {
+    width: 82%;
+    margin-right: 5%;
+    text-align: start;
+    padding: 5px;
+}
+
+.location {
+    width: 13%;
+
+}
+
+.headingdate h2 {
+    margin-bottom: 0;
+    margin-top: 3px;
+}
+
+
+.date {
+    margin-left: 36vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.time {
+    margin-left: 48vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.date {
+    margin-top: 10px;
+}
+
+.location {
+
+
+    text-align: center;
+    padding: 3px;
+
+}
+
+.time {
+    margin-left: 94vh;
+
+
+}
+
+.description {
+    margin-top: -3px;
+    margin-left: -5px
+}
+
+.location button {
+
+    background-color: lightseagreen;
+
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 7px 7px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+
+
+
+}
+
+.location button:hover {
+
+    background-color: lightseagreen;
+
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 7px 7px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 15px -5px, rgba(0, 0, 0, 0.3) 0px 5px 7px -8px;
+    transition-duration: 0.2s;
+
+}
