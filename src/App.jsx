@@ -1,10 +1,8 @@
-import Home from './Users/Home.jsx'
-import Browsing from './Users/Browsing.jsx'
+import Browse from './Users/Browse.jsx'
 function App() {
     return (
         <div className='Main'>
-
-            <Browsing />
+            <Browse/>
         </div>
     )
 }
