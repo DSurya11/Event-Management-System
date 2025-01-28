@@ -1,8 +1,9 @@
-.browse h2{
+h2 {
     text-align: center;
     font-weight: 100;
     padding-top: 20px;
 }
+
 .searchbox {
     width: 80%;
     height: 40px;
@@ -15,12 +16,14 @@
     text-align: center;
     transition-duration: 0.3s;
 }
-.searchbox:focus{
+
+.searchbox:focus {
     outline: none;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -4px;
     transition-duration: 0.3s;
 
 }
+
 .date-filter button {
     padding: 10px 14px;
     background-color: #E8EDDF;
@@ -30,19 +33,22 @@
     margin-left: 6px;
     margin-bottom: 10px;
 }
-.filters h4{
+
+.filters h4 {
     margin-bottom: 3px;
     margin-top: 6px;
     margin-left: 10px;
 }
-.each-category input{
+
+.each-category input {
     margin-left: 15px;
     display: none;
 }
+
 .categories {
     display: flex;
     flex-wrap: wrap;
-    width: 17%;
+    width: 250px;
 }
 
 .each-category {
@@ -53,15 +59,18 @@
     display: flex;
     align-items: center;
 }
-.each-category label{
+
+.each-category label {
     padding: 5px 12px;
-    margin: -5px -12px; 
+    margin: -5px -12px;
 }
 
-.check:checked + label {
+.check:checked+label {
     background-color: lightseagreen;
     border-color: lightseagreen;
     color: white;
 
 }
-
+.browse{
+    display: flex;
+}
