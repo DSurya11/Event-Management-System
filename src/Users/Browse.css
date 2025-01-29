@@ -34,7 +34,7 @@
     margin-bottom: 10px;
 }
 .filters{
-    width: 27%;
+    width: 17%;
 }
 .filters h4 {
     margin-bottom: 3px;
@@ -76,11 +76,11 @@
 .browse{
     display: flex;
 }
-.browselist {
-    width: 70%;
-    
+.browse-list {
+    width: 75%;
+    margin-left: 3%;
     margin-right: 3%;
-    margin-top: 100px;
+    margin-top: 25px;
     background-color: #CFDBD5;
 
 }
@@ -91,24 +91,29 @@
     margin-top: 18px;
     border-radius: 8px;
     margin-bottom: 18px;
-    background-color: #f4e8c6;
+    background-color: #E8EDDF;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
 }
 
 .browsingimg {
     object-fit: cover;
-
-
-    width: 27%;
+    width: 26%;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 
 }
-
+.browsingtext{
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    overflow-x: hidden;
+}
+.browsingtext::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
 .browsingtext {
-    width:fit-content ;
-    margin-left: 30px;
+    width:73% ;
+    padding-left: 30px;
     justify-self: center;
     overflow: auto;
     padding-right: 20px;
@@ -153,7 +158,7 @@ h5,
     display: flex;
     margin: 3px;
     text-align:right;
-
+    
 
 }
 .descriptionlocation{
@@ -161,6 +166,12 @@ h5,
 }
 .typetime{
     justify-content: space-between;
+    margin-top: -10px;
+}
+.type{
+    color: grey;
+    font-weight: 100;
+    font-size: 15px;
 }
 .headingdate{
     justify-content: space-between;
@@ -170,9 +181,6 @@ h5,
     width: 100%;
     display: flex;
 
-}
-.descriptionlocation .location p{
-    /* margin-left: 25px; */
 }
 
 .description {
@@ -190,7 +198,7 @@ h5,
 
 .headingdate div h2 {
     margin-bottom: 0;
-    margin-top: 3px;
+    margin-top: 8px;
 }
 
 
