@@ -1,7 +1,7 @@
 import './Regevent.css';
 function Regevent() {
     return (
-        <div className="regevent">
+        <div className="regevent Main">
             <img className="banner" src=".\public\dj.jpg" />
             <div className='event'>
                 <h2 className='event_name'>Event Name</h2>

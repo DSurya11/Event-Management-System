@@ -1,4 +1,5 @@
 import './Browse.css'
+import {Link} from 'react-router-dom';
 import React, { useState } from "react";
 import ChatIcon from '../Components/ChatIcon';
 
@@ -21,7 +22,7 @@ function Browse() {
     const categories = ["Academics", "Culture", "Sports", "Social", "Tech", "Career", 'Awareness', "Festivals", "Commuinty", "Competitions", "Workshops", "Events", "InterCollege", "Clubs"];
 
     return (
-        <div className="browsemain">
+        <div className="browsemain Main">
             <h2 id='searchh2'>Find Your Next College Experience</h2>
             <input className='searchbox' type="text" placeholder="Search here" />
             <div className="browse">
@@ -71,9 +72,9 @@ function Browse() {
                                 <div class="time">11:45 AM</div>
                             </div>
                             <div className='descriptionlocation'>
-                                <div className='description'><p> Andaru gudda muskoni ocheyandi </p> </div>
+                                <div className='description'><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates molestiae excepturi nihil magnam tenetur fuga cum quos expedita, animi alias et omnis minima. Laboriosam quidem, adipisci molestias ex nostrum dolore!</p> </div>
                                 <div class="location"><p>Location</p>
-                                    <button>Register Now</button></div>
+                                    <Link to = "/register"><button>Register now</button></Link></div>
                             </div>
 
 
@@ -95,9 +96,9 @@ function Browse() {
                                 <div class="time">11:45 AM</div>
                             </div>
                             <div className='descriptionlocation'>
-                                <div className='description'><p> Andaru gudda muskoni ocheyandi </p> </div>
+                                <div className='description'><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates molestiae excepturi nihil magnam tenetur fuga cum quos expedita, animi alias et omnis minima. Laboriosam quidem, adipisci molestias ex nostrum dolore!</p> </div>
                                 <div class="location"><p>Location</p>
-                                    <button>Register Now</button></div>
+                                    <Link to = "/register"><button>Register now</button></Link></div>
                             </div>
 
 
@@ -119,9 +120,9 @@ function Browse() {
                                 <div class="time">11:45 AM</div>
                             </div>
                             <div className='descriptionlocation'>
-                                <div className='description'><p> Andaru gudda muskoni ocheyandi </p> </div>
+                                <div className='description'><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates molestiae excepturi nihil magnam tenetur fuga cum quos expedita, animi alias et omnis minima. Laboriosam quidem, adipisci molestias ex nostrum dolore!</p> </div>
                                 <div class="location"><p>Location</p>
-                                    <button>Register Now</button></div>
+                                    <Link to = "/register"><button>Register now</button></Link></div>
                             </div>
 
 
