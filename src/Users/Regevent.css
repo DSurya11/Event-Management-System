@@ -1,11 +1,27 @@
-.regevent .banner{
-    margin-top: 20px;
-    width:90%;
-    aspect-ratio: 3/1;
-    object-fit: cover;
-    margin-left: 5%;
-    margin-right: 5%;
+.testimonial-slide {
+    margin: 40px auto;
+    height: 450px;
+    width: 800px;   
+    border-radius: 15px;
+    background-color: white;
+    display: flex;
+    padding: 5px;
 }
+
+.testimonial-slide img {
+    width: 80%; 
+    height: 10px;
+    object-fit: cover;  
+    border-radius: 10px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.testimonial-inner {
+    margin: 0 auto;
+    width: 80%;  
+}
+
 .event{
     margin-left: 5%;
     margin-right: 5%;
@@ -19,15 +35,15 @@
     justify-content: space-between;
 }
 .Register{
-    padding-top:1%;
-    padding-bottom: 1%;
-    padding-right: 2.5%;
-    padding-left: 2.5%;
+    padding-top:1.2%;
+    padding-bottom: 1.2%;
+    padding-right: 3%;
+    padding-left: 3%;
     border: none;
-    background-color: #333533;
+    background-color:lightseagreen;
 }
 .Register:hover{
-    background-color:lightseagreen ;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
     cursor: pointer;
 }
 .event_info2{
