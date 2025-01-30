@@ -41,6 +41,16 @@ function Home() {
                     <a href="abc.com" className='contenta'>To the page <svg className='asvg' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="lightseagreen"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" /></svg></a>
                 </div>
             </div>
+            <button className='cta-button'>Browse Events</button>
+            <hr style={{color: "lightseagreen",width:"10%"}} />
+            <hr style={{color: "lightseagreen",width:"6%", marginBottom:"60px"}} />
+            <h1></h1>
+            <div className='quick-signup'>
+                <h2>Sign up for your favorite college events in just a few clicks!</h2>
+                <p>No more tedious forms or long processes—registering for events has never been this simple. Just browse, choose your event, and hit the register button to secure your spot instantly. Stay focused on enjoying the events you love while we handle the rest!</p>
+                <input type="text" placeholder="Enter your email!"/>
+                <button type='submit'>Sign Up</button>
+            </div>
         </div>
     )
 }

@@ -33,6 +33,7 @@
     color: black;
     border-radius: 5px;
     border: none;
+    font-size: 14px;
 }
 .nb-button .btn:hover{
     color: lightseagreen;;
