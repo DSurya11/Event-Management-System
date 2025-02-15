@@ -34,11 +34,14 @@
     border-radius: 5px;
     border: none;
     font-size: 14px;
+    transition-duration: .2s;
+
 }
 .nb-button .btn:hover{
     color: lightseagreen;;
     cursor: pointer;
-    
+    transform: scale(1.08);
+    transition-duration: .2s;
     
 }
 
