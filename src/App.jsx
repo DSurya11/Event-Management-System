@@ -1,4 +1,4 @@
-import Browse from './Users/Browse.jsx'
+import Regevent from './Users/Regevent.jsx'
 function App() {
     return (
         <div className='Main'>
