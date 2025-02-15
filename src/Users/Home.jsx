@@ -5,10 +5,24 @@ function Home() {
     return (
         <div className="home Main">
             <div className='home-head'>
-                <h1 className="home-heading">College Events made easy!</h1>
+                <h1 className="home-heading head-text">College Events made easy!</h1>
                 <p>"Explore a variety of college events and easily register to participate in the ones that excite you the most!"</p>
             </div>
-            
+            <h1 className='sidehead subhead-text'>Discover Events</h1>
+            <div className='discover-cards'>
+                <div>
+                    <h2 className='subhead-text'>1. Fests</h2>
+                    <p>Join exciting festivals with music, dance, and cultural performances.</p>
+                </div>
+                <div>
+                    <h2 className='subhead-text'>2. Workshops</h2>
+                    <p>Enhance your skills with informative workshops and seminars.</p>
+                </div>
+                <div>
+                    <h2 className='subhead-text'>3. Sports</h2>
+                    <p>Compete or cheer in thrilling sports events and tournaments.</p>
+                </div>
+            </div>
             <div className="event-cardholder">
                 {[...Array(4)].map((_, index) => (
                     <div className="content" key={index}>
@@ -26,16 +40,10 @@ function Home() {
                     </div>
                 ))}
             </div>
-            <Link to="/browse"><button className='cta-button'>Browse Events</button></Link>
+            <Link to="/browse"><button className='cta-button'>Browse all Events</button></Link>
             <hr style={{ color: "lightseagreen", width: "10%" }} />
             <hr style={{ color: "lightseagreen", width: "6%", marginBottom: "60px" }} />
             <h1></h1>
-            <div className='quick-signup'>
-                <h2>Sign up for your favorite college events in just a few clicks!</h2>
-                <p>No more tedious forms or long processes, registering for events has never been this simple. Just browse, choose your event, and hit the register button to secure your spot instantly. Stay focused on enjoying the events you love while we handle the rest!</p>
-                <input type="text" placeholder="Enter your email!" />
-                <button type='submit'>Sign Up</button>
-            </div>
         </div>
     )
 }
