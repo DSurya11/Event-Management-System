@@ -44,7 +44,7 @@ function TestimonialCarousel() {
 
 function Regevent() {
     return (
-        <div className="regevent">
+        <div className="regevent Main">
             <div className="testimonial-container">
                 <div className="testimonial-inner">
                     <TestimonialCarousel />
@@ -68,15 +68,15 @@ function Regevent() {
                     <div className='artists'>
                         <h3 className='Artist_header'>Artists</h3>
                         <div className='Artist'>
-                            <div className='artist1'><img className='artist_photo' src=".\public\white.jpeg" alt="" /></div>
+                            <div className='artist1'><img className='artist_photo' src=".\white.jpeg" alt="" /></div>
                             <div className='artist_name'>Artist Name</div>
                         </div>
                         <div className='Artist'>
-                            <div className='artist2'><img className='artist_photo' src=".\public\white.jpeg" alt="" /></div>
+                            <div className='artist2'><img className='artist_photo' src=".\white.jpeg" alt="" /></div>
                             <div className='artist_name'>Artist Name</div>
                         </div>
                         <div className='Artist'>
-                            <div className='artist3'><img className='artist_photo' src=".\public\white.jpeg" alt="" /></div>
+                            <div className='artist3'><img className='artist_photo' src=".\white.jpeg" alt="" /></div>
                             <div className='artist_name'>Artist Name</div>
                         </div>
                     </div>
@@ -97,15 +97,15 @@ function Regevent() {
                         <h3 className='uc_event_header'>Upcoming events</h3>
                         <div className='events'>
                             <div className='UC_event'>
-                                <div className='event1'><img className='event_photo' src=".\public\white.jpeg" alt="" /></div>
+                                <div className='event1'><img className='event_photo' src=".\white.jpeg" alt="" /></div>
                                 <div className='artist_name'>Event</div>
                             </div>
                             <div className='UC_event'>
-                                <div className='event2'><img className='event_photo' src=".\public\white.jpeg" alt="" /></div>
+                                <div className='event2'><img className='event_photo' src=".\white.jpeg" alt="" /></div>
                                 <div className='artist_name'>Event</div>
                             </div>
                             <div className='UC_event'>
-                                <div className='event3'><img className='event_photo' src=".\public\white.jpeg" alt="" /></div>
+                                <div className='event3'><img className='event_photo' src=".\white.jpeg" alt="" /></div>
                                 <div className='artist_name'>Event</div>
                             </div>
                         </div>

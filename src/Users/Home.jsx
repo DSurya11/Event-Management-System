@@ -29,7 +29,7 @@ function Home() {
             <h1></h1>
             <div className='quick-signup'>
                 <h2>Sign up for your favorite college events in just a few clicks!</h2>
-                <p>No more tedious forms or long processes—registering for events has never been this simple. Just browse, choose your event, and hit the register button to secure your spot instantly. Stay focused on enjoying the events you love while we handle the rest!</p>
+                <p>No more tedious forms or long processes, registering for events has never been this simple. Just browse, choose your event, and hit the register button to secure your spot instantly. Stay focused on enjoying the events you love while we handle the rest!</p>
                 <input type="text" placeholder="Enter your email!" />
                 <button type='submit'>Sign Up</button>
             </div>
