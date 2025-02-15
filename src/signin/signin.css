@@ -1,34 +1,60 @@
 .signininfo {
-    width: 90%;
+
 
     margin: auto;
-    margin-top: 14vh;
-    
+    margin-top: 11.5vh;
+    height: 300px;
     margin-bottom: 20px;
+    background-color: lightseagreen;
+    width: 100%;
+
+
+    text-align: center;
+    
+
+}
+
+.signininfo p {
+    font-size: large;
+    color: white;
+    width: 80%;
+    margin: auto;
+    padding-top: 10px;
+    font-weight: 300;
+    line-height:30px; 
 }
 
 .signinh2 {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size:50px;
+    padding-top: 70px;
+    color: white;
+    font-size: 50px;
     padding-bottom: 0;
     margin-bottom: 0;
     font-weight: 400;
 }
 
+.head-text {
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+
+    font-style: normal;
+}
+
+
 .usersignin {
 
-    width: 90%;
+    width: 85%;
 
-    height: 40vh;
+    height: 45vh;
     display: flex;
     margin: auto;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 5%;
 
 }
 
 .attendees {
-    width: 48%;
+    width: 45%;
     padding: 0.4%;
     height: 100%;
     display: flex;
@@ -38,12 +64,43 @@
 
 }
 
+.attendees ul li {
+    text-align: justify;
+}
+
+.organizers ul li {
+    text-align: justify;
+}
+
+.organizers ul li h4 {
+    font-size: 18px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-top: 8px;
+    font-weight: 600;
+    font-family: "Playfair Display", serif;
+
+}
+
+.attendees ul li h4 {
+    font-size: 18px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-top: 8px;
+    font-weight: 600;
+    font-family: "Playfair Display", serif;
+}
+
 .attendees h3 {
     text-align: center;
+    font-size: 25px;
+    margin-bottom: 0;
+    font-family: "Playfair Display", serif;
 }
 
 .organizers {
-    width: 48%;
+
+    width: 45%;
     padding: 0.4%;
     height: 100%;
     display: flex;
@@ -53,24 +110,32 @@
 }
 
 .organizers h3 {
+    font-size: 25px;
     text-align: center;
+    margin-bottom: 0;
+    font-family: "Playfair Display", serif;
 }
 
 .usersignh3 {
     margin-top: 0;
 }
 
+.organizers button {
+    margin-top: 20px;
+}
+
 .signinbut {
-    color: lightseagreen;
-    background-color: #E8EDDF;
+    color: #E8EDDF;
+    background-color: lightseagreen;
     border: 1px solid #CFDBD5;
     border-radius: 6px;
-    height: 30px;
+    height: 45px;
+    font-size: 14px;
+    padding: 5px 17px;
 }
 
 button:hover {
-    color: #E8EDDF;
+    transform: scale(1.03);
+    transition-duration: .3s;
 
-    box-shadow: 0 0 5px lightseagreen;
-    background-color: lightseagreen;
 }
