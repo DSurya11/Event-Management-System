@@ -4,8 +4,11 @@ import './Home.css';
 function Home() {
     return (
         <div className="home Main">
-            <h1 className="home-heading">College Events made easy!</h1>
-            <p>"Explore a variety of college events and easily register to participate in the ones that excite you the most!"</p>
+            <div className='home-head'>
+                <h1 className="home-heading">College Events made easy!</h1>
+                <p>"Explore a variety of college events and easily register to participate in the ones that excite you the most!"</p>
+            </div>
+            
             <div className="event-cardholder">
                 {[...Array(4)].map((_, index) => (
                     <div className="content" key={index}>

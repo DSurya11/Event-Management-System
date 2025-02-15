@@ -1,10 +1,29 @@
 .home {
-    padding-top: 40px;
-    text-align: center;
+
+    text-align: left;
 }
 
 .home p {
     padding-bottom: 20px;
+    color: white;
+    padding-left: 45%;
+
+}
+body{
+    margin: 0;
+}
+
+.home-heading{
+    padding-top: 150px;
+    color: white;
+    padding-left: 45%;
+}
+
+.home-head{
+    
+    height: 500px;
+    background-color: lightseagreen;
+    width: 100%;
 }
 
 .event-cardholder {
