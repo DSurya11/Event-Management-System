@@ -3,6 +3,9 @@
 * {
 	font-family: Open Sans;
 }
+body{
+	margin: 0;
+}
 
 .footer-distributed{
 	background: #E8EDDF;
@@ -13,9 +16,8 @@
 	font: bold 16px sans-serif;
 	padding: 55px 50px;
 	position: relative;
-	width: 99.6vw;
+	width: 100vw;
 	margin: 0;
-    left: -7px;
     bottom: -7.5px;
 	overflow-x:unset;
 }
