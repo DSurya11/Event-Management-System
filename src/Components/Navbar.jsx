@@ -8,7 +8,7 @@ function Navbar(){
             <div className='nb-button'>
                 <Link to="/"><button className='btn'>Home</button></Link>
                 <Link to="/browse"><button className='btn'>Browse</button></Link>
-                <Link to="/contact"><button className='btn'>Contact</button></Link>
+                <Link to="/organizer"><button className='btn'>Organizers</button></Link>
             </div>
             
             <Link to="/profile">
