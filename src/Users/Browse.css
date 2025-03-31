@@ -82,7 +82,7 @@
     width: 75%;
     margin-left: 3%;
     margin-right: 3%;
-    margin-top: 25px;
+    margin-top: 100px;
     background-color: #CFDBD5;
 
 }
@@ -249,13 +249,14 @@ h5,
     border: none;
     border-radius: 5px;
     color: white;
-    padding: 7px 7px;
+    padding: 5px 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    transition-duration: 0.2s;
-    width: 110px;
+
+
+
 }
 
 .location button:hover {
