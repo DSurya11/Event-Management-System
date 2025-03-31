@@ -20,6 +20,7 @@ function App() {
                 <Route path="/" element={<Organizerssignin />} />
                 <Route path="browse" element={<Browse />} />
                 <Route path="register" element={<Regevent />} />
+                <Route path="organizer" element={<Organizers />} />
             </Routes>
         </BrowserRouter>
     )
