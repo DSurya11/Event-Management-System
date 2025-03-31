@@ -9,7 +9,7 @@ function Organizerssignup() {
             </div>
             <div className='loginsignupinput'>
                 <div className="wrapper">
-                    <div className="title"><span>Signup Form</span></div>
+                    <div className="title"><span>Organizers Signup</span></div>
                     <form action="#">
                         <div className="row">
                             <i className="fas fa-user"></i>

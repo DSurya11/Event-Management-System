@@ -17,10 +17,7 @@ function App() {
         <BrowserRouter>
             <Navbar />
             <Routes>
-                <Route path="/" element={<Organizerssignin />} />
-                <Route path="browse" element={<Browse />} />
-                <Route path="register" element={<Regevent />} />
-                <Route path="organizer" element={<Organizers />} />
+                <Route path="/" element={<Organizerssignin/>} />
             </Routes>
         </BrowserRouter>
     )

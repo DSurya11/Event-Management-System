@@ -9,12 +9,9 @@ function Organizerssignin() {
             </div>
             <div className='loginsignininput'>
                 <div className="wrapper">
-                    <div className="title"><span>Login Form</span></div>
+                    <div className="title"><span>Organizers Signin</span></div>
                     <form action="#">
-                        <div className="row">
-                            <i className="fas fa-user"></i>
-                            <input type="text" placeholder="Name" required />
-                        </div>
+
                         <div className="row">
                             <i className="fas fa-envelope"></i>
                             <input type="text" placeholder="Email or Phone" required />
