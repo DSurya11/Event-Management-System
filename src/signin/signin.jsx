@@ -20,6 +20,7 @@ function Signin() {
 
 
                     </ul>
+                    <input type="text" placeholder='enter your email' className='usersigninput'/>
                     <button class="signinbut">SignIn as an Attendee</button>
 
 
@@ -38,6 +39,7 @@ function Signin() {
                         <li><h4>Receive event notifications:</h4> Stay updated with real-time alerts via email, SMS, or push notifications.</li>
                         <li><h4>Connect with organizers:</h4> Engage with event hosts via chat, discussion forums, or social media.</li>
                     </ul>
+                    <input type="text" placeholder='enter your email' className='usersigninput'/>
                     <button class="signinbut">SignIn as an Organizer</button>
                 </div>
             </div>
