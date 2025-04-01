@@ -6,7 +6,7 @@ import Regevent from './Users/Regevent.jsx'
 import Organizers from "./Users/Organizers.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import Signin from "./signin/signin.jsx";
-
+import BrowseOrg from "./Users/BrowseOrg.jsx";
 import Attendeessignin from "./signin/attendeessignin.jsx";
 import Attendeessignup from "./signin/Attendeessignup.jsx";
 import Organizerssignin from "./signin/Organizerssignin.jsx";
