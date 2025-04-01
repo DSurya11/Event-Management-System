@@ -17,11 +17,23 @@ function Organizerssignin() {
             });
 
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error);
 
+            if (!res.ok) {
+                // Display backend error message
+                throw new Error(data.error || "Login failed");
+            }
+
+            // Store token and role
             localStorage.setItem("token", data.token);
+            localStorage.setItem("role", "organizer");
+
             setMessage("Login successful!");
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = "/organizer/dashboard"; // Ensure this route exists in your frontend routing
+            }, 1000);
         } catch (error) {
+            // Show error message from backend
             setMessage(error.message || "Login failed");
         }
     };

@@ -67,54 +67,60 @@ app.post("/attendee/signin", async (req, res) => {
 });
 
 // **Organizer Signup** (Organizers Registration)
+// **Organizer Signup** (Organizer Registration)
 app.post("/organizer/signup", async (req, res) => {
-  const { name, username, password } = req.body; // username here is the email
+    const { name, username, password } = req.body; // `username` here is the email
 
-  // Check if organizer already exists
-  db.query("SELECT * FROM organisers WHERE username = ?", [username], async (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
-    if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" });
+    // Check if organizer already exists
+    db.query("SELECT * FROM organisers WHERE username = ?", [username], async (err, results) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" });
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10).catch(err => {
-      console.error("Bcrypt hashing failed:", err);
-      throw err; // Ensure the error propagates
+        // Hash password before storing in the database
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert new organizer into the database
+        db.query(
+            "INSERT INTO organisers (name, username, password) VALUES (?, ?, ?)",
+            [name, username, hashedPassword],
+            (err, result) => {
+                if (err) return res.status(500).json({ error: "Database error" });
+
+                res.status(201).json({ message: "Organizer registered successfully" });
+            }
+        );
     });
-
-    // Insert new organizer
-    db.query(
-
-      "INSERT INTO organisers (name, username, password) VALUES (?, ?, ?)",
-      [name, username, hashedPassword],
-      (err, result) => {
-        if (err) {
-          console.error("Database error:", err); // Logs the full error object
-          return res.status(500).json({ error: "Database error" });
-        }
-        res.status(201).json({ message: "Organizer registered successfully" });
-      }
-    );
-  });
 });
 
 // **Organizer Login** (Organizer Sign-In)
 app.post("/organizer/signin", async (req, res) => {
-  const { username, password } = req.body; // username here is the email
+    const { email, password } = req.body;
 
-  db.query("SELECT * FROM organisers WHERE username = ?", [username], async (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
-    
-    if (results.length === 0) return res.status(401).json({ error: "Invalid credentials1" });
+    console.log("Login Attempt with Email:", email); // Log the email being received
 
-    const organizer = results[0];
-    const isMatch = await bcrypt.compare(password, organizer.password);
-    // Temporarily modify your signin route to log the stored hash
+    db.query("SELECT * FROM organisers WHERE username = ?", [email], async (err, results) => {
+        if (err) return res.status(500).json({ error: "Database error" });
 
-    if (!isMatch) return res.status(401).json({ error: "Invalid credentials2" });
+        if (results.length === 0) {
+            console.log("User Not Found!"); // Log if no user is found
+            return res.status(401).json({ error: "Invalid credentials (User not found)" });
+        }
 
-    const token = jwt.sign({ organizerId: organizer.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.json({ message: "Login successful", token });
-  });
+        const user = results[0];
+
+        // Compare the entered password with the stored hashed password
+        const isMatch = await bcrypt.compare(password.trim(), user.password);
+
+        if (!isMatch) {
+            console.log("Password Mismatch!"); // Log if password doesn't match
+            return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+        res.json({ message: "Login successful", token });
+    });
 });
 
 // Start server

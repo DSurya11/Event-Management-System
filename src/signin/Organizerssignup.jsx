@@ -14,7 +14,7 @@ function Organizerssignup() {
             const res = await fetch("http://localhost:3000/organizer/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, username, password }),
+                body: JSON.stringify({ name, username: email, password }), // Fix: Change email -> username
             });
 
             const data = await res.json();
