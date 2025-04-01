@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Browse from './Users/Browse.jsx'
 import Home from './Users/Home.jsx'
 import Regevent from './Users/Regevent.jsx'
+import Organizers from "./Users/Organizers.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import Signin from "./signin/signin.jsx";
 

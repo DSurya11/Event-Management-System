@@ -33,7 +33,7 @@ function TestimonialCarousel() {
         <Slider {...settings}>
             {testimonials.map((testimonial) => (
                 <div key={testimonial.id} className="testimonial-slide">
-                    <img src={testimonial.pic} alt="Customer" style={{ width: "90%", height: "90%", objectFit: "cover" }} />
+                    <img src={testimonial.pic} alt="Customer" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
             ))}
         </Slider>
@@ -65,33 +65,34 @@ function Regevent() {
                     </div>
                 </div>
                 <div className='event_info2'>
-                    <div className='artists'>
-                        <h3 className='Artist_header'>Artists</h3>
-                        <div className='Artist'>
-                            <div className='artist1'><img className='artist_photo' src=".\white.jpeg" alt="" /></div>
-                            <div className='artist_name'>Artist Name</div>
-                        </div>
-                        <div className='Artist'>
-                            <div className='artist2'><img className='artist_photo' src=".\white.jpeg" alt="" /></div>
-                            <div className='artist_name'>Artist Name</div>
-                        </div>
-                        <div className='Artist'>
-                            <div className='artist3'><img className='artist_photo' src=".\white.jpeg" alt="" /></div>
-                            <div className='artist_name'>Artist Name</div>
-                        </div>
-                    </div>
                     <div className='event_motto'>
                         <h3 className='motto_header'>What makes this event stand out from others?</h3>
-                        <ul>
+                        {/* <ul> */}
                             <div className='motto'>
-                                <li className='motto_bp'><b>Diverse Music Genres:</b> A fusion of Pop, Folk, Filmy, and Jazz to suit every musical taste</li>
+                                {/* <li className='motto_bp'><b>Diverse Music Genres:</b> A fusion of Pop, Folk, Filmy, and Jazz to suit every musical taste</li>
                                 <li className='motto_bp'><b>Multilingual Experience:</b> Performances in Telugu, Hindi, and English for a truly inclusive vibe.</li>
                                 <li className='motto_bp'><b>Extended Celebration: </b>A 6-hour non-stop musical extravaganza for maximum enjoyment.</li>
                                 <li className='motto_bp'><b>Unforgettable Venue: </b>Hosted at the iconic OAT, IIITDM Jabalpur, offering an electrifying ambiance.</li>
-                                <li className='motto_bp'><b>Unmatched Energy: </b>A night filled with rhythm, fun, and the magic of live DJ performances.</li>
+                                <li className='motto_bp'><b>Unmatched Energy: </b>A night filled with rhythm, fun, and the magic of live DJ performances.</li> */}
+                                <div className='motto_info'>
+                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio nemo quae at, ducimus aliquam, molestiae a provident impedit, repellendus nostrum doloremque. Mollitia accusantium explicabo at, temporibus earum quod debitis numquam?</p>
+                                     <p>
+                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo suscipit deserunt iure in minus rerum voluptatibus laboriosam, laborum quasi ut eveniet expedita, dolores unde. Obcaecati ipsa veniam at natus aliquid!
+                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quo quam, animi tenetur veritatis quis, quibusdam perferendis voluptatum earum et doloremque nobis officia ab numquam aliquam molestias, cupiditate laborum. Magni, consequatur!
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam dolore soluta adipisci. Fuga a, aliquam hic porro recusandae, fugit ea odio laudantium beatae incidunt et, eius pariatur. Minus, voluptates totam!
+                                     </p>
+                                     <p>
+                                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sapiente dolor modi officiis soluta sed eveniet similique assumenda eaque qui eum, ea tempora architecto voluptate aperiam saepe commodi magnam libero doloribus.
+                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, officiis soluta harum impedit magnam id sapiente! Expedita reiciendis debitis, animi quidem excepturi quibusdam quis eligendi doloremque accusantium! Facilis, velit est.
+                                     </p>
+                                    
+                                </div>
+                                
+                                
+
                             </div>
 
-                        </ul>
+                        {/* </ul> */}
                     </div>
                     <div className='uc_event'>
                         <h3 className='uc_event_header'>Upcoming events</h3>

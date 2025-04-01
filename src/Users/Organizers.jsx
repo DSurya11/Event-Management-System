@@ -4,7 +4,8 @@ function Organizers() {
     return (
         <div className='organizers_browse'>
             <h1>Organizers</h1>
-            <h2>Sports Club</h2>
+            <div className='Sports'>
+            <h2>Sports</h2>
             <div className='Org'>
                 <div className='Event'>
                     <img src=".\public\white.jpeg" alt="" />
@@ -15,9 +16,10 @@ function Organizers() {
                     <h3>Club_Name</h3>
                 </div>
             </div>
-            <h2>Technical Club</h2>
-            <div className='Org'>
-                
+            </div>
+            <div className='Technical'>
+            <h2>Technical</h2>
+            <div className='Org'> 
                 <div className='Event'>
                     <img src=".\public\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
@@ -27,9 +29,11 @@ function Organizers() {
                     <h3>Club_Name</h3>
                 </div>
             </div>
-            <h2>Cultural Club</h2>
+            </div>
+            
+           <div className='Acadamic'>
+           <h2>Acadacmic</h2>
             <div className='Org'>
-                
                 <div className='Event'>
                     <img src=".\public\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
@@ -39,6 +43,22 @@ function Organizers() {
                     <h3>Club_Name</h3>
                 </div>
             </div>
+           </div>
+           <div className='Cultural'>
+           <h2>Cultural</h2>
+            <div className='Org'>
+                <div className='Event'>
+                    <img src=".\public\white.jpeg" alt="" />
+                    <h3>Club_Name</h3>
+                </div>
+                <div className='Event'>
+                    <img src=".\public\white.jpeg" alt="" />
+                    <h3>Club_Name</h3>
+                </div>
+            </div>
+           </div>
+
+
         </div>
     )
 }
