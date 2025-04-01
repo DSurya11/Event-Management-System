@@ -3,23 +3,21 @@
     height: 450px;
     width: 800px;   
     border-radius: 15px;
-    background-color: white;
     display: flex;
     padding: 5px;
 }
 
 .testimonial-slide img {
-    width: 80%; 
+    width: 90%; 
     height: 10px;
     object-fit: cover;  
-    border-radius: 10px;
     margin: 0 auto;
     margin-top: 20px;
 }
 
 .testimonial-inner {
     margin: 0 auto;
-    width: 80%;  
+    width: 90%;  
 }
 
 .event{
@@ -58,7 +56,7 @@ margin-bottom: 70px;
 .event_motto{
     background-color: #e8eddf;
     height: 700px;
-    width:60%;
+    width:80%;
     margin-left: 10px;
     margin-right: 10px;
 }
@@ -86,7 +84,7 @@ margin-top: 6%;
     padding: 4%;
 }
 .motto_header{
-    margin-left: 10%;
+    text-align: center;
 }
 .uc_event_header{
     margin-left: 15%;
@@ -107,4 +105,7 @@ margin-top: 6%;
 .event_location p{
     display: inline-flex;
     margin: 0;
+}
+.motto_info p{
+    margin: 5%;
 }

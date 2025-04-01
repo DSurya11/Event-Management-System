@@ -2,19 +2,16 @@ import './loginsignin.css';
 
 function Organizerssignin() {
     return (
-        <div className='loginsignin Main'>
+        <div className='loginsignin  body1'>
             <div className='loginsignininfo'>
                 <h2 className='loginsigninh2 head-text'>WELCOME TO PLANOVA</h2>
                 <p>"Your seamless event planning platform"</p>
             </div>
             <div className='loginsignininput'>
                 <div className="wrapper">
-                    <div className="title"><span>Login Form</span></div>
+                    <div className="title"><span>Organizers Signin</span></div>
                     <form action="#">
-                        <div className="row">
-                            <i className="fas fa-user"></i>
-                            <input type="text" placeholder="Name" required />
-                        </div>
+
                         <div className="row">
                             <i className="fas fa-envelope"></i>
                             <input type="text" placeholder="Email or Phone" required />
@@ -27,7 +24,7 @@ function Organizerssignin() {
                         <div className="row button">
                             <input type="submit" value="Login" />
                         </div>
-                        <div className="signin-link">Not a member? <a href="#">Signin now</a></div>
+                        <div className="signin-link">Not a member? <a href="#">Signup now</a></div>
                     </form>
                 </div>
             </div>

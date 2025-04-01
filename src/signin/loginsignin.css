@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 
-body {
+.body1 {
     margin-top: 20px;
     display: flex;
     align-items: center;
@@ -53,7 +53,7 @@ body {
     width: 100%;
     max-width: 400px;
     text-align: center;
-    margin-top: 160px;
+    /* margin-top: 160px; */
 }
 
 .loginsignin .wrapper .row {
