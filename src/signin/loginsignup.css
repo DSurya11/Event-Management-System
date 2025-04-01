@@ -15,7 +15,6 @@ body {
     height: 100vh;
     padding: 15px;
     background: linear-gradient(135deg, #1abc9c, #16a085);
-    overflow: hidden;
 }
 .head-text{
     margin-top: 130px;
