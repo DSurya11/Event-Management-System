@@ -24,7 +24,7 @@ function Organizerssignin() {
                         <div className="row button">
                             <input type="submit" value="Login" />
                         </div>
-                        <div className="signin-link">Not a member? <a href="#">Signin now</a></div>
+                        <div className="signin-link">Not a member? <a href="#">Signup now</a></div>
                     </form>
                 </div>
             </div>
