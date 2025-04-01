@@ -17,7 +17,7 @@ function App() {
         <BrowserRouter>
             <Navbar />
             <Routes>
-                <Route path="/" element={<Organizerssignin/>} />
+                <Route path="/" element={<Home/>} />
             </Routes>
         </BrowserRouter>
     )

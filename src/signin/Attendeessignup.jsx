@@ -2,7 +2,7 @@ import './loginsignup.css';
 
 function Attendeessignup() {
     return (
-        <div className='loginsignup'>
+        <div className='loginsignup body1'>
             <div className='loginsignupinfo'>
                 <h2 className='loginsignuph2 head-text'>WELCOME TO PLANOVA</h2>
                 <p>"Your seamless event planning platform"</p>
