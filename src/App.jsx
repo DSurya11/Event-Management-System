@@ -11,14 +11,14 @@ import Attendeessignin from "./signin/attendeessignin.jsx";
 import Attendeessignup from "./signin/Attendeessignup.jsx";
 import Organizerssignin from "./signin/Organizerssignin.jsx";
 import Organizerssignup from "./signin/Organizerssignup.jsx";
-
+import Razerpay from "./Payments/Razerpay.jsx";
 
 function App() {
     return (
         <BrowserRouter>
             <Navbar />
             <Routes>
-                <Route path="/" element={<Organizerssignin />} />
+                <Route path="/" element={<Regevent />} />
             </Routes>
         </BrowserRouter>
     )
