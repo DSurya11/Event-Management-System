@@ -10,9 +10,7 @@ function App2() {
         <BrowserRouter>
             <OrgNav />
             <Routes>
-                <Route path="/" element={<Home/>} />
-                <Route path="host" element={<Host />} />
-                <Route path="register" element={<Regevent />} />
+                <Route path="/" element={<Regevent />} />
             </Routes>
         </BrowserRouter>
     )

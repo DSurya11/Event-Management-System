@@ -295,6 +295,58 @@ app.get("/events/filter", (req, res) => {
   });
 });
 
+app.get("/events/:eventId", (req, res) => {
+  const { eventId } = req.params;
+
+  // Fetch event details
+  db.query(
+      `SELECT event_id, title, description, date, time, venue, capacity, organiser, approved, 
+              reg_start_date, reg_end_date, price, cover_image 
+       FROM Events 
+       WHERE event_id = ?`, 
+      [eventId], 
+      (err, eventResults) => {
+          if (err) {
+              console.error("Error fetching event:", err);
+              return res.status(500).json({ message: "Internal server error" });
+          }
+          if (eventResults.length === 0) {
+              return res.status(404).json({ message: "Event not found" });
+          }
+
+          const event = eventResults[0];
+
+          // Fetch categories
+          db.query(
+              `SELECT category FROM Categories WHERE event_id = ?`, 
+              [eventId], 
+              (err, categoryResults) => {
+                  if (err) {
+                      console.error("Error fetching categories:", err);
+                      return res.status(500).json({ message: "Internal server error" });
+                  }
+
+                  event.categories = categoryResults.map(row => row.category);
+
+                  // Fetch event pictures
+                  db.query(
+                      `SELECT address FROM EventPics WHERE event_id = ?`, 
+                      [eventId], 
+                      (err, picturesResults) => {
+                          if (err) {
+                              console.error("Error fetching event pictures:", err);
+                              return res.status(500).json({ message: "Internal server error" });
+                          }
+
+                          event.pictures = picturesResults.map(row => row.address);
+                          res.json(event); // Send final response with event details
+                      }
+                  );
+              }
+          );
+      }
+  );
+});
 
 
 
