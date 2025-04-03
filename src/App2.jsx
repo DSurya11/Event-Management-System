@@ -11,8 +11,7 @@ function App2() {
         <BrowserRouter>
             <OrgNav />
             <Routes>
-                <Route path="/" element={<Razerpay/>} />
-                
+                <Route path="/" element={<Regevent />} />
             </Routes>
         </BrowserRouter>
     )

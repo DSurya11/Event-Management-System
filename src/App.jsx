@@ -23,7 +23,7 @@ import OrgNav from './Components/OrgNav.jsx';
 
 function App() {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
-
+  
   useEffect(() => {
     const handleStorageChange = () => {
       setUserRole(localStorage.getItem('userRole'));
@@ -43,7 +43,7 @@ function App() {
         {userRole === 'attendee' && (
           <>
             <Route path="/browse" element={<Browse />} />
-            <Route path="/register" element={<Regevent />} />
+            <Route path="/register/:eventId" element={<Regevent />} />
           </>
         )}
 

@@ -62,7 +62,7 @@ function Browse() {
                 <div className='filters'>
                     <h3>Filter</h3>
                     <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
-                    
+
                     <div className="date-filter">
                         <h4>Start Date</h4>
                         <button onClick={() => document.getElementById("start-date-picker").showPicker()} style={selectedStartDate ? { backgroundColor: "lightseagreen" } : {}}>
@@ -97,11 +97,11 @@ function Browse() {
                     <div className='categories'>
                         {categories.map((category, index) => (
                             <div key={index} className='each-category'>
-                                <input 
-                                    type="checkbox" 
-                                    id={category} 
-                                    className='check' 
-                                    name="category" 
+                                <input
+                                    type="checkbox"
+                                    id={category}
+                                    className='check'
+                                    name="category"
                                     value={category}
                                     onChange={handleCategoryChange}
                                     checked={selectedCategories.includes(category)}
@@ -127,7 +127,7 @@ function Browse() {
                                         <div className="date">{formatDate(event.date)}</div>
                                     </div>
                                     <div className='typetime'>
-                                    <div className="type"><b>{event.categories ? event.categories.join(', ') : "General"}</b></div>
+                                        <div className="type"><b>{event.categories ? event.categories.join(', ') : "General"}</b></div>
                                         <div className="time">{event.time}</div>
                                     </div>
                                     <div className='descriptionlocation'>
@@ -136,7 +136,9 @@ function Browse() {
                                         </div>
                                         <div className="location">
                                             <p>{event.venue}</p>
-                                            <Link to="/register"><button>Register now</button></Link>
+                                            <Link to={`/register/${event.event_id}`}>
+                                                <button>Register now</button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
