@@ -1,67 +1,64 @@
 import { useState, useEffect } from "react";
-import "./Razerpay.css";
-
-function App() {
-    const [amount] = useState(1); // Fixed amount
-    const [qrCode, setQrCode] = useState("");
+import './Razerpay.css'
+function Razerpay() {
     const [orderId, setOrderId] = useState("");
-    const [paymentStatus, setPaymentStatus] = useState(null);
 
-    // Generate QR Code on component mount
     useEffect(() => {
-        const generateQrCode = async () => {
-            try {
-                const response = await fetch("http://localhost:3000/payment/qr", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ amount }),
-                });
-
-                const data = await response.json();
-                setQrCode(data.qrCodeUrl);
-                setOrderId(data.orderId);
-            } catch (error) {
-                console.error("QR Code Error:", error);
-            }
-        };
-
-        generateQrCode(); // Call function when component mounts
+        // Load Razorpay script dynamically
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        script.onload = () => console.log("Razorpay SDK Loaded");
+        document.body.appendChild(script);
     }, []);
 
-    const checkPaymentStatus = async () => {
+    const createOrder = async () => {
         try {
-            const response = await fetch("http://localhost:3000/payment/verify", {
+            const res = await fetch("http://localhost:3000/create-order", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ orderId }),
+                body: JSON.stringify({ amount: 500 }) // ₹5
             });
-
-            const data = await response.json();
-            setPaymentStatus(data.success ? "Payment Successful ✅" : "Payment Pending ⏳");
-        } catch (error) {
-            console.error("Payment Verification Error:", error);
+            const data = await res.json();
+            setOrderId(data.id);
+            openRazorpay(data.id);
+        } catch (err) {
+            console.error("Error creating order:", err);
         }
+    };
+
+    const openRazorpay = (orderId) => {
+        if (!window.Razorpay) {
+            alert("Razorpay SDK failed to load. Try again.");
+            return;
+        }
+
+        const options = {
+            key: "rzp_test_x4UltRWpwOAf5h", // Replace with your Razorpay test key
+            amount: 500,
+            currency: "INR",
+            name: "Test Store",
+            description: "Payment for order",
+            order_id: orderId,
+            handler: function (response) {
+                alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+            },
+            prefill: {
+                name: "Test User",
+                email: "test@example.com",
+                contact: "9876543210"
+            }
+        };
+        const rzp = new window.Razorpay(options);
+        rzp.open();
     };
 
     return (
         <div className="paymentmain">
-            <h2>Amount to be Paid: ₹{amount}</h2>
-
-            {qrCode && (
-                <>
-                    <h3>Scan QR to Pay</h3>
-                    <img src={qrCode} alt="UPI QR Code" style={{ width: "200px", margin: "20px" }} />
-                    <br />
-                    <button onClick={checkPaymentStatus}
-                        style={{ padding: "10px 20px", fontSize: "16px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "5px" }}>
-                        Check Payment Status
-                    </button>
-                </>
-            )}
-
-            {paymentStatus && <h3 style={{ color: paymentStatus.includes("Successful") ? "green" : "orange" }}>{paymentStatus}</h3>}
+            <h2>Razorpay Test Payment</h2>
+            <button onClick={createOrder} className="generatebutton">Continue To Pay</button>
         </div>
     );
 }
 
-export default App;
+export default Razerpay;

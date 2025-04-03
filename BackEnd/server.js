@@ -19,17 +19,17 @@ const __dirname = path.dirname(__filename);
 const uploadDir = path.join(__dirname, "../public/uploads");
 
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true }); // Create directory if not exists
+  fs.mkdirSync(uploadDir, { recursive: true }); // Create directory if not exists
 }
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${file.originalname}`;
-        cb(null, uniqueName);
-    }
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  }
 });
 
 const upload = multer({ storage });
@@ -52,56 +52,28 @@ db.connect((err) => {
   else console.log("Connected to database");
 });
 
-// Razorpay instance
+
+// Razorpay Instance
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-// **Generate Payment QR Code**
-app.post("/payment/qr", async (req, res) => {
-  const { amount, upiId } = req.body; // Allow dynamic UPI ID
-
-  if (!upiId) {
-    return res.status(400).json({ error: "UPI ID is required" });
-  }
-
-  const options = {
-    amount: amount * 100, // Convert to paisa
-    currency: "INR",
-    payment_capture: 1, // Auto-capture payment
-  };
-
+app.post("/create-order", async (req, res) => {
   try {
-    // Create an order in Razorpay
+    const { amount } = req.body;
+    const options = {
+      amount: amount,
+      currency: "INR",
+      receipt: "receipt#1",
+      payment_capture: 1,
+    };
     const order = await razorpay.orders.create(options);
-
-    // Generate a UPI QR Code dynamically
-    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${encodeURIComponent(upiId)}&pn=YourStore&mc=123456&tid=${order.id}&tr=${order.id}&tn=Payment&am=${amount}&cu=INR`;
-
-    res.json({ qrCodeUrl, orderId: order.id });
+    res.json(order);
   } catch (error) {
-    console.error("QR Code Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
-app.post("/payment/verify", async (req, res) => {
-  const { orderId } = req.body;
-
-  try {
-    const payments = await razorpay.orders.fetchPayments(orderId);
-
-    if (payments.items.length > 0 && payments.items[0].status === "captured") {
-      res.json({ success: true, message: "Payment Successful ✅" });
-    } else {
-      res.json({ success: false, message: "Payment Pending ⏳" });
-    }
-  } catch (error) {
-    console.error("Payment Verification Error:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
 
 // **Attendee Signup**
 app.post("/attendee/signup", async (req, res) => {
@@ -169,28 +141,28 @@ app.post("/organizer/signin", async (req, res) => {
   const { email, password } = req.body;
 
   db.query("SELECT * FROM organisers WHERE username = ?", [email], async (err, results) => {
-      if (err) return res.status(500).json({ error: "Database error" });
+    if (err) return res.status(500).json({ error: "Database error" });
 
-      if (results.length === 0) {
-          console.log("User Not Found!"); // Log if no user is found
-          return res.status(401).json({ error: "Invalid credentials (User not found)" });
-      }
+    if (results.length === 0) {
+      console.log("User Not Found!"); // Log if no user is found
+      return res.status(401).json({ error: "Invalid credentials (User not found)" });
+    }
 
-      const user = results[0];
+    const user = results[0];
 
-      // Compare the entered password with the stored hashed password
-      const isMatch = await bcrypt.compare(password.trim(), user.password);
+    // Compare the entered password with the stored hashed password
+    const isMatch = await bcrypt.compare(password.trim(), user.password);
 
-      if (!isMatch) {
-          console.log("Password Mismatch!"); // Log if password doesn't match
-          return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
-      }
+    if (!isMatch) {
+      console.log("Password Mismatch!"); // Log if password doesn't match
+      return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
+    }
 
-      // ✅ Store `organiser_id` in the token payload
-      const token = jwt.sign({ userId: user.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    // ✅ Store `organiser_id` in the token payload
+    const token = jwt.sign({ userId: user.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-      // ✅ Include `organiser_id` in the response
-      res.json({ message: "Login successful", token, organizerId: user.organiser_id });
+    // ✅ Include `organiser_id` in the response
+    res.json({ message: "Login successful", token, organizerId: user.organiser_id });
   });
 });
 
@@ -198,29 +170,29 @@ app.post("/events/create", (req, res) => {
   const { title, description, date, time, venue, organiser, categories } = req.body;
 
   if (!title || !description || !date || !time || !venue || !organiser || categories.length === 0) {
-      return res.status(400).json({ error: "All fields are required!" });
+    return res.status(400).json({ error: "All fields are required!" });
   }
 
   const query = `INSERT INTO Events (title, description, date, time, venue, organiser) VALUES (?, ?, ?, ?, ?, ?)`;
 
   db.query(query, [title, description, date, time, venue, organiser], (err, result) => {
-      if (err) return res.status(500).json({ error: "Database error", details: err });
+    if (err) return res.status(500).json({ error: "Database error", details: err });
 
-      const eventId = result.insertId;
+    const eventId = result.insertId;
 
-      // Insert categories
-      const categoryQueries = categories.map(category => {
-          return new Promise((resolve, reject) => {
-              db.query(`INSERT INTO Categories (event_id, category) VALUES (?, ?)`, [eventId, category], (err) => {
-                  if (err) reject(err);
-                  else resolve();
-              });
-          });
+    // Insert categories
+    const categoryQueries = categories.map(category => {
+      return new Promise((resolve, reject) => {
+        db.query(`INSERT INTO Categories (event_id, category) VALUES (?, ?)`, [eventId, category], (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
       });
+    });
 
-      Promise.all(categoryQueries)
-          .then(() => res.status(201).json({ message: "Event created successfully", event_id: eventId }))
-          .catch(err => res.status(500).json({ error: "Category insert error", details: err }));
+    Promise.all(categoryQueries)
+      .then(() => res.status(201).json({ message: "Event created successfully", event_id: eventId }))
+      .catch(err => res.status(500).json({ error: "Category insert error", details: err }));
   });
 });
 
@@ -228,15 +200,15 @@ app.put("/events/update", (req, res) => {
   const { event_id, reg_start_date, reg_end_date, price, capacity } = req.body;
 
   if (!event_id || !reg_start_date || !reg_end_date || price === undefined || !capacity) {
-      return res.status(400).json({ error: "All fields are required!" });
+    return res.status(400).json({ error: "All fields are required!" });
   }
 
   const query = `UPDATE Events SET reg_start_date = ?, reg_end_date = ?, price = ?, capacity = ? WHERE event_id = ?`;
 
   db.query(query, [reg_start_date, reg_end_date, price, capacity, event_id], (err, result) => {
-      if (err) return res.status(500).json({ error: "Database error", details: err });
+    if (err) return res.status(500).json({ error: "Database error", details: err });
 
-      res.status(200).json({ message: "Event updated successfully" });
+    res.status(200).json({ message: "Event updated successfully" });
   });
 });
 
@@ -244,41 +216,41 @@ app.post("/events/upload-pics", upload.fields([{ name: "images", maxCount: 10 },
   const { event_id } = req.body;
 
   if (!event_id || !req.files["images"] || !req.files["cover_image"]) {
-      return res.status(400).json({ error: "Cover image and event images are required!" });
+    return res.status(400).json({ error: "Cover image and event images are required!" });
   }
 
   const coverImagePath = `uploads/${req.files["cover_image"][0].filename}`;
 
   // Insert cover image path into Events table
   db.query(
-      "UPDATE Events SET cover_image = ? WHERE event_id = ?",
-      [coverImagePath, event_id],
-      (err) => {
-          if (err) {
-              console.error("Error saving cover image:", err);
-              return res.status(500).json({ error: "Cover image insert error" });
-          }
+    "UPDATE Events SET cover_image = ? WHERE event_id = ?",
+    [coverImagePath, event_id],
+    (err) => {
+      if (err) {
+        console.error("Error saving cover image:", err);
+        return res.status(500).json({ error: "Cover image insert error" });
       }
+    }
   );
 
   // Insert event images into EventPics table
   const imageQueries = req.files["images"].map(file => {
-      const filePath = `uploads/${file.filename}`;
-      return new Promise((resolve, reject) => {
-          db.query(
-              "INSERT INTO EventPics (event_id, address) VALUES (?, ?)", 
-              [event_id, filePath], 
-              (err) => {
-                  if (err) reject(err);
-                  else resolve();
-              }
-          );
-      });
+    const filePath = `uploads/${file.filename}`;
+    return new Promise((resolve, reject) => {
+      db.query(
+        "INSERT INTO EventPics (event_id, address) VALUES (?, ?)",
+        [event_id, filePath],
+        (err) => {
+          if (err) reject(err);
+          else resolve();
+        }
+      );
+    });
   });
 
   Promise.all(imageQueries)
-      .then(() => res.status(201).json({ message: "Images uploaded successfully!" }))
-      .catch(err => res.status(500).json({ error: "Image insert error", details: err }));
+    .then(() => res.status(201).json({ message: "Images uploaded successfully!" }))
+    .catch(err => res.status(500).json({ error: "Image insert error", details: err }));
 });
 
 app.get("/events/recent", (req, res) => {
@@ -291,11 +263,11 @@ app.get("/events/recent", (req, res) => {
   `;
 
   db.query(query, (err, results) => {
-      if (err) {
-          console.error("Error fetching events:", err);
-          return res.status(500).json({ error: "Internal server error" });
-      }
-      res.json(results);
+    if (err) {
+      console.error("Error fetching events:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    res.json(results);
   });
 });
 app.get("/events/filter", (req, res) => {
@@ -311,32 +283,32 @@ app.get("/events/filter", (req, res) => {
   let queryParams = [];
 
   if (startDate) {
-      query += " AND e.date >= ?";
-      queryParams.push(startDate);
+    query += " AND e.date >= ?";
+    queryParams.push(startDate);
   }
   if (endDate) {
-      query += " AND e.date <= ?";
-      queryParams.push(endDate);
+    query += " AND e.date <= ?";
+    queryParams.push(endDate);
   }
   if (categories) {
-      const categoryList = categories.split(",").map(cat => `'${cat}'`).join(",");
-      query += ` AND e.event_id IN (SELECT event_id FROM Categories WHERE category IN (${categoryList}))`;
+    const categoryList = categories.split(",").map(cat => `'${cat}'`).join(",");
+    query += ` AND e.event_id IN (SELECT event_id FROM Categories WHERE category IN (${categoryList}))`;
   }
 
   query += " GROUP BY e.event_id ORDER BY e.date ASC"; // Ensure proper grouping and ordering
 
   db.query(query, queryParams, (err, results) => {
-      if (err) {
-          console.error("Error fetching filtered events:", err);
-          return res.status(500).json({ error: "Database error" });
-      }
-      
-      // Convert categories from CSV string to an array
-      results.forEach(event => {
-          event.categories = event.categories ? event.categories.split(",") : [];
-      });
+    if (err) {
+      console.error("Error fetching filtered events:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
 
-      res.json(results);
+    // Convert categories from CSV string to an array
+    results.forEach(event => {
+      event.categories = event.categories ? event.categories.split(",") : [];
+    });
+
+    res.json(results);
   });
 });
 
