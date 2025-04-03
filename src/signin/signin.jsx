@@ -17,8 +17,6 @@ function Signin() {
                         <li><h4>Explore a variety of events:</h4> Discover workshops, conferences, and meetups based on your interests.</li>
                         <li><h4>Easy registration process:</h4> Sign up quickly with a seamless online registration system.</li>
                         <li><h4>Receive event updates:</h4> Get timely notifications about schedule changes, speakers, and new opportunities.</li>
-
-
                     </ul>
                     <input type="text" placeholder='enter your email' className='usersigninput'/>
                     <button class="signinbut">SignIn as an Attendee</button>
