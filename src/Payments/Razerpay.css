@@ -1,0 +1,18 @@
+.paymentmain {
+    text-align: center;
+    margin-top: 125px;
+    height: 300px;
+
+}
+
+.generatebutton {
+    margin-top: 16px;
+    padding: 10px 20px;
+
+    font-size: 16px;
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

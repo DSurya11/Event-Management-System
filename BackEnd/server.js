@@ -8,8 +8,9 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import Razorpay from "razorpay";
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,17 +19,17 @@ const __dirname = path.dirname(__filename);
 const uploadDir = path.join(__dirname, "../public/uploads");
 
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true }); // Create directory if not exists
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${file.originalname}`;
-        cb(null, uniqueName);
-    }
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  }
 });
 
 const upload = multer({ storage });
@@ -39,7 +40,7 @@ app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
 
-// Database connection
+
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -52,19 +53,41 @@ db.connect((err) => {
   else console.log("Connected to database");
 });
 
-// **Attendee Signup** (User Registration)
+
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+
+app.post("/create-order", async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const options = {
+      amount: amount,
+      currency: "INR",
+      receipt: "receipt#1",
+      payment_capture: 1,
+    };
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+app.post("/logout", (req, res) => {
+  res.status(200).json({ message: "Logout successful" });
+});
+
 app.post("/attendee/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Check if user already exists
   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });
     if (results.length > 0) return res.status(400).json({ error: "User already exists" });
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert new user
     db.query(
       "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
       [name, email, hashedPassword],
@@ -77,7 +100,6 @@ app.post("/attendee/signup", async (req, res) => {
   });
 });
 
-// **Attendee Login** (User Sign-In)
 app.post("/attendee/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -94,59 +116,54 @@ app.post("/attendee/signin", async (req, res) => {
   });
 });
 
-// **Organizer Signup** (Organizers Registration)
-// **Organizer Signup** (Organizer Registration)
+
 app.post("/organizer/signup", async (req, res) => {
-    const { name, username, password } = req.body; // `username` here is the email
+  const { name, username, password } = req.body;
 
-    // Check if organizer already exists
-    db.query("SELECT * FROM organisers WHERE username = ?", [username], async (err, results) => {
+  db.query("SELECT * FROM organisers WHERE username = ?", [username], async (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+    if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    db.query(
+      "INSERT INTO organisers (name, username, password) VALUES (?, ?, ?)",
+      [name, username, hashedPassword],
+      (err, result) => {
         if (err) return res.status(500).json({ error: "Database error" });
-        if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" });
 
-        // Hash password before storing in the database
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insert new organizer into the database
-        db.query(
-            "INSERT INTO organisers (name, username, password) VALUES (?, ?, ?)",
-            [name, username, hashedPassword],
-            (err, result) => {
-                if (err) return res.status(500).json({ error: "Database error" });
-
-                res.status(201).json({ message: "Organizer registered successfully" });
-            }
-        );
-    });
+        res.status(201).json({ message: "Organizer registered successfully" });
+      }
+    );
+  });
 });
 
-// **Organizer Login** (Organizer Sign-In)
 app.post("/organizer/signin", async (req, res) => {
   const { email, password } = req.body;
 
   db.query("SELECT * FROM organisers WHERE username = ?", [email], async (err, results) => {
-      if (err) return res.status(500).json({ error: "Database error" });
+    if (err) return res.status(500).json({ error: "Database error" });
 
-      if (results.length === 0) {
-          console.log("User Not Found!"); // Log if no user is found
-          return res.status(401).json({ error: "Invalid credentials (User not found)" });
-      }
+    if (results.length === 0) {
+      console.log("User Not Found!");
+      return res.status(401).json({ error: "Invalid credentials (User not found)" });
+    }
 
-      const user = results[0];
+    const user = results[0];
 
-      // Compare the entered password with the stored hashed password
-      const isMatch = await bcrypt.compare(password.trim(), user.password);
 
-      if (!isMatch) {
-          console.log("Password Mismatch!"); // Log if password doesn't match
-          return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
-      }
+    const isMatch = await bcrypt.compare(password.trim(), user.password);
 
-      // ✅ Store `organiser_id` in the token payload
-      const token = jwt.sign({ userId: user.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    if (!isMatch) {
+      console.log("Password Mismatch!");
+      return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
+    }
 
-      // ✅ Include `organiser_id` in the response
-      res.json({ message: "Login successful", token, organizerId: user.organiser_id });
+
+    const token = jwt.sign({ userId: user.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+
+    res.json({ message: "Login successful", token, organizerId: user.organiser_id });
   });
 });
 
@@ -154,29 +171,29 @@ app.post("/events/create", (req, res) => {
   const { title, description, date, time, venue, organiser, categories } = req.body;
 
   if (!title || !description || !date || !time || !venue || !organiser || categories.length === 0) {
-      return res.status(400).json({ error: "All fields are required!" });
+    return res.status(400).json({ error: "All fields are required!" });
   }
 
   const query = `INSERT INTO Events (title, description, date, time, venue, organiser) VALUES (?, ?, ?, ?, ?, ?)`;
 
   db.query(query, [title, description, date, time, venue, organiser], (err, result) => {
-      if (err) return res.status(500).json({ error: "Database error", details: err });
+    if (err) return res.status(500).json({ error: "Database error", details: err });
 
-      const eventId = result.insertId;
+    const eventId = result.insertId;
 
-      // Insert categories
-      const categoryQueries = categories.map(category => {
-          return new Promise((resolve, reject) => {
-              db.query(`INSERT INTO Categories (event_id, category) VALUES (?, ?)`, [eventId, category], (err) => {
-                  if (err) reject(err);
-                  else resolve();
-              });
-          });
+
+    const categoryQueries = categories.map(category => {
+      return new Promise((resolve, reject) => {
+        db.query(`INSERT INTO Categories (event_id, category) VALUES (?, ?)`, [eventId, category], (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
       });
+    });
 
-      Promise.all(categoryQueries)
-          .then(() => res.status(201).json({ message: "Event created successfully", event_id: eventId }))
-          .catch(err => res.status(500).json({ error: "Category insert error", details: err }));
+    Promise.all(categoryQueries)
+      .then(() => res.status(201).json({ message: "Event created successfully", event_id: eventId }))
+      .catch(err => res.status(500).json({ error: "Category insert error", details: err }));
   });
 });
 
@@ -184,15 +201,15 @@ app.put("/events/update", (req, res) => {
   const { event_id, reg_start_date, reg_end_date, price, capacity } = req.body;
 
   if (!event_id || !reg_start_date || !reg_end_date || price === undefined || !capacity) {
-      return res.status(400).json({ error: "All fields are required!" });
+    return res.status(400).json({ error: "All fields are required!" });
   }
 
   const query = `UPDATE Events SET reg_start_date = ?, reg_end_date = ?, price = ?, capacity = ? WHERE event_id = ?`;
 
   db.query(query, [reg_start_date, reg_end_date, price, capacity, event_id], (err, result) => {
-      if (err) return res.status(500).json({ error: "Database error", details: err });
+    if (err) return res.status(500).json({ error: "Database error", details: err });
 
-      res.status(200).json({ message: "Event updated successfully" });
+    res.status(200).json({ message: "Event updated successfully" });
   });
 });
 
@@ -200,41 +217,41 @@ app.post("/events/upload-pics", upload.fields([{ name: "images", maxCount: 10 },
   const { event_id } = req.body;
 
   if (!event_id || !req.files["images"] || !req.files["cover_image"]) {
-      return res.status(400).json({ error: "Cover image and event images are required!" });
+    return res.status(400).json({ error: "Cover image and event images are required!" });
   }
 
   const coverImagePath = `uploads/${req.files["cover_image"][0].filename}`;
 
-  // Insert cover image path into Events table
+
   db.query(
-      "UPDATE Events SET cover_image = ? WHERE event_id = ?",
-      [coverImagePath, event_id],
-      (err) => {
-          if (err) {
-              console.error("Error saving cover image:", err);
-              return res.status(500).json({ error: "Cover image insert error" });
-          }
+    "UPDATE Events SET cover_image = ? WHERE event_id = ?",
+    [coverImagePath, event_id],
+    (err) => {
+      if (err) {
+        console.error("Error saving cover image:", err);
+        return res.status(500).json({ error: "Cover image insert error" });
       }
+    }
   );
 
-  // Insert event images into EventPics table
+
   const imageQueries = req.files["images"].map(file => {
-      const filePath = `uploads/${file.filename}`;
-      return new Promise((resolve, reject) => {
-          db.query(
-              "INSERT INTO EventPics (event_id, address) VALUES (?, ?)", 
-              [event_id, filePath], 
-              (err) => {
-                  if (err) reject(err);
-                  else resolve();
-              }
-          );
-      });
+    const filePath = `uploads/${file.filename}`;
+    return new Promise((resolve, reject) => {
+      db.query(
+        "INSERT INTO EventPics (event_id, address) VALUES (?, ?)",
+        [event_id, filePath],
+        (err) => {
+          if (err) reject(err);
+          else resolve();
+        }
+      );
+    });
   });
 
   Promise.all(imageQueries)
-      .then(() => res.status(201).json({ message: "Images uploaded successfully!" }))
-      .catch(err => res.status(500).json({ error: "Image insert error", details: err }));
+    .then(() => res.status(201).json({ message: "Images uploaded successfully!" }))
+    .catch(err => res.status(500).json({ error: "Image insert error", details: err }));
 });
 
 app.get("/events/recent", (req, res) => {
@@ -247,11 +264,11 @@ app.get("/events/recent", (req, res) => {
   `;
 
   db.query(query, (err, results) => {
-      if (err) {
-          console.error("Error fetching events:", err);
-          return res.status(500).json({ error: "Internal server error" });
-      }
-      res.json(results);
+    if (err) {
+      console.error("Error fetching events:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    res.json(results);
   });
 });
 app.get("/events/filter", (req, res) => {
@@ -267,90 +284,90 @@ app.get("/events/filter", (req, res) => {
   let queryParams = [];
 
   if (startDate) {
-      query += " AND e.date >= ?";
-      queryParams.push(startDate);
+    query += " AND e.date >= ?";
+    queryParams.push(startDate);
   }
   if (endDate) {
-      query += " AND e.date <= ?";
-      queryParams.push(endDate);
+    query += " AND e.date <= ?";
+    queryParams.push(endDate);
   }
   if (categories) {
-      const categoryList = categories.split(",").map(cat => `'${cat}'`).join(",");
-      query += ` AND e.event_id IN (SELECT event_id FROM Categories WHERE category IN (${categoryList}))`;
+    const categoryList = categories.split(",").map(cat => `'${cat}'`).join(",");
+    query += ` AND e.event_id IN (SELECT event_id FROM Categories WHERE category IN (${categoryList}))`;
   }
 
-  query += " GROUP BY e.event_id ORDER BY e.date ASC"; // Ensure proper grouping and ordering
+  query += " GROUP BY e.event_id ORDER BY e.date ASC";
 
   db.query(query, queryParams, (err, results) => {
-      if (err) {
-          console.error("Error fetching filtered events:", err);
-          return res.status(500).json({ error: "Database error" });
-      }
-      
-      // Convert categories from CSV string to an array
-      results.forEach(event => {
-          event.categories = event.categories ? event.categories.split(",") : [];
-      });
+    if (err) {
+      console.error("Error fetching filtered events:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
 
-      res.json(results);
+
+    results.forEach(event => {
+      event.categories = event.categories ? event.categories.split(",") : [];
+    });
+
+    res.json(results);
   });
 });
 
 app.get("/events/:eventId", (req, res) => {
   const { eventId } = req.params;
 
-  // Fetch event details
+
   db.query(
-      `SELECT event_id, title, description, date, time, venue, capacity, organiser, approved, 
+    `SELECT event_id, title, description, date, time, venue, capacity, organiser, approved, 
               reg_start_date, reg_end_date, price, cover_image 
        FROM Events 
-       WHERE event_id = ?`, 
-      [eventId], 
-      (err, eventResults) => {
-          if (err) {
-              console.error("Error fetching event:", err);
-              return res.status(500).json({ message: "Internal server error" });
-          }
-          if (eventResults.length === 0) {
-              return res.status(404).json({ message: "Event not found" });
-          }
-
-          const event = eventResults[0];
-
-          // Fetch categories
-          db.query(
-              `SELECT category FROM Categories WHERE event_id = ?`, 
-              [eventId], 
-              (err, categoryResults) => {
-                  if (err) {
-                      console.error("Error fetching categories:", err);
-                      return res.status(500).json({ message: "Internal server error" });
-                  }
-
-                  event.categories = categoryResults.map(row => row.category);
-
-                  // Fetch event pictures
-                  db.query(
-                      `SELECT address FROM EventPics WHERE event_id = ?`, 
-                      [eventId], 
-                      (err, picturesResults) => {
-                          if (err) {
-                              console.error("Error fetching event pictures:", err);
-                              return res.status(500).json({ message: "Internal server error" });
-                          }
-
-                          event.pictures = picturesResults.map(row => row.address);
-                          res.json(event); // Send final response with event details
-                      }
-                  );
-              }
-          );
+       WHERE event_id = ?`,
+    [eventId],
+    (err, eventResults) => {
+      if (err) {
+        console.error("Error fetching event:", err);
+        return res.status(500).json({ message: "Internal server error" });
       }
+      if (eventResults.length === 0) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      const event = eventResults[0];
+
+
+      db.query(
+        `SELECT category FROM Categories WHERE event_id = ?`,
+        [eventId],
+        (err, categoryResults) => {
+          if (err) {
+            console.error("Error fetching categories:", err);
+            return res.status(500).json({ message: "Internal server error" });
+          }
+
+          event.categories = categoryResults.map(row => row.category);
+
+
+          db.query(
+            `SELECT address FROM EventPics WHERE event_id = ?`,
+            [eventId],
+            (err, picturesResults) => {
+              if (err) {
+                console.error("Error fetching event pictures:", err);
+                return res.status(500).json({ message: "Internal server error" });
+              }
+
+              event.pictures = picturesResults.map(row => row.address);
+              res.json(event);
+            }
+          );
+        }
+      );
+    }
   );
 });
 
 
 
-// Start server
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

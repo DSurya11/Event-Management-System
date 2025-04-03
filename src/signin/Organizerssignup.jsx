@@ -3,7 +3,7 @@ import "./loginsignup.css";
 
 function Organizerssignup() {
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
@@ -14,7 +14,7 @@ function Organizerssignup() {
             const res = await fetch("http://localhost:3000/organizer/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, username: email, password }), // Fix: Change email -> username
+                body: JSON.stringify({ name, username: email, password }),
             });
 
             const data = await res.json();
@@ -22,7 +22,7 @@ function Organizerssignup() {
 
             setMessage("Signup successful! Redirecting to login...");
 
-            // Redirect to login after 2 seconds
+
             setTimeout(() => {
                 window.location.href = "/organizer/signin";
             }, 2000);
@@ -57,10 +57,10 @@ function Organizerssignup() {
                         <div className="row">
                             <i className="fas fa-envelope"></i>
                             <input
-                                type="email"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                type="text"
+                                placeholder="Username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required
                             />
                         </div>

@@ -22,7 +22,7 @@ function Attendeessignup() {
 
             setMessage("Signup successful! Redirecting to login...");
 
-            // Redirect to login page after 2 seconds
+            
             setTimeout(() => {
                 window.location.href = "/attendee/signin";
             }, 2000);

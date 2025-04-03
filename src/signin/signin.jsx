@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import './signin.css';
 
 function Signin() {
-    const navigate = useNavigate(); // Initialize the navigate function
+    const navigate = useNavigate(); 
 
     const handleSigninRedirect = (role) => {
         if (role === 'attendee') {

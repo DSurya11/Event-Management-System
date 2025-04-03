@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// User Pages
+
 import Home from './Users/Home.jsx';
 import Browse from './Users/Browse.jsx';
 import Regevent from './Users/Regevent.jsx';
 
-// Sign-in Pages
-import Attendeessignin from './signin/Attendeessignin.jsx';
+
+import Attendeessignin from './signin/attendeessignin.jsx';
 import Attendeessignup from './signin/Attendeessignup.jsx';
 import Organizerssignin from './signin/Organizerssignin.jsx';
 import Organizerssignup from './signin/Organizerssignup.jsx';
 import Signin from './signin/signin.jsx';
 
-// Organizer Pages
+
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';
 
-// Navbar Components
+
 import Navbar from './Components/Navbar.jsx';
 import OrgNav from './Components/OrgNav.jsx';
 
 function App() {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
-  
+
   useEffect(() => {
     const handleStorageChange = () => {
       setUserRole(localStorage.getItem('userRole'));
@@ -44,6 +44,7 @@ function App() {
           <>
             <Route path="/browse" element={<Browse />} />
             <Route path="/register/:eventId" element={<Regevent />} />
+            <Route path="/profile" element={<Profile />} />
           </>
         )}
 

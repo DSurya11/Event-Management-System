@@ -3,11 +3,12 @@
 * {
 	font-family: Open Sans;
 }
-body{
+
+body {
 	margin: 0;
 }
 
-.footer-distributed{
+.footer-distributed {
 	background: #E8EDDF;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
 	box-sizing: border-box;
@@ -18,8 +19,8 @@ body{
 	position: relative;
 	width: 100vw;
 	margin: 0;
-    bottom: -7.5px;
-	overflow-x:unset;
+	bottom: -7.5px;
+	overflow-x: unset;
 }
 
 .footer-distributed .footer-left,
@@ -29,13 +30,13 @@ body{
 	vertical-align: top;
 }
 
-/* Footer left */
+
 
 .footer-distributed .footer-left {
 	width: 40%;
 }
 
-/* The company logo */
+
 
 .footer-distributed h3 {
 	color: #161616;
@@ -47,7 +48,7 @@ body{
 	color: lightseagreen;
 }
 
-/* Footer links */
+
 
 .footer-distributed .footer-links {
 	color: #080808;
@@ -70,7 +71,7 @@ body{
 	margin: 0;
 }
 
-/* Footer Center */
+
 
 .footer-distributed .footer-center {
 	width: 35%;
@@ -129,7 +130,7 @@ body{
 	content: none;
 }
 
-/* Footer Right */
+
 
 .footer-distributed .footer-right {
 	width: 20%;
@@ -172,7 +173,7 @@ body{
 	margin-bottom: 5px;
 }
 
-/* If you don't want the footer to be responsive, remove these media queries */
+
 
 @media (max-width: 880px) {
 
