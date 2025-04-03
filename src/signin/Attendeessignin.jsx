@@ -6,7 +6,7 @@ function Attendeessignin({ setUserRole }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
-    const navigate = useNavigate(); // ✅ useNavigate inside the component
+    const navigate = useNavigate(); 
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -27,7 +27,7 @@ function Attendeessignin({ setUserRole }) {
             setUserRole("attendee");
             setMessage("Login successful!");
 
-            navigate("/"); // ✅ Redirect user immediately after login
+            navigate("/");
         } catch (error) {
             setMessage(error.message || "Login failed");
         }

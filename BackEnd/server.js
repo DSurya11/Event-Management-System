@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import Razorpay from "razorpay";
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 const uploadDir = path.join(__dirname, "../public/uploads");
 
 if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true }); // Create directory if not exists
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
@@ -39,7 +39,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
-// Database connection
+
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -53,7 +53,7 @@ db.connect((err) => {
 });
 
 
-// Razorpay Instance
+
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -75,7 +75,7 @@ app.post("/create-order", async (req, res) => {
   }
 });
 
-// **Attendee Signup**
+
 app.post("/attendee/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -97,7 +97,6 @@ app.post("/attendee/signup", async (req, res) => {
   });
 });
 
-// **Attendee Login**
 app.post("/attendee/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -114,7 +113,7 @@ app.post("/attendee/signin", async (req, res) => {
   });
 });
 
-// **Organizer Signup**
+
 app.post("/organizer/signup", async (req, res) => {
   const { name, username, password } = req.body;
 
@@ -136,7 +135,6 @@ app.post("/organizer/signup", async (req, res) => {
   });
 });
 
-// **Organizer Login**
 app.post("/organizer/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -144,24 +142,24 @@ app.post("/organizer/signin", async (req, res) => {
     if (err) return res.status(500).json({ error: "Database error" });
 
     if (results.length === 0) {
-      console.log("User Not Found!"); // Log if no user is found
+      console.log("User Not Found!");
       return res.status(401).json({ error: "Invalid credentials (User not found)" });
     }
 
     const user = results[0];
 
-    // Compare the entered password with the stored hashed password
+
     const isMatch = await bcrypt.compare(password.trim(), user.password);
 
     if (!isMatch) {
-      console.log("Password Mismatch!"); // Log if password doesn't match
+      console.log("Password Mismatch!");
       return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
     }
 
-    // ✅ Store `organiser_id` in the token payload
+
     const token = jwt.sign({ userId: user.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    // ✅ Include `organiser_id` in the response
+
     res.json({ message: "Login successful", token, organizerId: user.organiser_id });
   });
 });
@@ -180,7 +178,7 @@ app.post("/events/create", (req, res) => {
 
     const eventId = result.insertId;
 
-    // Insert categories
+
     const categoryQueries = categories.map(category => {
       return new Promise((resolve, reject) => {
         db.query(`INSERT INTO Categories (event_id, category) VALUES (?, ?)`, [eventId, category], (err) => {
@@ -221,7 +219,7 @@ app.post("/events/upload-pics", upload.fields([{ name: "images", maxCount: 10 },
 
   const coverImagePath = `uploads/${req.files["cover_image"][0].filename}`;
 
-  // Insert cover image path into Events table
+
   db.query(
     "UPDATE Events SET cover_image = ? WHERE event_id = ?",
     [coverImagePath, event_id],
@@ -233,7 +231,7 @@ app.post("/events/upload-pics", upload.fields([{ name: "images", maxCount: 10 },
     }
   );
 
-  // Insert event images into EventPics table
+
   const imageQueries = req.files["images"].map(file => {
     const filePath = `uploads/${file.filename}`;
     return new Promise((resolve, reject) => {
@@ -295,7 +293,7 @@ app.get("/events/filter", (req, res) => {
     query += ` AND e.event_id IN (SELECT event_id FROM Categories WHERE category IN (${categoryList}))`;
   }
 
-  query += " GROUP BY e.event_id ORDER BY e.date ASC"; // Ensure proper grouping and ordering
+  query += " GROUP BY e.event_id ORDER BY e.date ASC";
 
   db.query(query, queryParams, (err, results) => {
     if (err) {
@@ -303,7 +301,7 @@ app.get("/events/filter", (req, res) => {
       return res.status(500).json({ error: "Database error" });
     }
 
-    // Convert categories from CSV string to an array
+
     results.forEach(event => {
       event.categories = event.categories ? event.categories.split(",") : [];
     });
@@ -315,58 +313,58 @@ app.get("/events/filter", (req, res) => {
 app.get("/events/:eventId", (req, res) => {
   const { eventId } = req.params;
 
-  // Fetch event details
+
   db.query(
-      `SELECT event_id, title, description, date, time, venue, capacity, organiser, approved, 
+    `SELECT event_id, title, description, date, time, venue, capacity, organiser, approved, 
               reg_start_date, reg_end_date, price, cover_image 
        FROM Events 
-       WHERE event_id = ?`, 
-      [eventId], 
-      (err, eventResults) => {
-          if (err) {
-              console.error("Error fetching event:", err);
-              return res.status(500).json({ message: "Internal server error" });
-          }
-          if (eventResults.length === 0) {
-              return res.status(404).json({ message: "Event not found" });
-          }
-
-          const event = eventResults[0];
-
-          // Fetch categories
-          db.query(
-              `SELECT category FROM Categories WHERE event_id = ?`, 
-              [eventId], 
-              (err, categoryResults) => {
-                  if (err) {
-                      console.error("Error fetching categories:", err);
-                      return res.status(500).json({ message: "Internal server error" });
-                  }
-
-                  event.categories = categoryResults.map(row => row.category);
-
-                  // Fetch event pictures
-                  db.query(
-                      `SELECT address FROM EventPics WHERE event_id = ?`, 
-                      [eventId], 
-                      (err, picturesResults) => {
-                          if (err) {
-                              console.error("Error fetching event pictures:", err);
-                              return res.status(500).json({ message: "Internal server error" });
-                          }
-
-                          event.pictures = picturesResults.map(row => row.address);
-                          res.json(event); // Send final response with event details
-                      }
-                  );
-              }
-          );
+       WHERE event_id = ?`,
+    [eventId],
+    (err, eventResults) => {
+      if (err) {
+        console.error("Error fetching event:", err);
+        return res.status(500).json({ message: "Internal server error" });
       }
+      if (eventResults.length === 0) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      const event = eventResults[0];
+
+
+      db.query(
+        `SELECT category FROM Categories WHERE event_id = ?`,
+        [eventId],
+        (err, categoryResults) => {
+          if (err) {
+            console.error("Error fetching categories:", err);
+            return res.status(500).json({ message: "Internal server error" });
+          }
+
+          event.categories = categoryResults.map(row => row.category);
+
+
+          db.query(
+            `SELECT address FROM EventPics WHERE event_id = ?`,
+            [eventId],
+            (err, picturesResults) => {
+              if (err) {
+                console.error("Error fetching event pictures:", err);
+                return res.status(500).json({ message: "Internal server error" });
+              }
+
+              event.pictures = picturesResults.map(row => row.address);
+              res.json(event);
+            }
+          );
+        }
+      );
+    }
   );
 });
 
 
 
-// Start server
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

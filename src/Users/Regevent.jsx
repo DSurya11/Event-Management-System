@@ -24,7 +24,7 @@ function TestimonialCarousel({ images }) {
 
     const handleThumbnailClick = (index) => {
         setSelectedImage(index);
-        sliderRef.current.slickGoTo(index); // Move slider to clicked image
+        sliderRef.current.slickGoTo(index); 
     };
 
     return (
@@ -59,7 +59,7 @@ function TestimonialCarousel({ images }) {
 }
 
 function Regevent() {
-    const { eventId } = useParams(); // Get event ID from URL
+    const { eventId } = useParams(); 
     const [event, setEvent] = useState(null);
 
     useEffect(() => {

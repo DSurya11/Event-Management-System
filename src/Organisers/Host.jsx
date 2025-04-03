@@ -51,7 +51,7 @@ function Host() {
                 ? [...prev.categories, value]
                 : prev.categories.filter(c => c !== value);
 
-            console.log("Updated Categories:", updatedCategories); // Debugging
+            console.log("Updated Categories:", updatedCategories);
             return { ...prev, categories: updatedCategories };
         });
     };
@@ -89,7 +89,7 @@ function Host() {
                 time: formData.time,
                 venue: formData.venue,
                 organiser: formData.organiser,
-                categories: formData.categories, // ✅ Ensure categories are sent
+                categories: formData.categories,
             }),
         });
 
@@ -140,26 +140,26 @@ function Host() {
 
     const handleSubmitImages = async (e) => {
         e.preventDefault();
-    
+
         if (!eventId || !selectedImages.length || !coverImage) {
             alert("Please select a cover image and at least one event image.");
             return;
         }
-    
+
         const imageData = new FormData();
         imageData.append("event_id", eventId);
-        imageData.append("cover_image", coverImage.file); // ✅ Add Cover Image
-    
+        imageData.append("cover_image", coverImage.file);
+
         for (let i = 0; i < selectedImages.length; i++) {
             imageData.append("images", selectedImages[i].file);
         }
-    
+
         try {
             const response = await fetch("http://localhost:3000/events/upload-pics", {
                 method: "POST",
                 body: imageData,
             });
-    
+
             const result = await response.json();
             if (response.ok) {
                 setStep(4);
@@ -171,7 +171,7 @@ function Host() {
             alert("Image upload failed!");
         }
     };
-    
+
 
     const handleRemoveImage = (index) => {
         setSelectedImages(prevImages => prevImages.filter((_, i) => i !== index));

@@ -4,7 +4,7 @@ function Razerpay() {
     const [orderId, setOrderId] = useState("");
 
     useEffect(() => {
-        // Load Razorpay script dynamically
+        
         const script = document.createElement("script");
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         script.async = true;
@@ -17,7 +17,7 @@ function Razerpay() {
             const res = await fetch("http://localhost:3000/create-order", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: 500 }) // ₹5
+                body: JSON.stringify({ amount: 500 }) 
             });
             const data = await res.json();
             setOrderId(data.id);
@@ -34,7 +34,7 @@ function Razerpay() {
         }
 
         const options = {
-            key: "rzp_test_x4UltRWpwOAf5h", // Replace with your Razorpay test key
+            key: "rzp_test_x4UltRWpwOAf5h", 
             amount: 500,
             currency: "INR",
             name: "Test Store",

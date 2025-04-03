@@ -11,7 +11,7 @@ function Organizerssignin({ setUserRole }) {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMessage(""); // Clear previous messages
+        setMessage(""); 
         setLoading(true);
     
         try {
@@ -24,11 +24,11 @@ function Organizerssignin({ setUserRole }) {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Login failed");
     
-            // Store token, role, and organizer ID in localStorage
+           
             localStorage.setItem("token", data.token);
             localStorage.setItem("userRole", "organizer");
-            localStorage.setItem("organizerId", data.organizerId); // Store organizer's ID
-            setUserRole("organizer"); // Update user role state
+            localStorage.setItem("organizerId", data.organizerId); 
+            setUserRole("organizer"); 
     
             setMessage("Login successful! Redirecting...");
     

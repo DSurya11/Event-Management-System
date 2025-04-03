@@ -116,12 +116,12 @@
 
 }
 .browsingtext{
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
     overflow-x: hidden;
 }
 .browsingtext::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
+    display: none; 
 }
 .browsingtext {
     width:73% ;
@@ -144,14 +144,14 @@
 .browsingtext::-webkit-scrollbar {
     width: 12px;
     display: none;
-    /* Width of the scrollbar */
+    
 }
 
 .browsingtext::-webkit-scrollbar-track {
     background: #919191;
-    /* Background color of the track */
+    
     border-radius: 6px;
-    /* Rounded track corners */
+    
 }
 
 .browsingtext h2,
