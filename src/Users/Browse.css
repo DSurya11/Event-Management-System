@@ -8,6 +8,8 @@
     width: 80%;
     height: 40px;
     margin-left: 10%;
+    margin-bottom: 10px;
+    margin-top: 20px;
     background-color: #E8EDDF;
     border: 0;
     border-radius: 6px;
@@ -35,6 +37,7 @@
 }
 .filters{
     width: 17%;
+    margin-left: 10px;
 }
 .filters h4 {
     margin-bottom: 3px;
@@ -113,12 +116,12 @@
 
 }
 .browsingtext{
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
     overflow-x: hidden;
 }
 .browsingtext::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
+    display: none; 
 }
 .browsingtext {
     width:73% ;
@@ -141,14 +144,14 @@
 .browsingtext::-webkit-scrollbar {
     width: 12px;
     display: none;
-    /* Width of the scrollbar */
+    
 }
 
 .browsingtext::-webkit-scrollbar-track {
     background: #919191;
-    /* Background color of the track */
+    
     border-radius: 6px;
-    /* Rounded track corners */
+    
 }
 
 .browsingtext h2,
@@ -193,7 +196,7 @@ h5,
 }
 
 .description {
-    width: 84%;
+    width: 70%;
     margin-right: 5%;
     text-align: start;
     padding: 5px;
@@ -201,8 +204,8 @@ h5,
 }
 
 .location {
-    width: 13%;
-    
+    width: 25%;
+    margin-top: 25px;
 }
 
 
@@ -249,7 +252,8 @@ h5,
     border: none;
     border-radius: 5px;
     color: white;
-    padding: 5px 5px;
+    margin-top: 26px;
+    padding: 8px 6px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -266,13 +270,9 @@ h5,
     border: none;
     border-radius: 5px;
     color: white;
-    padding: 7px 7px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    transform: scale(1.03);
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 15px -5px, rgba(0, 0, 0, 0.3) 0px 5px 7px -8px;
-    transition-duration: 0.2s;
 
 }

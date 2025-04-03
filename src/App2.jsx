@@ -4,15 +4,14 @@ import Home from './Organisers/Home.jsx'
 import Regevent from './Users/Regevent.jsx'
 import OrgNav from "./Components/OrgNav.jsx";
 import Host from "./Organisers/Host.jsx";
+import Razerpay from "./Payments/Razerpay.jsx";
 
 function App2() {
     return (
         <BrowserRouter>
             <OrgNav />
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="host" element={<Host />} />
-                <Route path="register" element={<Regevent />} />
+                <Route path="/" element={<Regevent />} />
             </Routes>
         </BrowserRouter>
     )

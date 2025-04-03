@@ -1,13 +1,45 @@
 import './Browse.css'
-import {Link} from 'react-router-dom';
-import React, { useState } from "react";
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
 import ChatIcon from '../Components/ChatIcon';
 
 function Browse() {
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedStartDate, setSelectedStartDate] = useState('');
+    const [selectedEndDate, setSelectedEndDate] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [events, setEvents] = useState([]);
 
-    const handleDateChange = (e) => {
-        setSelectedDate(e.target.value);
+    useEffect(() => {
+        fetchEvents();
+    }, [selectedStartDate, selectedEndDate, selectedCategories]);
+
+    const fetchEvents = () => {
+        let query = new URLSearchParams();
+        if (selectedStartDate) query.append("startDate", selectedStartDate);
+        if (selectedEndDate) query.append("endDate", selectedEndDate);
+        if (selectedCategories.length > 0) query.append("categories", selectedCategories.join(","));
+
+        fetch(`http://localhost:3000/events/filter?${query.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                setEvents(data);
+            })
+            .catch(error => console.error("Error fetching events:", error));
+    };
+
+    const handleStartDateChange = (e) => {
+        setSelectedStartDate(e.target.value);
+    };
+
+    const handleEndDateChange = (e) => {
+        setSelectedEndDate(e.target.value);
+    };
+
+    const handleCategoryChange = (e) => {
+        const category = e.target.value;
+        setSelectedCategories(prev =>
+            e.target.checked ? [...prev, category] : prev.filter(cat => cat !== category)
+        );
     };
 
     const formatDate = (date) => {
@@ -19,7 +51,8 @@ function Browse() {
             year: 'numeric'
         });
     };
-    const categories = ["Academics", "Culture", "Sports", "Social", "Tech", "Career", 'Awareness', "Festivals", "Commuinty", "Competitions", "Workshops", "Events", "InterCollege", "Clubs"];
+
+    const categories = ["Academics", "Culture", "Sports", "Social", "Tech", "Career", "Awareness", "Festivals", "Community", "Competitions", "Workshops", "Events", "InterCollege", "Clubs"];
 
     return (
         <div className="browsemain Main">
@@ -29,112 +62,93 @@ function Browse() {
                 <div className='filters'>
                     <h3>Filter</h3>
                     <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
+
                     <div className="date-filter">
-                        <h4>Date</h4>
-
-                        <button onClick={() => document.getElementById("date-picker").showPicker()} style={selectedDate ? { backgroundColor: "lightseagreen" } : {}}>
-                            {selectedDate ? formatDate(selectedDate) : "Select Date"}
+                        <h4>Start Date</h4>
+                        <button onClick={() => document.getElementById("start-date-picker").showPicker()} style={selectedStartDate ? { backgroundColor: "lightseagreen" } : {}}>
+                            {selectedStartDate ? formatDate(selectedStartDate) : "Select Start Date"}
                         </button>
-
                         <input
                             type="date"
-                            id="date-picker"
-                            value={selectedDate}
-                            onChange={handleDateChange}
+                            id="start-date-picker"
+                            value={selectedStartDate}
+                            onChange={handleStartDateChange}
                             style={{ display: 'none' }}
                         />
                     </div>
+
+                    <div className="date-filter">
+                        <h4>End Date</h4>
+                        <button onClick={() => document.getElementById("end-date-picker").showPicker()} style={selectedEndDate ? { backgroundColor: "lightseagreen" } : {}}>
+                            {selectedEndDate ? formatDate(selectedEndDate) : "Select End Date"}
+                        </button>
+                        <input
+                            type="date"
+                            id="end-date-picker"
+                            value={selectedEndDate}
+                            onChange={handleEndDateChange}
+                            style={{ display: 'none' }}
+                        />
+                    </div>
+
                     <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
+
                     <h4>Category</h4>
                     <div className='categories'>
-
                         {categories.map((category, index) => (
                             <div key={index} className='each-category'>
-                                <input type="checkbox" id={category} className='check' name="category" value={category} />
+                                <input
+                                    type="checkbox"
+                                    id={category}
+                                    className='check'
+                                    name="category"
+                                    value={category}
+                                    onChange={handleCategoryChange}
+                                    checked={selectedCategories.includes(category)}
+                                />
                                 <label htmlFor={category}>{category}</label>
                             </div>
                         ))}
                     </div>
+
                     <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
                 </div>
+
                 <div className='browse-list'>
-                    <div className='browseitem'>
-
-                        <img className='browsingimg' src="./th.jpg" alt="" />
-
-                        <div className='browsingtext'>
-                            <div className='headingdate'>
-                                <div><h2>Shutterbox </h2></div>
-                                <div class="date">January 25, 2025</div>
+                    {events.length === 0 ? (
+                        <p>No events available</p>
+                    ) : (
+                        events.map(event => (
+                            <div key={event.event_id} className='browseitem'>
+                                <img className='browsingimg' src={event.cover_image} alt={event.title} />
+                                <div className='browsingtext'>
+                                    <div className='headingdate'>
+                                        <div><h2>{event.title}</h2></div>
+                                        <div className="date">{formatDate(event.date)}</div>
+                                    </div>
+                                    <div className='typetime'>
+                                        <div className="type"><b>{event.categories ? event.categories.join(', ') : "General"}</b></div>
+                                        <div className="time">{event.time}</div>
+                                    </div>
+                                    <div className='descriptionlocation'>
+                                        <div className='description'>
+                                            <p>{event.description.length > 280 ? event.description.slice(0, 280) + "..." : event.description}</p>
+                                        </div>
+                                        <div className="location">
+                                            <p>{event.venue}</p>
+                                            <Link to={`/register/${event.event_id}`}>
+                                                <button>Register now</button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className='typetime'>
-                                <div class="type"><b>Photograohy</b></div>
-                                <div class="time">11:45 AM</div>
-                            </div>
-                            <div className='descriptionlocation'>
-                                <div className='description'><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates molestiae excepturi nihil magnam tenetur fuga cum quos expedita, animi alias et omnis minima. Laboriosam quidem, adipisci molestias ex nostrum dolore!</p> </div>
-                                <div class="location"><p>Location</p>
-                                    <Link to = "/register"><button>Register now</button></Link></div>
-                            </div>
-
-
-
-                        </div>
-
-                    </div>
-                    <div className='browseitem'>
-
-                        <img className='browsingimg' src="./th.jpg" alt="" />
-
-                        <div className='browsingtext'>
-                            <div className='headingdate'>
-                                <div><h2>Shutterbox </h2></div>
-                                <div class="date">January 25, 2025</div>
-                            </div>
-                            <div className='typetime'>
-                                <div class="type"><b>Photograohy</b></div>
-                                <div class="time">11:45 AM</div>
-                            </div>
-                            <div className='descriptionlocation'>
-                                <div className='description'><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates molestiae excepturi nihil magnam tenetur fuga cum quos expedita, animi alias et omnis minima. Laboriosam quidem, adipisci molestias ex nostrum dolore!</p> </div>
-                                <div class="location"><p>Location</p>
-                                    <Link to = "/register"><button>Register now</button></Link></div>
-                            </div>
-
-
-
-                        </div>
-
-                    </div>
-                    <div className='browseitem'>
-
-                        <img className='browsingimg' src="./th.jpg" alt="" />
-
-                        <div className='browsingtext'>
-                            <div className='headingdate'>
-                                <div><h2>Shutterbox </h2></div>
-                                <div class="date">January 25, 2025</div>
-                            </div>
-                            <div className='typetime'>
-                                <div class="type"><b>Photograohy</b></div>
-                                <div class="time">11:45 AM</div>
-                            </div>
-                            <div className='descriptionlocation'>
-                                <div className='description'><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates molestiae excepturi nihil magnam tenetur fuga cum quos expedita, animi alias et omnis minima. Laboriosam quidem, adipisci molestias ex nostrum dolore!</p> </div>
-                                <div class="location"><p>Location</p>
-                                    <Link to = "/register"><button>Register now</button></Link></div>
-                            </div>
-
-
-
-                        </div>
-
-                    </div>
+                        ))
+                    )}
                 </div>
             </div>
-            <ChatIcon/>
         </div>
-    )
+    );
 }
 
 export default Browse;
