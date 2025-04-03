@@ -74,7 +74,9 @@ app.post("/create-order", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
+app.post("/logout", (req, res) => {
+  res.status(200).json({ message: "Logout successful" });
+});
 
 app.post("/attendee/signup", async (req, res) => {
   const { name, email, password } = req.body;

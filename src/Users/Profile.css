@@ -1,7 +1,7 @@
 .profile_page{
     display: flex;
 }
-.profile_logo button{
+.profilelogout{
     background-color: lightseagreen;
     border: none;
     padding: 6px;
@@ -12,7 +12,7 @@
     border-radius: 2px;
     cursor: pointer;
 }
-.profile_logo button:hover{
+.profilelogout:hover{
     background-color:rgb(19, 102, 98)
 
 }
@@ -21,7 +21,7 @@
 }
 .profile_boxM1 .profile_logo{
     width:300px;
-    height:400px;
+    height:450px;
     background-color: #E8EDDF;
     margin-top: 100px;
     border-radius: 8px;

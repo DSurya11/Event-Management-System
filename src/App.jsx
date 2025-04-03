@@ -44,6 +44,7 @@ function App() {
           <>
             <Route path="/browse" element={<Browse />} />
             <Route path="/register/:eventId" element={<Regevent />} />
+            <Route path="/profile" element={<Profile />} />
           </>
         )}
 
