@@ -1,18 +1,18 @@
 import './Home.css'
 
-function Home() {
+function OrgHome() {
     return (
         <div className="org_home Main">
             <div className='home-head'>
-                <h1 className="home-heading head-text">Welcome, Organizer!</h1>
+                <h1 className="home-heading head-text-card">Welcome, Organizer!</h1>
                 <p>"Effortlessly create and manage college events while attracting enthusiastic participants to make your event a success!"</p>
 
             </div>
-            <h2 className='subhead-text'>Your Ongoing Events</h2>
-            <div className='ongoing_events'>
-                <div className='ongoing_event_card'>
+            <h2 className='subhead-text-card'>Your Ongoing Events</h2>
+            <div className='ongoing_events-home'>
+                <div className='ongoing_event_cards'>
                     <div>
-                        <h1 className='head-text'>Event Name</h1>
+                        <h1 className='head-text-card'>Event Name</h1>
                         <p id='cat'>Category</p>
                         <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
                         <p id='location'>Location: </p>
@@ -41,9 +41,9 @@ function Home() {
                     </div>
                 </div>
 
-                <div className='ongoing_event_card'>
+                <div className='ongoing_event_cards'>
                     <div>
-                        <h1 className='head-text'>Event Name</h1>
+                        <h1 className='head-text-card'>Event Name</h1>
                         <p id='cat'>Category</p>
                         <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
                         <p id='location'>Location: </p>
@@ -73,11 +73,11 @@ function Home() {
                 </div>
 
             </div>
-            <h2 className='subhead-text'>Your Previous Events</h2>
+            <h2 className='subhead-text-card'>Your Previous Events</h2>
             <div className='previous-events'>
-                <div className='previous_event_card'>
+                <div className='previous_event_cards'>
                     <div>
-                        <h1 className='head-text'>Event Name</h1>
+                        <h1 className='head-text-card'>Event Name</h1>
                         <p id='cat'>Category</p>
                         <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
                         <p id='location'>Location: </p>
@@ -89,24 +89,9 @@ function Home() {
                         <div className='vertical-bar-prog' style={{ height : "25%" }}></div>
 
                     </div>
-                </div><div className='previous_event_card'>
+                </div><div className='previous_event_cards'>
                     <div>
-                        <h1 className='head-text'>Event Name</h1>
-                        <p id='cat'>Category</p>
-                        <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
-                        <p id='location'>Location: </p>
-                        <button>Registrations</button>
-                    </div>
-                    <div className='vertical-progress'>
-                        <p>Occupancy: 25%</p>
-                        <div className='vertical-bar'></div>
-                        <div className='vertical-bar-prog' style={{ height : "25%" }}></div>
-
-                    </div>
-                </div>
-                <div className='previous_event_card'>
-                    <div>
-                        <h1 className='head-text'>Event Name</h1>
+                        <h1 className='head-text-card'>Event Name</h1>
                         <p id='cat'>Category</p>
                         <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
                         <p id='location'>Location: </p>
@@ -119,9 +104,9 @@ function Home() {
 
                     </div>
                 </div>
-                <div className='previous_event_card'>
+                <div className='previous_event_cards'>
                     <div>
-                        <h1 className='head-text'>Event Name</h1>
+                        <h1 className='head-text-card'>Event Name</h1>
                         <p id='cat'>Category</p>
                         <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
                         <p id='location'>Location: </p>
@@ -134,9 +119,24 @@ function Home() {
 
                     </div>
                 </div>
-                <div className='previous_event_card'>
+                <div className='previous_event_cards'>
                     <div>
-                        <h1 className='head-text'>Event Name</h1>
+                        <h1 className='head-text-card'>Event Name</h1>
+                        <p id='cat'>Category</p>
+                        <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
+                        <p id='location'>Location: </p>
+                        <button>Registrations</button>
+                    </div>
+                    <div className='vertical-progress'>
+                        <p>Occupancy: 25%</p>
+                        <div className='vertical-bar'></div>
+                        <div className='vertical-bar-prog' style={{ height : "25%" }}></div>
+
+                    </div>
+                </div>
+                <div className='previous_event_cards'>
+                    <div>
+                        <h1 className='head-text-card'>Event Name</h1>
                         <p id='cat'>Category</p>
                         <p id='datetime'>10:00 AM<br></br>24th August, 2025</p>
                         <p id='location'>Location: </p>
@@ -152,4 +152,4 @@ function Home() {
         </div>
     )
 }
-export default Home;
+export default OrgHome;

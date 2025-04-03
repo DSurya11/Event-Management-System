@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./loginsignin.css";
 
-function Attendeessignin() {
+function Attendeessignin({ setUserRole }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate(); // ✅ useNavigate inside the component
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -19,13 +21,13 @@ function Attendeessignin() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
 
-            // Store token in localStorage
             localStorage.setItem("token", data.token);
-            setMessage("Login successful!");
-            
-            // Redirect user (optional)
-            window.location.href = "/dashboard"; 
+            localStorage.setItem("userRole", "attendee");
 
+            setUserRole("attendee");
+            setMessage("Login successful!");
+
+            navigate("/"); // ✅ Redirect user immediately after login
         } catch (error) {
             setMessage(error.message || "Login failed");
         }
@@ -71,7 +73,7 @@ function Attendeessignin() {
                             <input type="submit" value="Login" />
                         </div>
 
-                        <div className="signin-link">Not a member? <a href="/signup">Signup now</a></div>
+                        <div className="signin-link">Not a member? <a href="/attendee/signup">Signup now</a></div>
                     </form>
 
                     {message && <p className="message">{message}</p>}
