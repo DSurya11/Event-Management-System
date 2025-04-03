@@ -6,8 +6,8 @@ function OrgNav() {
         <div className="navbar">
             <h2 className='title'>Planova</h2>
             <div className='nb-button'>
-                <Link to="/"><button className='btn'>Home</button></Link>
-                <Link to="/host"><button className='btn'>Host</button></Link>
+                <Link to="/organizer/home"><button className='btn'>Home</button></Link>
+                <Link to="/organizer/host"><button className='btn'>Host</button></Link>
                 <Link to="/contact"><button className='btn'>Contact</button></Link>
             </div>
             

@@ -1,42 +1,44 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./loginsignin.css";
 
-function Organizerssignin() {
+function Organizerssignin({ setUserRole }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
+        setMessage(""); // Clear previous messages
+        setLoading(true);
+    
         try {
             const res = await fetch("http://localhost:3000/organizer/signin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
-
+    
             const data = await res.json();
-
-            if (!res.ok) {
-                // Display backend error message
-                throw new Error(data.error || "Login failed");
-            }
-
-            // Store token and role
+            if (!res.ok) throw new Error(data.error || "Login failed");
+    
+            // Store token, role, and organizer ID in localStorage
             localStorage.setItem("token", data.token);
-            localStorage.setItem("role", "organizer");
-
-            setMessage("Login successful!");
-            // Redirect to dashboard
-            setTimeout(() => {
-                window.location.href = "/organizer/dashboard"; // Ensure this route exists in your frontend routing
-            }, 1000);
+            localStorage.setItem("userRole", "organizer");
+            localStorage.setItem("organizerId", data.organizerId); // Store organizer's ID
+            setUserRole("organizer"); // Update user role state
+    
+            setMessage("Login successful! Redirecting...");
+    
+            setTimeout(() => navigate("/organizer/home"), 1000);
         } catch (error) {
-            // Show error message from backend
-            setMessage(error.message || "Login failed");
+            setMessage(error.message || "Login failed. Please try again.");
+        } finally {
+            setLoading(false);
         }
-    };
+    };    
 
     return (
         <div className="loginsignin body1">
@@ -75,10 +77,12 @@ function Organizerssignin() {
                         <div className="pass"><a href="#">Forgot password?</a></div>
 
                         <div className="row button">
-                            <input type="submit" value="Login" />
+                            <input type="submit" value={loading ? "Logging in..." : "Login"} disabled={loading} />
                         </div>
 
-                        <div className="signin-link">Not a member? <a href="#">Signup now</a></div>
+                        <div className="signin-link">
+                            Not a member? <a href="/organizer/signup">Signup now</a>
+                        </div>
                     </form>
 
                     {message && <p className="message">{message}</p>}

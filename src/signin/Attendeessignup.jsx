@@ -24,7 +24,7 @@ function Attendeessignup() {
 
             // Redirect to login page after 2 seconds
             setTimeout(() => {
-                window.location.href = "/signin";
+                window.location.href = "/attendee/signin";
             }, 2000);
 
         } catch (error) {
