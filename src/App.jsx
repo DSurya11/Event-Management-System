@@ -12,6 +12,8 @@ import Attendeessignup from './signin/Attendeessignup.jsx';
 import Organizerssignin from './signin/Organizerssignin.jsx';
 import Organizerssignup from './signin/Organizerssignup.jsx';
 import Signin from './signin/signin.jsx';
+import Profile from './Users/Profile.jsx';
+import Razerpay from './Payments/Razerpay.jsx';
 
 
 import OrgHome from './Organisers/Home.jsx';
@@ -45,6 +47,7 @@ function App() {
             <Route path="/browse" element={<Browse />} />
             <Route path="/register/:eventId" element={<Regevent />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/register/:eventId/fillform" element={<Razerpay />} />
           </>
         )}
 

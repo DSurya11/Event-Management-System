@@ -8,16 +8,23 @@ function Browse() {
     const [selectedEndDate, setSelectedEndDate] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [events, setEvents] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     useEffect(() => {
         fetchEvents();
-    }, [selectedStartDate, selectedEndDate, selectedCategories]);
+    }, [selectedStartDate, selectedEndDate, selectedCategories, searchTerm]);
+
 
     const fetchEvents = () => {
         let query = new URLSearchParams();
         if (selectedStartDate) query.append("startDate", selectedStartDate);
         if (selectedEndDate) query.append("endDate", selectedEndDate);
         if (selectedCategories.length > 0) query.append("categories", selectedCategories.join(","));
+        if (searchTerm.trim() !== "") query.append("search", searchTerm.trim());
 
         fetch(`http://localhost:3000/events/filter?${query.toString()}`)
             .then(response => response.json())
@@ -26,6 +33,7 @@ function Browse() {
             })
             .catch(error => console.error("Error fetching events:", error));
     };
+
 
     const handleStartDateChange = (e) => {
         setSelectedStartDate(e.target.value);
@@ -57,7 +65,14 @@ function Browse() {
     return (
         <div className="browsemain Main">
             <h2 id='searchh2'>Find Your Next College Experience</h2>
-            <input className='searchbox' type="text" placeholder="Search here" />
+            <input
+                className='searchbox'
+                type="text"
+                placeholder="Search here"
+                value={searchTerm}
+                onChange={handleSearchChange}
+            />
+
             <div className="browse">
                 <div className='filters'>
                     <h3>Filter</h3>

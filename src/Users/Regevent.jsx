@@ -1,90 +1,68 @@
-import { useParams } from 'react-router-dom';
-import React, { useState, useEffect, useRef } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './Regevent.css';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-function TestimonialCarousel({ images }) {
-    const [rerender, setRerender] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(0);
-    const sliderRef = useRef(null);
-    useEffect(() => {
-        if (images.length > 0) {
-            setRerender(prev => !prev); // Trigger re-render
-        }
-    }, [images]);
-    const settings = {
-        dots: false,
-        arrows: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        pauseOnHover: true,
-        beforeChange: (oldIndex, newIndex) => setSelectedImage(newIndex),
-    };
-
-    const handleThumbnailClick = (index) => {
-        setSelectedImage(index);
-        sliderRef.current.slickGoTo(index);
-    };
-
-    return (
-        <div className="carousel-container">
-            {images.length > 0 && (
-                <>
-                    <Slider ref={sliderRef} {...settings} className='slider'>
-                        {images.map((img, index) => (
-                            <div key={index} className="testimonial-slide">
-                                <img 
-                                    src={`${img}`} 
-                                    alt={`Event ${index}`} 
-                                    className="main-image"
-                                />
-                            </div>
-                        ))}
-                    </Slider>
-
-                    <div className="thumbnail-container">
-                        {images.map((img, index) => (
-                            <div
-                                key={index}
-                                className={`thumbnail ${selectedImage === index ? "active" : ""}`}
-                                onClick={() => handleThumbnailClick(index)}
-                            >
-                                <img src={`${img}`} alt="Preview" />
-                            </div>
-                        ))}
-                    </div>
-                </>
-            )}
-        </div>
-    );
-}
-
-
 
 function Regevent() {
     const { eventId } = useParams();
     const [event, setEvent] = useState(null);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [recentEvents, setRecentEvents] = useState([]);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
+        // Fetch selected event
         fetch(`http://localhost:3000/events/${eventId}`)
             .then(response => response.json())
             .then(data => {
                 setEvent(data);
+                setSelectedImageIndex(0);
             })
             .catch(error => console.error("Error fetching event:", error));
+
+        // Fetch recent events
+        fetch("http://localhost:3000/events/recent")
+            .then(response => response.json())
+            .then(data => {
+                setRecentEvents(data);
+            })
+            .catch(error => console.error("Error fetching recent events:", error));
     }, [eventId]);
+
 
     if (!event) return <p>Loading event details...</p>;
 
+    const allImages = [event.cover_image, ...(event.pictures || [])];
+
     return (
         <div className="regevent Main">
-            <TestimonialCarousel images={[event.cover_image, ...(event.pictures || [])]} />
+            <div className="carousel-container">
+                {allImages.length > 0 && (
+                    <>
+                        <div className='slider'>
+                            <div className="testimonial-slide">
+                                <img
+                                    src={`../${allImages[selectedImageIndex]}`}
+                                    alt={`Event ${selectedImageIndex}`}
+                                    className="main-image"
+                                />
+                            </div>
+                        </div>
+                        <div className="thumbnail-container">
+                            {allImages.map((img, index) => (
+                                <div
+                                    key={index}
+                                    className={`thumbnail ${selectedImageIndex === index ? "active" : ""}`}
+                                    onClick={() => setSelectedImageIndex(index)}
+                                >
+                                    <img src={`../${img}`} alt={`Thumbnail ${index}`} />
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
 
 
             <div className='event'>
@@ -92,7 +70,25 @@ function Regevent() {
                 <div className='event_info'>
                     <div className='event_reg'>
                         <div className='event_specs'>{event.categories?.join(", ") || "Category"}</div>
-                        <button className='Register'>Register</button>
+                        <button
+                            className='Register'
+                            onClick={() =>
+                                navigate(`/register/${event.event_id}/fillform`, {
+                                    state: {
+                                        eventId: event.event_id,
+                                        amount: event.price * 100, // Razorpay needs amount in paise
+                                        customFields: event.custom_fields || [
+                                            { name: "Name", type: "text" },
+                                            { name: "Email", type: "email" },
+                                            { name: "Phone", type: "tel" }
+                                        ]
+                                    }
+                                })
+                            }
+                        >
+                            Register now
+                        </button>
+
                     </div>
                     <hr />
                     <div className='event_details'>
@@ -117,20 +113,23 @@ function Regevent() {
                         </div>
                     </div>
                     <div className='uc_event'>
-                        <h3 className='uc_event_header'>Upcoming events</h3>
+                        <h3 className='uc_event_header'>More Events</h3>
                         <div className='events'>
-                            <div className='UC_event'>
-                                <div className='event1'><img className='event_photo' src="white.jpeg" alt="Upcoming Event" /></div>
-                                <div className='artist_name'>Event</div>
-                            </div>
-                            <div className='UC_event'>
-                                <div className='event2'><img className='event_photo' src="white.jpeg" alt="Upcoming Event" /></div>
-                                <div className='artist_name'>Event</div>
-                            </div>
-                            <div className='UC_event'>
-                                <div className='event3'><img className='event_photo' src="white.jpeg" alt="Upcoming Event" /></div>
-                                <div className='artist_name'>Event</div>
-                            </div>
+                            {recentEvents
+                                .filter(e => e.event_id !== parseInt(eventId)) // 🛑 Filter out current event
+                                .map((e, index) => (
+                                    <Link to={`/register/${e.event_id}`} key={index} className='UC_event'>
+                                        <div className='event1'>
+                                            <img
+                                                className='event_photo'
+                                                src={`../${e.cover_image}`}
+                                                alt={e.title}
+                                            />
+                                            <div className='artist_name'>{e.title}</div>
+                                        </div>
+                                    </Link>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
