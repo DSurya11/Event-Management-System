@@ -6,9 +6,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 function TestimonialCarousel({ images }) {
+    const [rerender, setRerender] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
     const sliderRef = useRef(null);
-
+    useEffect(() => {
+        if (images.length > 0) {
+            setRerender(prev => !prev); // Trigger re-render
+        }
+    }, [images]);
     const settings = {
         dots: false,
         arrows: false,
@@ -24,48 +29,54 @@ function TestimonialCarousel({ images }) {
 
     const handleThumbnailClick = (index) => {
         setSelectedImage(index);
-        sliderRef.current.slickGoTo(index); 
+        sliderRef.current.slickGoTo(index);
     };
 
     return (
         <div className="carousel-container">
-            {/* Main Image Carousel */}
-            <Slider ref={sliderRef} {...settings} className='slider'>
-                {images.length > 0 ? images.map((img, index) => (
-                    <div key={index} className="testimonial-slide">
-                        <img src="uploads/1743610443446-th-4231806598.jpg" alt={`Event ${index}`} className="main-image" />
-                    </div>
-                )) : (
-                    <div className="testimonial-slide">
-                        <img src="placeholder.jpg" alt="No Images Available" className="main-image" />
-                    </div>
-                )}
-            </Slider>
+            {images.length > 0 && (
+                <>
+                    <Slider ref={sliderRef} {...settings} className='slider'>
+                        {images.map((img, index) => (
+                            <div key={index} className="testimonial-slide">
+                                <img 
+                                    src={`${img}`} 
+                                    alt={`Event ${index}`} 
+                                    className="main-image"
+                                />
+                            </div>
+                        ))}
+                    </Slider>
 
-            {/* Thumbnails (Static) */}
-            <div className="thumbnail-container">
-                {images.length > 0 ? images.map((img, index) => (
-                    <div
-                        key={index}
-                        className={`thumbnail ${selectedImage === index ? "active" : ""}`}
-                        onClick={() => handleThumbnailClick(index)}
-                    >
-                        <img src={img} alt="Preview" />
+                    <div className="thumbnail-container">
+                        {images.map((img, index) => (
+                            <div
+                                key={index}
+                                className={`thumbnail ${selectedImage === index ? "active" : ""}`}
+                                onClick={() => handleThumbnailClick(index)}
+                            >
+                                <img src={`${img}`} alt="Preview" />
+                            </div>
+                        ))}
                     </div>
-                )) : null}
-            </div>
+                </>
+            )}
         </div>
     );
 }
 
+
+
 function Regevent() {
-    const { eventId } = useParams(); 
+    const { eventId } = useParams();
     const [event, setEvent] = useState(null);
 
     useEffect(() => {
         fetch(`http://localhost:3000/events/${eventId}`)
             .then(response => response.json())
-            .then(data => setEvent(data))
+            .then(data => {
+                setEvent(data);
+            })
             .catch(error => console.error("Error fetching event:", error));
     }, [eventId]);
 
@@ -73,8 +84,8 @@ function Regevent() {
 
     return (
         <div className="regevent Main">
-            {/* Updated to use event images */}
-            <TestimonialCarousel images={event.pictures || []} />
+            <TestimonialCarousel images={[event.cover_image, ...(event.pictures || [])]} />
+
 
             <div className='event'>
                 <h2 className='event_name'>{event.title || "Event Name"}</h2>

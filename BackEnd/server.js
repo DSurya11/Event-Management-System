@@ -40,7 +40,9 @@ const server = createServer(app);
 
 app.use(express.json());
 app.use(cors());
-app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+app.use('/uploads', express.static('uploads'));
+
+
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -118,6 +120,9 @@ app.post("/create-order", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+app.post("/logout", (req, res) => {
+  res.status(200).json({ message: "Logout successful" });
 });
 
 app.post("/attendee/signup", async (req, res) => {
