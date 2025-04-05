@@ -11,6 +11,7 @@ import fs from "fs";
 import Razorpay from "razorpay";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ const upload = multer({ storage });
 const app = express();
 const server = createServer(app);
 
-
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
 app.use('/uploads', express.static('uploads'));
@@ -408,14 +409,9 @@ app.post("/events/custom-fields", (req, res) => {
   });
 });
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.json()); // if not already set
-
 app.post("/register", (req, res) => {
   const { event_id, form_data, razorpay_payment_id } = req.body;
-
-  // For simplicity, assuming user_id is stored in session/localStorage (or passed in body)
-  const user_id = req.headers["x-user-id"]; // Or extract from auth/session
+  const user_id = req.headers["x-user-id"];
 
   if (!user_id || !event_id || !form_data || !razorpay_payment_id) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -439,7 +435,6 @@ app.post("/register", (req, res) => {
     }
   );
 });
-
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
