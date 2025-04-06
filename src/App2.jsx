@@ -14,8 +14,8 @@ function App2() {
         <BrowserRouter>
             <OrgNav />
             <Routes>
-                <Route path="/" element={<Organizers />} />
-                
+                <Route path="/" element={<Chat role={"attendees"} />} />
+                <Route path="/chat/organizer" element={<Chat role={"organizer"} />} />
             </Routes>
         </BrowserRouter>
     )

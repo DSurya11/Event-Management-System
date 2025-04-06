@@ -11,34 +11,34 @@ function Organizerssignin({ setUserRole }) {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMessage(""); 
+        setMessage("");
         setLoading(true);
-    
+
         try {
             const res = await fetch("http://localhost:3000/organizer/signin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
-    
+
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Login failed");
-    
-           
+
+
             localStorage.setItem("token", data.token);
             localStorage.setItem("userRole", "organizer");
-            localStorage.setItem("organizerId", data.organizerId); 
-            setUserRole("organizer"); 
-    
+            localStorage.setItem("userId", data.organizerId);
+            setUserRole("organizer");
+
             setMessage("Login successful! Redirecting...");
-    
+
             setTimeout(() => navigate("/organizer/home"), 1000);
         } catch (error) {
             setMessage(error.message || "Login failed. Please try again.");
         } finally {
             setLoading(false);
         }
-    };    
+    };
 
     return (
         <div className="loginsignin body1">
