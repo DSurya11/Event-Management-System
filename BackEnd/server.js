@@ -216,6 +216,56 @@ app.post("/attendee/signup", async (req, res) => {
   });
 });
 
+app.get("/admin/events", (req, res) => {
+  const pendingQuery = `
+    SELECT e.*, o.name AS organiser_name
+    FROM events e
+    JOIN organisers o ON e.organiser = o.organiser_id
+    WHERE e.approved = 0
+  `;
+
+  const ongoingQuery = `
+    SELECT e.*, o.name AS organiser_name
+    FROM events e
+    JOIN organisers o ON e.organiser = o.organiser_id
+    WHERE e.approved = 1
+  `;
+
+  db.query(pendingQuery, (err, pending) => {
+    if (err) {
+      return res.status(500).json({ error: "Error fetching pending events" });
+    }
+
+    db.query(ongoingQuery, (err2, ongoing) => {
+      if (err2) {
+        return res.status(500).json({ error: "Error fetching ongoing events" });
+      }
+
+      res.json({ pending, ongoing });
+    });
+  });
+});
+// Approve event
+app.put('/events/:id/approve', (req, res) => {
+  const { id } = req.params;
+  db.query("UPDATE Events SET approved = 1 WHERE event_id = ?", [id], (err, result) => {
+    if (err) return res.status(500).json({ error: "Error approving event" });
+    res.json({ message: "Event approved successfully" });
+  });
+});
+
+// Reject event
+app.put('/events/:id/reject', (req, res) => {
+  const { id } = req.params;
+  db.query("UPDATE Events SET approved = 2 WHERE event_id = ?", [id], (err, result) => {
+    if (err) return res.status(500).json({ error: "Error rejecting event" });
+    res.json({ message: "Event rejected successfully" });
+  });
+});
+
+
+
+
 app.post("/attendee/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -238,13 +288,13 @@ app.post("/attendee/signin", async (req, res) => {
   });
 });
 
-// Organizer signup and signin remain unchanged...
+
 app.post("/organizer/signup", async (req, res) => {
   const { name, username, password } = req.body;
 
   db.query("SELECT * FROM organisers WHERE username = ?", [username], async (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });
-    if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" });
+    if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" }); 
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -288,7 +338,6 @@ app.post("/organizer/signin", async (req, res) => {
     res.json({ message: "Login successful", token, organizerId: user.organiser_id });
   });
 });
-
 
 app.post("/events/create", (req, res) => {
   const { title, description, date, time, venue, organiser, categories } = req.body;

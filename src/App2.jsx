@@ -5,14 +5,17 @@ import Regevent from './Users/Regevent.jsx'
 import OrgNav from "./Components/OrgNav.jsx";
 import Host from "./Organisers/Host.jsx";
 import Razerpay from "./Payments/Razerpay.jsx";
-import Chat from "./communication/Chat.jsx";
-import Attendeesignin from "./signin/attendeessignin.jsx";
-import Organizers from "./Users/Organizers.jsx";
-
+import Profile from "./Users/Profile.jsx";
+import Admin from "./Admin/Admin.jsx";
+import AdminNavbar from "./Components/AdminNavbar.jsx";
+import VdEvent_On from "./Admin/VdEvent_On.jsx";
+import VdEvent_Up from "./Admin/VdEvent_Up.jsx";
+import Admin_Org from "./Admin/Admin_Org.jsx";
+import Admin_User from "./Admin/Admin_User.jsx";
 function App2() {
     return (
         <BrowserRouter>
-            <OrgNav />
+            <AdminNavbar />
             <Routes>
                 <Route path="/" element={<Chat role={"attendees"} />} />
                 <Route path="/chat/organizer" element={<Chat role={"organizer"} />} />

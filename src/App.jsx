@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 
+import Admin from './Admin/Admin.jsx';
+
 import Home from './Users/Home.jsx';
 import Browse from './Users/Browse.jsx';
 import Regevent from './Users/Regevent.jsx';
@@ -66,6 +68,10 @@ function App() {
         <Route path="/attendee/signup" element={!userRole ? <Attendeessignup setUserRole={setUserRole} /> : <Navigate to="/" />} />
         <Route path="/organizer/signin" element={!userRole ? <Organizerssignin setUserRole={setUserRole} /> : <Navigate to="/organizer/home" />} />
         <Route path="/organizer/signup" element={!userRole ? <Organizerssignup setUserRole={setUserRole} /> : <Navigate to="/organizer/home" />} />
+
+
+        <Route path="/admin" element={<Admin/>} />
+
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
