@@ -70,6 +70,7 @@ function Regevent() {
                 <div className='event_info'>
                     <div className='event_reg'>
                         <div className='event_specs'>{event.categories?.join(", ") || "Category"}</div>
+                                <Link to={`/chat/attendees/${eventId}/${event.organiser}`}>Open Chat</Link>
                         <button
                             className='Register'
                             onClick={() =>

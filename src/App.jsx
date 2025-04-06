@@ -7,7 +7,7 @@ import Admin from './Admin/Admin.jsx';
 import Home from './Users/Home.jsx';
 import Browse from './Users/Browse.jsx';
 import Regevent from './Users/Regevent.jsx';
-
+import Chat from './communication/Chat.jsx';
 
 import Attendeessignin from './signin/attendeessignin.jsx';
 import Attendeessignup from './signin/Attendeessignup.jsx';
@@ -50,13 +50,17 @@ function App() {
             <Route path="/register/:eventId" element={<Regevent />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
-          </>
+            <Route path="/chat/attendees/:eventId/:organizerId" element={<Chat role="attendee" />} />
+
+            </>
         )}
 
         {userRole === 'organizer' && (
           <>
             <Route path="/organizer/home" element={<OrgHome />} />
             <Route path="/organizer/host" element={<Host />} />
+            <Route path="/chat/organizers/:eventId/:attendeeId" element={<Chat role="organizer" />} />
+
           </>
         )}
 
