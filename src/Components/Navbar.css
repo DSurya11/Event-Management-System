@@ -33,21 +33,34 @@
     color: black;
     border-radius: 5px;
     border: none;
+    font-size: 14px;
+    transition-duration: .2s;
+
 }
 .nb-button .btn:hover{
     color: lightseagreen;;
     cursor: pointer;
-    
+    transform: scale(1.08);
+    transition-duration: .2s;
     
 }
 
 .profilesvg {
     height: 40px;
     width: 40px;
-    border-radius: 100%;
+    /* border-radius: 100%; */
     margin-left: 40px;
     position: fixed;
     top: 2.5%;
     right: 2.5%;
 
+}
+.logoutsvg{
+    height: 30px;
+    width: 30px;
+    margin-left: 40px;
+    position: fixed;
+    top: 2.59%;
+    right: 2.5%;
+    cursor: pointer;
 }

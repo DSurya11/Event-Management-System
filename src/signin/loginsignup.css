@@ -1,0 +1,183 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.body1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 15px;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+
+}
+
+
+
+.loginsignup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 800px;
+    padding: 15px;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    overflow: hidden;
+}
+
+/* Left Section */
+.loginsignupinfo {
+    width: 55%;
+    text-align: center;
+    color: white;
+    padding: 40px;
+}
+
+.loginsignuph2 {
+    font-size: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.loginsignupinfo p {
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 10px;
+}
+
+/* Right Section - Login Form */
+.loginsignupinput {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+}
+
+.loginsignup .wrapper {
+    background: white;
+    /* margin-top: 260px; */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+
+}
+
+.loginsignup .wrapper .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.loginsignup .wrapper .row {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease-in-out;
+}
+
+.loginsignup .wrapper .row:focus-within {
+    border-color: #1abc9c;
+    background: white;
+}
+
+.loginsignup .wrapper .row i {
+    margin-right: 10px;
+    color: #1abc9c;
+    font-size: 18px;
+}
+
+.loginsignup .wrapper input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    color: #333;
+    padding: 5px;
+}
+
+.loginsignup .wrapper input::placeholder {
+    color: #999;
+}
+
+/* Forgot Password */
+.loginsignup .wrapper .pass {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.loginsignup .wrapper .pass a {
+    text-decoration: none;
+    color: #1abc9c;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.loginsignup .wrapper .pass a:hover {
+    color: #16a085;
+}
+
+/* Login Button */
+.loginsignup .wrapper .button input {
+    width: 100%;
+    background: #1abc9c;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.loginsignup .wrapper .button input:hover {
+    background: #16a085;
+    transform: scale(1.02);
+}
+
+/* Signup Link */
+.loginsignup .wrapper .signup-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.loginsignup .wrapper .signup-link a {
+    color: #1abc9c;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.loginsignup .wrapper .signup-link a:hover {
+    color: #16a085;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .loginsignup {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .loginsignupinfo {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .loginsignupinput {
+        width: 90%;
+    }
+}
