@@ -87,7 +87,7 @@ function Admin() {
                                     day: 'numeric'
                                 })}
                             </div>
-
+                            
                             <button className='event_btns_vd'>View Details</button>
                         </div>
                     ))}

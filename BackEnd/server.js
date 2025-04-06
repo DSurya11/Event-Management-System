@@ -534,6 +534,22 @@ app.post("/register", (req, res) => {
     }
   );
 });
+//admin
+// Cancel Event
+app.put('/events/:id/cancel', async (req, res) => {
+  const eventId = req.params.id;
+  await pool.query('UPDATE events SET approved = 3 WHERE event_id = ?', [eventId]);
+  res.send({ message: 'Event cancelled' });
+});
+
+// Stop Registration
+app.put('/events/:id/stop-registration', async (req, res) => {
+  const eventId = req.params.id;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  await pool.query('UPDATE events SET reg_end_date = ? WHERE event_id = ?', [yesterday.toISOString().split('T')[0], eventId]);
+  res.send({ message: 'Registration stopped' });
+});
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
