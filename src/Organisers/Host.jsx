@@ -7,7 +7,12 @@ function Host() {
     const [organizerId, setOrganizerId] = useState(null);
     const [eventId, setEventId] = useState(null);
     const [selectedImages, setSelectedImages] = useState([]);
-
+    const [customFields, setCustomFields] = useState([
+        { name: "Name", type: "text" },
+        { name: "Email", type: "email" }
+    ]);
+    const [newFieldName, setNewFieldName] = useState("");
+    const [newFieldType, setNewFieldType] = useState("text");
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: "",
@@ -191,6 +196,46 @@ function Host() {
     const handleRemoveCoverImage = () => {
         setCoverImage(null);
     };
+    const handleAddField = () => {
+        if (!newFieldName.trim()) return;
+
+        const exists = customFields.some(f => f.name.toLowerCase() === newFieldName.trim().toLowerCase());
+        if (exists) {
+            alert("Field with this name already exists.");
+            return;
+        }
+
+        setCustomFields(prev => [...prev, { name: newFieldName.trim(), type: newFieldType }]);
+        setNewFieldName("");
+        setNewFieldType("text");
+    };
+
+    const handleRemoveField = (index) => {
+        setCustomFields(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const handleSubmitCustomFields = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch("http://localhost:3000/events/custom-fields", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ event_id: eventId, fields: customFields })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                setStep(5);
+            } else {
+                alert("Error: " + result.error);
+            }
+        } catch (err) {
+            console.error("Failed to submit custom fields:", err);
+            alert("Error submitting custom fields.");
+        }
+    };
+
 
 
     return (
@@ -199,6 +244,7 @@ function Host() {
                 <h3 className={step === 1 ? "active current" : step > 1 ? "active completed" : "inactive"}>Add Details</h3>
                 <h3 className={step === 2 ? "active current" : step > 2 ? "active completed" : "inactive"}>Add Extra Details</h3>
                 <h3 className={step === 3 ? "active current" : step > 3 ? "active completed" : "inactive"}>Upload Pictures</h3>
+                <h3 className={step === 4 ? "active current" : step > 4 ? "active completed" : "inactive"}>Create Form</h3>
             </div>
 
 
@@ -288,8 +334,57 @@ function Host() {
                     <button type="submit">Finish</button>
                 </form>
             )}
-
             {step === 4 && (
+                <form onSubmit={handleSubmitCustomFields} className="host-form">
+                    <h2 className="head-text">Add Custom Fields for Registration:</h2>
+
+                    <table className="custom-field-table">
+                        <tbody>
+                            {customFields.map((field, index) => (
+                                <tr key={index}>
+                                    <td>{field.name} ({field.type})</td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            className="remove-field-btn"
+                                            onClick={() => handleRemoveField(index)}
+                                            disabled={field.name === "Name" || field.name === "Email"}
+                                            title={field.name === "Name" || field.name === "Email" ? "Cannot remove default field" : "Remove"}
+                                        >
+                                            ✖
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <div className="add-field-container">
+                        <input
+                            type="text"
+                            value={newFieldName}
+                            onChange={(e) => setNewFieldName(e.target.value)}
+                            placeholder="Field name (e.g., Phone Number)"
+                        />
+                        <select
+                            value={newFieldType}
+                            onChange={(e) => setNewFieldType(e.target.value)}
+                        >
+                            <option value="text">Text</option>
+                            <option value="email">Email</option>
+                            <option value="number">Number</option>
+                            <option value="tel">Phone</option>
+                            <option value="date">Date</option>
+                        </select>
+                        <button type="button" onClick={handleAddField}>Add Field</button>
+                    </div>
+
+                    <button type="submit">Finish</button>
+                </form>
+            )}
+
+
+            {step === 5 && (
                 <div className="host-form success">
                     <h2 className="head-text">Successfully Created! 🎉</h2>
                     <p>Your event has been successfully created and is now awaiting admin approval.</p>

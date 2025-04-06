@@ -23,6 +23,7 @@ function Attendeessignin({ setUserRole }) {
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("userRole", "attendee");
+            localStorage.setItem("userId", data.user_id);
 
             setUserRole("attendee");
             setMessage("Login successful!");

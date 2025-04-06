@@ -9,15 +9,16 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import Razorpay from "razorpay";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import bodyParser from "body-parser";
 
 dotenv.config();
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const uploadDir = path.join(__dirname, "../public/uploads");
-
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -35,6 +36,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const app = express();
+const server = createServer(app);
+
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
 app.use('/uploads', express.static('uploads'));
@@ -53,12 +57,55 @@ db.connect((err) => {
   else console.log("Connected to database");
 });
 
-
-
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
+
+// ==================== SOCKET.IO HANDLING ====================
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  },
+  pingInterval: 25000,
+  pingTimeout: 50000
+});
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("joinRoom", (role) => {
+    console.log(`Socket ${socket.id} joined as ${role}`);
+
+    if (role === "attendees") {
+      socket.join("attendeesRoom");
+    } else if (role === "organizer") {
+      socket.join("organizerRoom");
+    }
+  });
+
+  socket.on("sendMessage", (message) => {
+    console.log("Received message:", message);
+
+    if (message.sender === "attendees") {
+      // Send to organizer + echo back to attendee
+      io.to("organizerRoom").emit("receiveMessage", message);
+      io.to("attendeesRoom").emit("receiveMessage", message); // also to attendee
+    } else if (message.sender === "organizer") {
+      // Send to attendees + echo back to organizer
+      io.to("attendeesRoom").emit("receiveMessage", message);
+      io.to("organizerRoom").emit("receiveMessage", message); // also to organizer
+    }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+
+// ==================== EXISTING ROUTES ====================
 
 app.post("/create-order", async (req, res) => {
   try {
@@ -231,7 +278,6 @@ app.post("/events/create", (req, res) => {
 
     const eventId = result.insertId;
 
-
     const categoryQueries = categories.map(category => {
       return new Promise((resolve, reject) => {
         db.query(`INSERT INTO Categories (event_id, category) VALUES (?, ?)`, [eventId, category], (err) => {
@@ -322,7 +368,7 @@ app.get("/events/recent", (req, res) => {
   });
 });
 app.get("/events/filter", (req, res) => {
-  const { startDate, endDate, categories } = req.query;
+  const { startDate, endDate, categories, search } = req.query;
 
   let query = `
       SELECT e.event_id, e.title, e.description, e.date, e.time, e.venue, e.cover_image, 
@@ -337,13 +383,27 @@ app.get("/events/filter", (req, res) => {
     query += " AND e.date >= ?";
     queryParams.push(startDate);
   }
+
   if (endDate) {
     query += " AND e.date <= ?";
     queryParams.push(endDate);
   }
+
   if (categories) {
     const categoryList = categories.split(",").map(cat => `'${cat}'`).join(",");
-    query += ` AND e.event_id IN (SELECT event_id FROM Categories WHERE category IN (${categoryList}))`;
+    query += ` AND e.event_id IN (
+      SELECT event_id FROM Categories WHERE category IN (${categoryList})
+    )`;
+  }
+
+  if (search) {
+    query += ` AND (
+      e.title LIKE ? OR
+      e.description LIKE ? OR
+      e.venue LIKE ?
+    )`;
+    const searchPattern = `%${search}%`;
+    queryParams.push(searchPattern, searchPattern, searchPattern);
   }
 
   query += " GROUP BY e.event_id ORDER BY e.date ASC";
@@ -353,7 +413,6 @@ app.get("/events/filter", (req, res) => {
       console.error("Error fetching filtered events:", err);
       return res.status(500).json({ error: "Database error" });
     }
-
 
     results.forEach(event => {
       event.categories = event.categories ? event.categories.split(",") : [];
@@ -366,12 +425,11 @@ app.get("/events/filter", (req, res) => {
 app.get("/events/:eventId", (req, res) => {
   const { eventId } = req.params;
 
-
   db.query(
     `SELECT event_id, title, description, date, time, venue, capacity, organiser, approved, 
-              reg_start_date, reg_end_date, price, cover_image 
-       FROM Events 
-       WHERE event_id = ?`,
+            reg_start_date, reg_end_date, price, cover_image 
+     FROM Events 
+     WHERE event_id = ?`,
     [eventId],
     (err, eventResults) => {
       if (err) {
@@ -384,7 +442,6 @@ app.get("/events/:eventId", (req, res) => {
 
       const event = eventResults[0];
 
-
       db.query(
         `SELECT category FROM Categories WHERE event_id = ?`,
         [eventId],
@@ -396,7 +453,6 @@ app.get("/events/:eventId", (req, res) => {
 
           event.categories = categoryResults.map(row => row.category);
 
-
           db.query(
             `SELECT address FROM EventPics WHERE event_id = ?`,
             [eventId],
@@ -407,7 +463,21 @@ app.get("/events/:eventId", (req, res) => {
               }
 
               event.pictures = picturesResults.map(row => row.address);
-              res.json(event);
+
+              // ➕ Fetch custom fields from eventfields
+              db.query(
+                `SELECT field_name AS name, field_type AS type FROM eventfields WHERE event_id = ?`,
+                [eventId],
+                (err, fieldResults) => {
+                  if (err) {
+                    console.error("Error fetching custom fields:", err);
+                    return res.status(500).json({ message: "Internal server error" });
+                  }
+
+                  event.custom_fields = fieldResults;
+                  res.json(event);
+                }
+              );
             }
           );
         }
@@ -416,5 +486,54 @@ app.get("/events/:eventId", (req, res) => {
   );
 });
 
+
+app.post("/events/custom-fields", (req, res) => {
+  const { event_id, fields } = req.body;
+
+  if (!event_id || !Array.isArray(fields)) {
+      return res.status(400).json({ error: "Invalid payload" });
+  }
+
+  const insertValues = fields.map(field => [event_id, field.name, field.type]);
+
+  const query = `INSERT INTO EventFields (event_id, field_name, field_type) VALUES ?`;
+
+  db.query(query, [insertValues], (err, result) => {
+      if (err) {
+          console.error("Error inserting custom fields:", err);
+          return res.status(500).json({ error: "Database error" });
+      }
+
+      res.status(200).json({ message: "Custom fields saved successfully" });
+  });
+});
+
+app.post("/register", (req, res) => {
+  const { event_id, form_data, razorpay_payment_id } = req.body;
+  const user_id = req.headers["x-user-id"];
+
+  if (!user_id || !event_id || !form_data || !razorpay_payment_id) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const query = `
+    INSERT INTO registrations (user_id, event_id, data, submitted_at, payment_id)
+    VALUES (?, ?, ?, NOW(), ?)
+  `;
+
+  db.query(
+    query,
+    [user_id, event_id, JSON.stringify(form_data), razorpay_payment_id],
+    (err, result) => {
+      if (err) {
+        console.error("Error saving registration:", err);
+        return res.status(500).json({ message: "Failed to register" });
+      }
+
+      res.status(200).json({ message: "Registered successfully" });
+    }
+  );
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
