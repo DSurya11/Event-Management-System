@@ -1,8 +1,8 @@
-import Regevent from './Users/Regevent.jsx'
+import Creation from './Organisers/Creation.jsx/'
 function App() {
     return (
         <div className='Main'>
-            <Home/>
+            <Creation/>
         </div>
     )
 }
