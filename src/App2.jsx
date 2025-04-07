@@ -8,13 +8,13 @@ import Razerpay from "./Payments/Razerpay.jsx";
 import Chat from "./communication/Chat.jsx";
 import Attendeesignin from "./signin/attendeessignin.jsx";
 import Organizers from "./Users/Organizers.jsx";
+import Nav from "./Navbar.jsx";
 
 function App2() {
     return (
         <BrowserRouter>
-            <OrgNav />
             <Routes>
-                <Route path="/" element={<Organizers />} />
+                <Route path="/" element={<Nav />} />
                 
             </Routes>
         </BrowserRouter>

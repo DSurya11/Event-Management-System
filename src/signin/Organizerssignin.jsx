@@ -27,7 +27,7 @@ function Organizerssignin({ setUserRole }) {
            
             localStorage.setItem("token", data.token);
             localStorage.setItem("userRole", "organizer");
-            localStorage.setItem("organizerId", data.organizerId); 
+            localStorage.setItem("userId", data.organizerId); 
             setUserRole("organizer"); 
     
             setMessage("Login successful! Redirecting...");
