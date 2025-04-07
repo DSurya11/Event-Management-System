@@ -12,6 +12,7 @@ import Razorpay from "razorpay";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,6 +37,7 @@ const upload = multer({ storage });
 
 const app = express();
 const server = createServer(app);
+
 
 app.use(express.json());
 app.use(cors());
@@ -63,44 +65,113 @@ const razorpay = new Razorpay({
 // ==================== SOCKET.IO HANDLING ====================
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"]
-  },
-  pingInterval: 25000,
-  pingTimeout: 50000
+  }
 });
+
+const getUserAndEventInfo = (user_id, role, event_id, callback) => {
+  const table = role === "organizer" ? "organisers" : "users";
+  const col = role === "organizer" ? "organiser_id" : "user_id";
+
+  db.query(`SELECT name FROM ${table} WHERE ${col} = ?`, [user_id], (err1, res1) => {
+    const sender_name = (!err1 && res1.length > 0) ? res1[0].name : "Unknown";
+
+    db.query("SELECT title FROM events WHERE event_id = ?", [event_id], (err2, res2) => {
+      const event_name = (!err2 && res2.length > 0) ? res2[0].title : "Unknown Event";
+
+      // ✅ Now sender_name is accessible here
+      callback({ sender_name, event_name });
+    });
+  });
+};
+
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  socket.on("joinRoom", (role) => {
-    console.log(`Socket ${socket.id} joined as ${role}`);
-
-    if (role === "attendees") {
-      socket.join("attendeesRoom");
-    } else if (role === "organizer") {
-      socket.join("organizerRoom");
-    }
+  socket.on("joinRoom", ({ event_id, attendee_id, organizer_id }) => {
+    const room = `event_${event_id}_a${attendee_id}_o${organizer_id}`;
+    socket.join(room);
+    console.log(`Socket ${socket.id} joined room ${room}`);
   });
 
-  socket.on("sendMessage", (message) => {
-    console.log("Received message:", message);
+  socket.on("sendMessage", (data) => {
+    const {
+      event_id,
+      sender_id,
+      sender_role,
+      receiver_id,
+      receiver_role,
+      message
+    } = data;
 
-    if (message.sender === "attendees") {
-      // Send to organizer + echo back to attendee
-      io.to("organizerRoom").emit("receiveMessage", message);
-      io.to("attendeesRoom").emit("receiveMessage", message); // also to attendee
-    } else if (message.sender === "organizer") {
-      // Send to attendees + echo back to organizer
-      io.to("attendeesRoom").emit("receiveMessage", message);
-      io.to("organizerRoom").emit("receiveMessage", message); // also to organizer
-    }
+    const room = `event_${event_id}_a${sender_role === "attendee" ? sender_id : receiver_id}_o${sender_role === "organizer" ? sender_id : receiver_id}`;
+
+    const query = `
+      INSERT INTO messages (event_id, sender_id, sender_role, receiver_id, receiver_role, message)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+      query,
+      [event_id, sender_id, sender_role, receiver_id, receiver_role, message],
+      (err) => {
+        if (err) {
+          console.error("DB Error:", err);
+        } else {
+          getUserAndEventInfo(sender_id, sender_role, event_id, ({ sender_name, event_name }) => {
+            const payload = {
+              ...data,
+              sender_name,
+              event_name
+            };
+            io.to(room).emit("receiveMessage", payload);
+          });
+        }
+      }
+    );
+  });
+
+  socket.on("getMessages", ({ event_id, attendee_id, organizer_id }) => {
+    const query = `
+      SELECT * FROM messages
+      WHERE event_id = ? AND (
+        (sender_id = ? AND receiver_id = ?) OR
+        (sender_id = ? AND receiver_id = ?)
+      )
+      ORDER BY timestamp ASC
+    `;
+
+    db.query(
+      query,
+      [event_id, attendee_id, organizer_id, organizer_id, attendee_id],
+      async (err, results) => {
+        if (err) {
+          console.error("Fetch messages error:", err);
+        } else {
+          const enriched = await Promise.all(results.map((msg) => {
+            return new Promise((resolve) => {
+              getUserAndEventInfo(msg.sender_id, msg.sender_role, msg.event_id, ({ sender_name, event_name }) => {
+                msg.sender_name = sender_name;
+                msg.event_name = event_name;
+                resolve(msg);
+              });
+            });
+          }));
+
+          socket.emit("loadMessages", enriched);
+        }
+      }
+    );
   });
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });
 });
+
+
 
 
 // ==================== EXISTING ROUTES ====================
@@ -145,6 +216,56 @@ app.post("/attendee/signup", async (req, res) => {
   });
 });
 
+app.get("/admin/events", (req, res) => {
+  const pendingQuery = `
+    SELECT e.*, o.name AS organiser_name
+    FROM events e
+    JOIN organisers o ON e.organiser = o.organiser_id
+    WHERE e.approved = 0
+  `;
+
+  const ongoingQuery = `
+    SELECT e.*, o.name AS organiser_name
+    FROM events e
+    JOIN organisers o ON e.organiser = o.organiser_id
+    WHERE e.approved = 1
+  `;
+
+  db.query(pendingQuery, (err, pending) => {
+    if (err) {
+      return res.status(500).json({ error: "Error fetching pending events" });
+    }
+
+    db.query(ongoingQuery, (err2, ongoing) => {
+      if (err2) {
+        return res.status(500).json({ error: "Error fetching ongoing events" });
+      }
+
+      res.json({ pending, ongoing });
+    });
+  });
+});
+// Approve event
+app.put('/events/:id/approve', (req, res) => {
+  const { id } = req.params;
+  db.query("UPDATE Events SET approved = 1 WHERE event_id = ?", [id], (err, result) => {
+    if (err) return res.status(500).json({ error: "Error approving event" });
+    res.json({ message: "Event approved successfully" });
+  });
+});
+
+// Reject event
+app.put('/events/:id/reject', (req, res) => {
+  const { id } = req.params;
+  db.query("UPDATE Events SET approved = 2 WHERE event_id = ?", [id], (err, result) => {
+    if (err) return res.status(500).json({ error: "Error rejecting event" });
+    res.json({ message: "Event rejected successfully" });
+  });
+});
+
+
+
+
 app.post("/attendee/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -188,6 +309,34 @@ app.post("/organizer/signup", async (req, res) => {
   });
 });
 
+app.post("/organizer/signin", async (req, res) => {
+  const { email, password } = req.body;
+
+  db.query("SELECT * FROM organisers WHERE username = ?", [email], async (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+
+    if (results.length === 0) {
+      console.log("User Not Found!");
+      return res.status(401).json({ error: "Invalid credentials (User not found)" });
+    }
+
+    const user = results[0];
+
+
+    const isMatch = await bcrypt.compare(password.trim(), user.password);
+
+    if (!isMatch) {
+      console.log("Password Mismatch!");
+      return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
+    }
+
+
+    const token = jwt.sign({ userId: user.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+
+    res.json({ message: "Login successful", token, organizerId: user.organiser_id });
+  });
+});
 app.post("/organizer/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -438,12 +587,23 @@ app.get("/events/:eventId", (req, res) => {
     }
   );
 });
+app.get("/api/events/:id", (req, res) => {
+  const event_id = req.params.id;
+
+  db.query("SELECT * FROM events WHERE event_id = ?", [event_id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error", details: err });
+    if (results.length === 0) return res.status(404).json({ error: "Event not found" });
+
+    res.status(200).json(results[0]);
+  });
+});
 
 
 app.post("/events/custom-fields", (req, res) => {
   const { event_id, fields } = req.body;
 
   if (!event_id || !Array.isArray(fields)) {
+    return res.status(400).json({ error: "Invalid payload" });
     return res.status(400).json({ error: "Invalid payload" });
   }
 
@@ -552,6 +712,22 @@ app.get('/organizer/events', async (req, res) => {
       console.error('Error fetching organizer events:', err);
       res.status(500).json({ error: 'Server error while fetching events' });
   }
+});
+//admin
+// Cancel Event
+app.put('/events/:id/cancel', async (req, res) => {
+  const eventId = req.params.id;
+  await pool.query('UPDATE events SET approved = 3 WHERE event_id = ?', [eventId]);
+  res.send({ message: 'Event cancelled' });
+});
+
+// Stop Registration
+app.put('/events/:id/stop-registration', async (req, res) => {
+  const eventId = req.params.id;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  await pool.query('UPDATE events SET reg_end_date = ? WHERE event_id = ?', [yesterday.toISOString().split('T')[0], eventId]);
+  res.send({ message: 'Registration stopped' });
 });
 
 const PORT = process.env.PORT || 3000;

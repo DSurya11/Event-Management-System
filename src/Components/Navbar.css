@@ -62,7 +62,7 @@
 .profilesvg {
     height: 40px;
     width: 40px;
-    border-radius: 100%;
+    /* border-radius: 100%; */
     margin-left: 40px;
     position: fixed;
     top: 2.5%;
@@ -74,4 +74,12 @@
     cursor: pointer;
     transition-duration: .2s;
     
+}.logoutsvg{
+    height: 30px;
+    width: 30px;
+    margin-left: 40px;
+    position: fixed;
+    top: 2.59%;
+    right: 2.5%;
+    cursor: pointer;
 }

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 
+import Admin from './Admin/Admin.jsx';
+
 import Home from './Users/Home.jsx';
 import Browse from './Users/Browse.jsx';
 import Regevent from './Users/Regevent.jsx';
-import Organizers from './Users/Organizers.jsx';
+import Chat from './communication/Chat.jsx';import Organizers from './Users/Organizers.jsx';
 
 
 import Attendeessignin from './signin/attendeessignin.jsx';
@@ -50,13 +52,17 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
             <Route path="/organizers" element={<Organizers />} />
-          </>
+            <Route path="/chat/attendees/:eventId/:organizerId" element={<Chat role="attendee" />} />
+
+            </>
         )}
 
         {userRole === 'organizer' && (
           <>
             <Route path="/organizer/home" element={<OrgHome />} />
             <Route path="/organizer/host" element={<Host />} />
+            <Route path="/chat/organizers/:eventId/:attendeeId" element={<Chat role="organizer" />} />
+
           </>
         )}
 
@@ -64,6 +70,10 @@ function App() {
         <Route path="/attendee/signup" element={!userRole ? <Attendeessignup setUserRole={setUserRole} /> : <Navigate to="/" />} />
         <Route path="/organizer/signin" element={!userRole ? <Organizerssignin setUserRole={setUserRole} /> : <Navigate to="/organizer/home" />} />
         <Route path="/organizer/signup" element={!userRole ? <Organizerssignup setUserRole={setUserRole} /> : <Navigate to="/organizer/home" />} />
+
+
+        <Route path="/admin" element={<Admin/>} />
+
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

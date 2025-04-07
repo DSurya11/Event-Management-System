@@ -35,7 +35,7 @@ function Attendeessignin({ setUserRole }) {
     };
 
     return (
-        <div className="loginsignin Main body1">
+        <div className="loginsignin body1">
             <div className="loginsignininfo">
                 <h2 className="loginsigninh2 head-text">WELCOME TO PLANOVA</h2>
                 <p>"Your seamless event planning platform"</p>
