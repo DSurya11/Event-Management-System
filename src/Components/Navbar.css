@@ -10,6 +10,7 @@
     z-index: 10;
 }
 
+
 .navbar h2 {
     margin: 20px;
     margin-left: 25px;
@@ -19,8 +20,21 @@
 
 .nb-button {
     position: absolute;
-    right: 100px;
+    right: 140px;
 }
+
+.chaticon{
+    position: absolute;
+    right: 100px;
+    top: 28px;
+}
+.chaticon:hover,.chaticon:hover path{
+    fill: lightseagreen;
+    cursor: pointer;
+    transition-duration: .2s;
+    
+}
+
 
 .nb-button .btn {
     padding-left: 10px;
@@ -55,7 +69,12 @@
     right: 2.5%;
 
 }
-.logoutsvg{
+.profilesvg:hover,.profilesvg:hover path{
+    fill: lightseagreen;
+    cursor: pointer;
+    transition-duration: .2s;
+    
+}.logoutsvg{
     height: 30px;
     width: 30px;
     margin-left: 40px;

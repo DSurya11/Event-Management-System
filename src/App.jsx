@@ -7,7 +7,8 @@ import Admin from './Admin/Admin.jsx';
 import Home from './Users/Home.jsx';
 import Browse from './Users/Browse.jsx';
 import Regevent from './Users/Regevent.jsx';
-import Chat from './communication/Chat.jsx';
+import Chat from './communication/Chat.jsx';import Organizers from './Users/Organizers.jsx';
+
 
 import Attendeessignin from './signin/attendeessignin.jsx';
 import Attendeessignup from './signin/Attendeessignup.jsx';
@@ -50,6 +51,7 @@ function App() {
             <Route path="/register/:eventId" element={<Regevent />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
+            <Route path="/organizers" element={<Organizers />} />
             <Route path="/chat/attendees/:eventId/:organizerId" element={<Chat role="attendee" />} />
 
             </>

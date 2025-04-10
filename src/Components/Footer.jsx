@@ -9,15 +9,11 @@ function Footer() {
 				<h3><span>Planova</span></h3>
 
 				<p className="footer-links">
-					<a href="#" className="link-1">Home</a>
-					
-					<a href="#">Blog</a>
+					<a href="/" className="link-1">Home</a>
 				
 					<a href="#">About</a>
 					
 					<a href="#">Faq</a>
-					
-					<a href="#">Contact</a>
 				</p>
 
 				<p className="footer-company-name">Planova © 2025</p>
@@ -27,7 +23,7 @@ function Footer() {
 
 				<div>
 					<i className="fa fa-map-marker"></i>
-					<p><span>IIITDM</span> Jabalpur, Madhya Pradesh</p>
+					<p><span style={{lineHeight:"18px"}}>Indian Institute of Information Technology,<br/>Design and Manufacturing</span> Jabalpur, Madhya Pradesh</p>
 				</div>
 
 				<div>

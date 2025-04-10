@@ -288,13 +288,12 @@ app.post("/attendee/signin", async (req, res) => {
   });
 });
 
-
 app.post("/organizer/signup", async (req, res) => {
   const { name, username, password } = req.body;
 
   db.query("SELECT * FROM organisers WHERE username = ?", [username], async (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });
-    if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" }); 
+    if (results.length > 0) return res.status(400).json({ error: "Organizer already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -310,6 +309,34 @@ app.post("/organizer/signup", async (req, res) => {
   });
 });
 
+app.post("/organizer/signin", async (req, res) => {
+  const { email, password } = req.body;
+
+  db.query("SELECT * FROM organisers WHERE username = ?", [email], async (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+
+    if (results.length === 0) {
+      console.log("User Not Found!");
+      return res.status(401).json({ error: "Invalid credentials (User not found)" });
+    }
+
+    const user = results[0];
+
+
+    const isMatch = await bcrypt.compare(password.trim(), user.password);
+
+    if (!isMatch) {
+      console.log("Password Mismatch!");
+      return res.status(401).json({ error: "Invalid credentials (Password mismatch)" });
+    }
+
+
+    const token = jwt.sign({ userId: user.organiser_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+
+    res.json({ message: "Login successful", token, organizerId: user.organiser_id });
+  });
+});
 app.post("/organizer/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -577,6 +604,7 @@ app.post("/events/custom-fields", (req, res) => {
 
   if (!event_id || !Array.isArray(fields)) {
     return res.status(400).json({ error: "Invalid payload" });
+    return res.status(400).json({ error: "Invalid payload" });
   }
 
   const insertValues = fields.map(field => [event_id, field.name, field.type]);
@@ -594,7 +622,7 @@ app.post("/events/custom-fields", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { event_id, form_data, razorpay_payment_id } = req.body;
+  const { event_id, form_data, razorpay_payment_id, notify } = req.body;
   const user_id = req.headers["x-user-id"];
 
   if (!user_id || !event_id || !form_data || !razorpay_payment_id) {
@@ -602,13 +630,13 @@ app.post("/register", (req, res) => {
   }
 
   const query = `
-    INSERT INTO registrations (user_id, event_id, data, submitted_at, payment_id)
-    VALUES (?, ?, ?, NOW(), ?)
+    INSERT INTO registrations (user_id, event_id, data, submitted_at, payment_id, notify)
+    VALUES (?, ?, ?, NOW(), ?, ?)
   `;
 
   db.query(
     query,
-    [user_id, event_id, JSON.stringify(form_data), razorpay_payment_id],
+    [user_id, event_id, JSON.stringify(form_data), razorpay_payment_id, notify ? 1 : 0],
     (err, result) => {
       if (err) {
         console.error("Error saving registration:", err);
@@ -618,6 +646,72 @@ app.post("/register", (req, res) => {
       res.status(200).json({ message: "Registered successfully" });
     }
   );
+});
+// GET /attendee/:id
+app.get("/attendee/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.query("SELECT name, email FROM users WHERE user_id = ?", [id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+    if (results.length === 0) return res.status(404).json({ error: "User not found" });
+
+    res.json(results[0]);
+  });
+});
+
+app.get('/organizer/events', async (req, res) => {
+  const organizerId = req.query.organizerId;
+
+  if (!organizerId) {
+      return res.status(400).json({ error: 'Organizer ID is required' });
+  }
+
+  try {
+      const [events] = await db.promise().query(
+          `SELECT e.event_id, e.title, e.date, e.time, e.venue, e.capacity, e.reg_end_date, 
+                  GROUP_CONCAT(DISTINCT c.category) AS category
+           FROM Events e
+           LEFT JOIN Categories c ON e.event_id = c.event_id
+           WHERE e.organiser = ?
+           GROUP BY e.event_id`,
+          [organizerId]
+      );
+
+      const now = new Date();
+
+      const ongoing = [];
+      const previous = [];
+
+      for (const event of events) {
+          const [registrations] = await db.promise().query(
+              'SELECT COUNT(*) AS count FROM Registrations WHERE event_id = ?',
+              [event.event_id]
+          );
+
+          const regCount = registrations[0].count;
+          const occupancy = Math.min(100, Math.round((regCount / event.capacity) * 100));
+
+          const eventData = {
+              ...event,
+              occupancy,
+              category: event.category?.split(',').join(', ') || 'Uncategorized',
+          };
+
+          const eventDate = new Date(event.date);
+          const regDeadline = new Date(event.reg_end_date);
+
+          if (eventDate >= now && regDeadline >= now) {
+              ongoing.push(eventData);
+          } else {
+              previous.push(eventData);
+          }
+      }
+
+      res.json({ ongoing, previous });
+  } catch (err) {
+      console.error('Error fetching organizer events:', err);
+      res.status(500).json({ error: 'Server error while fetching events' });
+  }
 });
 //admin
 // Cancel Event

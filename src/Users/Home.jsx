@@ -49,7 +49,7 @@ function Home() {
                             <div className="contenttext">
                                 {event.description.length > 150 ? event.description.substring(0, 150) + "..." : event.description}
                             </div>
-                            <Link to={`/event/${event.event_id}`} className='contenta' >
+                            <Link to={`/register/${event.event_id}`} className='contenta' >
                                 View Details
                                 <svg className='asvg' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="lightseagreen">
                                     <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
