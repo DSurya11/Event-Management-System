@@ -17,7 +17,7 @@ function App2() {
         <BrowserRouter>
             <AdminNavbar />
             <Routes>
-                <Route path="/" element={<VdEvent_On/>} />
+                <Route path="/" element={<Profile/>} />
             </Routes>
         </BrowserRouter>
     )
