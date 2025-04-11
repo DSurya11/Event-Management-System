@@ -52,6 +52,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
             <Route path="/organizers" element={<Organizers />} />
+            <Route path="/chat" element={<Chat role="attendee" />} />
             <Route path="/chat/attendees/:eventId/:organizerId" element={<Chat role="attendee" />} />
 
             </>
@@ -61,6 +62,7 @@ function App() {
           <>
             <Route path="/organizer/home" element={<OrgHome />} />
             <Route path="/organizer/host" element={<Host />} />
+            <Route path="/chat" element={<Chat role="organizer" />} />
             <Route path="/chat/organizers/:eventId/:attendeeId" element={<Chat role="organizer" />} />
 
           </>

@@ -28,6 +28,19 @@
     right: 100px;
     top: 28px;
 }
+.chat-badge-circle{
+    font-size:14px;
+    z-index: 10;
+    top: 26px;
+    position: absolute;
+    right: 99px;
+    background-color:lightseagreen;
+    
+    border-radius: 50%;
+    margin: auto;
+    width: 8px;
+    height: 8px;
+}
 .chaticon:hover,.chaticon:hover path{
     fill: lightseagreen;
     cursor: pointer;
@@ -69,12 +82,13 @@
     right: 2.5%;
 
 }
-.profilesvg:hover,.profilesvg:hover path{
+.profilesvg:hover, .profilesvg:hover path{
     fill: lightseagreen;
     cursor: pointer;
     transition-duration: .2s;
     
-}.logoutsvg{
+}
+.logoutsvg{
     height: 30px;
     width: 30px;
     margin-left: 40px;

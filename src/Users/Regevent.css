@@ -102,6 +102,7 @@
     border-radius: 5px;
     transition-duration: 0.2s;
     font-size: 16px;
+    width: 160px;
 }
 
 .Register:hover {
@@ -208,4 +209,28 @@
 
 .motto_info p {
     margin: 5%;
+}
+#support{
+    padding-top: 5%;
+    padding-bottom: 1.2%;
+    padding-right: 4%;
+    padding-left: 4%;
+    border: none;
+    margin-top: -30px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    background-color: rgb(235, 232, 232);
+    border-radius: 5px;
+    transition-duration: 0.2s;
+    font-size: 16px;
+    width: 50px;
+}#support:hover {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
+    cursor: pointer;
+}
+.reg-btns{
+    display: flex;
+    flex-direction: row;
+    width: 400px;
+    justify-content: end;
 }
