@@ -50,6 +50,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+
 });
 
 db.connect((err) => {
@@ -88,12 +89,16 @@ const getUserAndEventInfo = (user_id, role, event_id, callback) => {
 
 
 io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
+  // Store user info from the client query (you must pass these when connecting from frontend)
+  const userId = socket.handshake.query.userId;
+  const userRole = socket.handshake.query.role;
+
+  socket.userId = userId;
+  socket.userRole = userRole;
 
   socket.on("joinRoom", ({ event_id, attendee_id, organizer_id }) => {
     const room = `event_${event_id}_a${attendee_id}_o${organizer_id}`;
     socket.join(room);
-    console.log(`Socket ${socket.id} joined room ${room}`);
   });
 
   socket.on("sendMessage", (data) => {
@@ -109,8 +114,8 @@ io.on("connection", (socket) => {
     const room = `event_${event_id}_a${sender_role === "attendee" ? sender_id : receiver_id}_o${sender_role === "organizer" ? sender_id : receiver_id}`;
 
     const query = `
-      INSERT INTO messages (event_id, sender_id, sender_role, receiver_id, receiver_role, message)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO messages (event_id, sender_id, sender_role, receiver_id, receiver_role, message, is_seen)
+      VALUES (?, ?, ?, ?, ?, ?, 0)
     `;
 
     db.query(
@@ -149,27 +154,44 @@ io.on("connection", (socket) => {
       async (err, results) => {
         if (err) {
           console.error("Fetch messages error:", err);
-        } else {
-          const enriched = await Promise.all(results.map((msg) => {
-            return new Promise((resolve) => {
-              getUserAndEventInfo(msg.sender_id, msg.sender_role, msg.event_id, ({ sender_name, event_name }) => {
-                msg.sender_name = sender_name;
-                msg.event_name = event_name;
-                resolve(msg);
-              });
-            });
-          }));
-
-          socket.emit("loadMessages", enriched);
+          return;
         }
+
+        const enriched = await Promise.all(results.map((msg) => {
+          return new Promise((resolve) => {
+            getUserAndEventInfo(msg.sender_id, msg.sender_role, msg.event_id, ({ sender_name, event_name }) => {
+              msg.sender_name = sender_name;
+              msg.event_name = event_name;
+              resolve(msg);
+            });
+          });
+        }));
+
+        socket.emit("loadMessages", enriched);
+
+        // 🔄 Mark messages as seen
+        const markSeenQuery = `
+          UPDATE messages 
+          SET is_seen = 1 
+          WHERE event_id = ? AND receiver_id = ? AND receiver_role = ? AND is_seen = FALSE
+        `;
+
+        db.query(
+          markSeenQuery,
+          [event_id, socket.userId, socket.userRole],
+          (err) => {
+            if (err) console.error("Error marking messages seen:", err);
+          }
+        );
       }
     );
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+    // Optional cleanup
   });
 });
+
 
 
 
@@ -587,7 +609,7 @@ app.get("/events/:eventId", (req, res) => {
     }
   );
 });
-app.get("/api/events/:id", (req, res) => {
+app.get("/events/:id", (req, res) => {
   const event_id = req.params.id;
 
   db.query("SELECT * FROM events WHERE event_id = ?", [event_id], (err, results) => {
@@ -663,61 +685,61 @@ app.get('/organizer/events', async (req, res) => {
   const organizerId = req.query.organizerId;
 
   if (!organizerId) {
-      return res.status(400).json({ error: 'Organizer ID is required' });
+    return res.status(400).json({ error: 'Organizer ID is required' });
   }
 
   try {
-      const [events] = await db.promise().query(
-          `SELECT e.event_id, e.title, e.date, e.time, e.venue, e.capacity, e.reg_end_date, 
+    const [events] = await db.promise().query(
+      `SELECT e.event_id, e.title, e.date, e.time, e.venue, e.capacity, e.reg_end_date, 
                   GROUP_CONCAT(DISTINCT c.category) AS category
            FROM Events e
            LEFT JOIN Categories c ON e.event_id = c.event_id
            WHERE e.organiser = ?
            GROUP BY e.event_id`,
-          [organizerId]
+      [organizerId]
+    );
+
+    const now = new Date();
+
+    const ongoing = [];
+    const previous = [];
+
+    for (const event of events) {
+      const [registrations] = await db.promise().query(
+        'SELECT COUNT(*) AS count FROM Registrations WHERE event_id = ?',
+        [event.event_id]
       );
 
-      const now = new Date();
+      const regCount = registrations[0].count;
+      const occupancy = Math.min(100, Math.round((regCount / event.capacity) * 100));
 
-      const ongoing = [];
-      const previous = [];
+      const eventData = {
+        ...event,
+        occupancy,
+        category: event.category?.split(',').join(', ') || 'Uncategorized',
+      };
 
-      for (const event of events) {
-          const [registrations] = await db.promise().query(
-              'SELECT COUNT(*) AS count FROM Registrations WHERE event_id = ?',
-              [event.event_id]
-          );
+      const eventDate = new Date(event.date);
+      const regDeadline = new Date(event.reg_end_date);
 
-          const regCount = registrations[0].count;
-          const occupancy = Math.min(100, Math.round((regCount / event.capacity) * 100));
-
-          const eventData = {
-              ...event,
-              occupancy,
-              category: event.category?.split(',').join(', ') || 'Uncategorized',
-          };
-
-          const eventDate = new Date(event.date);
-          const regDeadline = new Date(event.reg_end_date);
-
-          if (eventDate >= now && regDeadline >= now) {
-              ongoing.push(eventData);
-          } else {
-              previous.push(eventData);
-          }
+      if (eventDate >= now && regDeadline >= now) {
+        ongoing.push(eventData);
+      } else {
+        previous.push(eventData);
       }
+    }
 
-      res.json({ ongoing, previous });
+    res.json({ ongoing, previous });
   } catch (err) {
-      console.error('Error fetching organizer events:', err);
-      res.status(500).json({ error: 'Server error while fetching events' });
+    console.error('Error fetching organizer events:', err);
+    res.status(500).json({ error: 'Server error while fetching events' });
   }
 });
 //admin
 // Cancel Event
 app.put('/events/:id/cancel', async (req, res) => {
   const eventId = req.params.id;
-  await pool.query('UPDATE events SET approved = 3 WHERE event_id = ?', [eventId]);
+  await db.query('UPDATE events SET approved = 3 WHERE event_id = ?', [eventId]);
   res.send({ message: 'Event cancelled' });
 });
 
@@ -726,9 +748,110 @@ app.put('/events/:id/stop-registration', async (req, res) => {
   const eventId = req.params.id;
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  await pool.query('UPDATE events SET reg_end_date = ? WHERE event_id = ?', [yesterday.toISOString().split('T')[0], eventId]);
+  await db.query('UPDATE events SET reg_end_date = ? WHERE event_id = ?', [yesterday.toISOString().split('T')[0], eventId]);
   res.send({ message: 'Registration stopped' });
 });
+
+app.get('/chat/rooms/:role/:userId', (req, res) => {
+  const { role, userId } = req.params;
+
+  if (!['attendee', 'organizer'].includes(role)) {
+    return res.status(400).json({ error: 'Invalid role' });
+  }
+
+  const baseSelect = `
+    SELECT DISTINCT m.event_id,
+           e.title AS event_title,
+           COALESCE(u.name, u2.name) AS attendee_name,
+           COALESCE(o.name, o2.name) AS organizer_name,
+           CASE 
+             WHEN m.sender_role = 'attendee' THEN m.sender_id
+             WHEN m.receiver_role = 'attendee' THEN m.receiver_id
+           END AS attendee_id,
+           CASE 
+             WHEN m.sender_role = 'organizer' THEN m.sender_id
+             WHEN m.receiver_role = 'organizer' THEN m.receiver_id
+           END AS organizer_id,
+           COUNT(CASE 
+             WHEN m.is_seen = 0 AND m.receiver_id = ? AND m.receiver_role = ?
+             THEN 1
+           END) AS unread_count
+  `;
+
+  const commonJoins = `
+    FROM Messages m
+    JOIN Events e ON m.event_id = e.event_id
+    LEFT JOIN users u ON m.sender_role = 'attendee' AND m.sender_id = u.user_id
+    LEFT JOIN users u2 ON m.receiver_role = 'attendee' AND m.receiver_id = u2.user_id
+    LEFT JOIN organisers o ON m.sender_role = 'organizer' AND m.sender_id = o.organiser_id
+    LEFT JOIN organisers o2 ON m.receiver_role = 'organizer' AND m.receiver_id = o2.organiser_id
+  `;
+
+  const whereClause = `
+    WHERE (m.sender_id = ? AND m.sender_role = ?)
+       OR (m.receiver_id = ? AND m.receiver_role = ?)
+  `;
+
+  const groupBy = `
+    GROUP BY m.event_id, attendee_id, organizer_id
+  `;
+
+  const query = baseSelect + commonJoins + whereClause + groupBy;
+
+  const values = [
+    userId, role, // for unread_count
+    userId, role, // for WHERE clause: sender
+    userId, role  // for WHERE clause: receiver
+  ];
+
+  db.query(query, values, (err, rows) => {
+    if (err) {
+      console.error("Error fetching chat rooms:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    res.json(rows);
+  });
+});
+
+
+// POST /chat/mark-seen
+app.post("/chat/mark-seen", (req, res) => {
+  const { event_id, receiver_id, receiver_role, sender_id, sender_role } = req.body;
+
+  db.query(
+    `UPDATE Messages
+     SET is_seen = 1
+     WHERE event_id = ? AND receiver_id = ? AND receiver_role = ? AND sender_id = ? AND sender_role = ? AND is_seen = 0`,
+    [event_id, receiver_id, receiver_role, sender_id, sender_role],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating is_seen:", err);
+        return res.status(500).json({ error: "Error updating seen status" });
+      }
+      res.sendStatus(200);
+    }
+  );
+});
+
+// GET /chat/unread-count?user_id=123&role=attendee
+app.get('/chat/unread-count', (req, res) => {
+  const { user_id, role } = req.query;
+
+  const query = `SELECT COUNT(*) AS unread FROM Messages WHERE receiver_id = ? AND receiver_role = ? AND is_seen = 0`;
+
+  db.query(query, [user_id, role], (err, results) => {
+    if (err) {
+      console.error('Error getting unread count:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    res.json({ unread: results[0].unread });
+  });
+});
+
+
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
