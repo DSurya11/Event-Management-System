@@ -14,14 +14,13 @@ function Organizerssignup() {
             const res = await fetch("http://localhost:3000/organizer/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, username: email, password }),
+                body: JSON.stringify({ name, username, password }),
             });
 
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
 
             setMessage("Signup successful! Redirecting to login...");
-
 
             setTimeout(() => {
                 window.location.href = "/organizer/signin";
