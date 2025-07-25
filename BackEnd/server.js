@@ -850,6 +850,51 @@ app.get('/chat/unread-count', (req, res) => {
   });
 });
 
+app.get("/profile/:role/:id", async (req, res) => {
+  const { role, id } = req.params;
+
+  if (role !== "attendee" && role !== "organizer") {
+    return res.status(400).json({ error: "Invalid role" });
+  }
+
+  try {
+    const [userRows] = await db.promise().query(
+      role === "attendee"
+        ? "SELECT name, email, date_joined FROM users WHERE user_id = ?"
+        : "SELECT name, username AS email, date_joined FROM organisers WHERE organiser_id = ?",
+      [id]
+    );
+
+    if (userRows.length === 0) {
+      return res.status(404).json({ error: "Profile not found" });
+    }
+
+    const profile = userRows[0];
+
+    if (role === "attendee") {
+      const [events] = await db.promise().query(
+        `
+        SELECT e.title, e.event_id
+        FROM registrations r
+        JOIN events e ON r.event_id = e.event_id
+        WHERE r.user_id = ?
+        ORDER BY r.submitted_at DESC
+        `,
+        [id]
+      );
+
+      profile.previous_events = events.map(e => ({
+        title: e.title,
+        event_id: e.event_id
+      }));
+    }
+
+    res.json(profile);
+  } catch (err) {
+    console.error("Error fetching profile and events:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 
 
