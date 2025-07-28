@@ -17,7 +17,7 @@ function App2() {
         <BrowserRouter>
             <AdminNavbar />
             <Routes>
-                <Route path="/" element={<Profile/>} />
+                <Route path="/" element={<Regevent/>} />
             </Routes>
         </BrowserRouter>
     )
