@@ -1,0 +1,157 @@
+.Organizers_profile{
+display: flex;
+margin-top: 100px;
+}
+.Orgprofilelogout{
+    background-color: lightseagreen;
+    border: none;
+    text-align: center;
+    margin-left: 30%;
+    margin-top: 20%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: large;
+}
+.Orgprofilelogout:hover{
+    background-color:rgb(19, 102, 98)
+
+}
+.Organizers_profile .OrgProfile_boxM1{
+background-color:   #E8EDDF ;
+margin-left: 30px;
+}
+.Profile_boxM1 .profile_logo{
+    width:300px;
+    height:450px;
+    background-color: #E8EDDF;
+    margin-top: 100px;
+    border-radius: 8px;
+}
+.OrgProfile_boxM1 .profile_logo img{
+    margin: 30px;
+    margin-left: 44px;
+    height: 200px;
+    width: 200px;
+    border-radius: 100%;
+    border: lightseagreen solid 2px;
+}
+.OrgProfile_boxM1 .profile_logo p{
+    text-align: center;
+    font-family:'Merriweather',serif;
+    font-size: 20px;
+}
+.Role{
+    text-align: center;
+    font-family:'Merriweather',serif;
+    font-size: larger;
+    color: rgb(168, 167, 167);
+    margin-top: 10px;
+}
+.Organizers_profile .OrgProfile_boxM2{
+    margin-left: 50px;
+}
+.Organizers_profile .OrgProfile_boxM2 .Profile_box_1{
+    width:1000px;
+    height:150px;
+    background-color: #E8EDDF;
+    border-radius: 8px;
+    padding: 2px;
+}
+.OrgProfile_boxM2 .Profile_box_1 .profile_box1_name{
+    font-size: larger;
+    font-family:'Merriweather',serif;
+    margin-top:15px;
+    margin-left:10px;
+    padding: 5px;
+}
+.OrgProfile_boxM2 .Profile_box_1 .profile_box1_name span{
+    font-weight: 600;
+
+}
+.OrgProfile_boxM2 .Profile_box_1 .profile_box1_email{
+    font-size: larger;
+    font-family:'Merriweather',serif;
+    margin-top:30px;
+    margin-left:10px;
+    padding: 5px;
+}
+.OrgProfile_boxM2 .Profile_box_1 .profile_box1_email span{
+    font-weight: 600;
+
+}
+.OrgProfile_boxM2 .Profile_box_2{
+    width:1000px;
+    height: fit-content;
+    min-height:140px;
+    background-color: #E8EDDF;
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.OrgProfile_boxM2 .Profile_box_2 p{
+    padding: 10px;
+    font-size: larger;
+    font-family:'Merriweather',serif;
+    font-weight: 600;
+}
+.Profile_box_2 .Ongoing_Organised_events{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 15px;
+    padding: 5px;
+}
+.Profile_box_2 .Ongoing_event1{
+    background-color:whitesmoke;
+    padding: 5px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 5px;
+}
+.Profile_box_2 .Ongoing_event1:hover{
+    transform: scale(1.05);
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+.OrgProfile_boxM2 .Profile_box_3{
+    width:1000px;
+    height: fit-content;
+    min-height:140px;
+    background-color: #E8EDDF;
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.OrgProfile_boxM2 .Profile_box_3 p{
+    padding: 10px;
+    font-size: larger;
+    font-family:'Merriweather',serif;
+    font-weight: 600;
+}
+.Profile_box_3 .Prev_Organised_events{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 15px;
+    padding: 5px;
+}
+.Profile_box_3 .Pre_event1{
+    background-color:whitesmoke;
+    padding: 5px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 5px;
+}
+.Profile_box_3 .Pre_event1:hover{
+    transform: scale(1.05);
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+
+
+

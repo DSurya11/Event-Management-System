@@ -10,6 +10,7 @@ import Browse from './Users/Browse.jsx';
 import Regevent from './Users/Regevent.jsx';
 import Chat from './communication/Chat.jsx';
 import Organizers from './Users/Organizers.jsx';
+import Orgprofile from './Organisers/Orgprofile.jsx';
 
 import Attendeessignin from './signin/attendeessignin.jsx';
 import Attendeessignup from './signin/Attendeessignup.jsx';
@@ -21,12 +22,14 @@ import Razerpay from './Payments/Razerpay.jsx';
 
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';
+import Email from './Organisers/Email.jsx';
 
 import Navbar from './Components/Navbar.jsx';
 import OrgNav from './Components/OrgNav.jsx';
 
 function App() {
-  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
+  const [userRole, setUserRole] = useState((localStorage.getItem('userRole') || "").toLowerCase());
+
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -73,8 +76,10 @@ function App() {
           <>
             <Route path="/organizer/home" element={<OrgHome />} />
             <Route path="/organizer/host" element={<Host />} />
+            <Route path="/organizer/notify" element={<Email />} />
             <Route path="/chat" element={<Chat role="organizer" />} />
             <Route path="/chat/organizers/:eventId/:attendeeId" element={<Chat role="organizer" />} />
+            <Route path="/orgprofile" element={<Orgprofile />} />
           </>
         )}
 

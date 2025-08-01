@@ -8,11 +8,11 @@ function Organizers() {
             <h2>Sports</h2>
             <div className='Org'>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
             </div>
@@ -21,11 +21,11 @@ function Organizers() {
             <h2>Technical</h2>
             <div className='Org'> 
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
             </div>
@@ -35,11 +35,11 @@ function Organizers() {
            <h2>Acadacmic</h2>
             <div className='Org'>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
             </div>
@@ -48,11 +48,11 @@ function Organizers() {
            <h2>Cultural</h2>
             <div className='Org'>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
             </div>

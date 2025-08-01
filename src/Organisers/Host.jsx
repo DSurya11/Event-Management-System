@@ -37,12 +37,10 @@ function Host() {
     ]
 
     useEffect(() => {
-        const userId = localStorage.getItem("userId")
-        const userRole = localStorage.getItem("userRole")
-
-        if (userRole === "organizer" && userId) {
-            setOrganizerId(userId)
-            setFormData(prev => ({ ...prev, organiser: parseInt(userId, 10) }))
+        const storedOrganizerId = localStorage.getItem("userId");
+        if (storedOrganizerId) {
+            setOrganizerId(storedOrganizerId);
+            setFormData(prev => ({ ...prev, organiser: storedOrganizerId }));
         } else {
             console.warn("User is not an organizer or ID is missing!")
         }
