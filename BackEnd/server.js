@@ -41,7 +41,7 @@ const server = createServer(app);
 
 app.use(express.json());
 app.use(cors());
-
+app.use('/uploads', express.static('uploads'));
 
 
 
@@ -969,6 +969,36 @@ app.get('/organiser/:id/events', (req, res) => {
         res.json(result);
     });
 });
+
+app.get('/api/organiserp/:id', (req, res) => {
+    const organiserId = req.params.id;
+
+    const organiserQuery = `SELECT * FROM organisers WHERE organiser_id = ?`;
+    db.query(organiserQuery, [organiserId], (err, organiserResults) => {
+        if (err || organiserResults.length === 0) {
+            return res.status(404).json({ error: 'Organiser not found' });
+        }
+
+        const organiser = organiserResults[0];
+
+        const eventQuery = `SELECT * FROM events WHERE organiser = ?`;
+        db.query(eventQuery, [organiserId], (err2, eventResults) => {
+            if (err2) return res.status(500).json({ error: 'Event fetch failed' });
+
+            const now = new Date();
+            const ongoing = eventResults.filter(e => new Date(e.date) >= now);
+            const completed = eventResults.filter(e => new Date(e.date) < now);
+
+            res.json({
+                organiser,
+                ongoingEvents: ongoing,
+                previousEvents: completed
+            });
+        });
+    });
+});
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
 
