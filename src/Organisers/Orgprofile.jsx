@@ -4,36 +4,36 @@ import "./Orgprofile.css";
 
 function Orgprofile() {
     const navigate = useNavigate();
-    const [profile, setProfile] = useState(null);
+    const [profile, setProfile] = useState([]);
     const [ongoingEvents, setOngoingEvents] = useState([]);
     const [previousEvents, setPreviousEvents] = useState([]);
 
     const organiserId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("userRole");
 
-    useEffect(() => {
-const fetchProfile = async () => {
+useEffect(() => {
+  const fetchProfile = async () => {
     try {
-        console.log("Calling API for organiser:", organiserId);
-        const res = await fetch(`http://localhost:5000/api/organiser/${organiserId}`);
-        if (!res.ok) {
-            const errText = await res.text();
-            throw new Error(`HTTP ${res.status} - ${errText}`);
-        }
-        const data = await res.json();
-        setProfile(data.organiser);
-        setOngoingEvents(data.ongoingEvents);
-        setPreviousEvents(data.previousEvents);
+      console.log("Fetching profile for organiser ID:", organiserId);
+      const res = await fetch(`http://localhost:3000/api/organiserp/${organiserId}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error ${res.status}`);
+      }
+      const data = await res.json();
+      console.log("Data received:", data);
+      setProfile(data.organiser);
+      setOngoingEvents(data.ongoingEvents);
+      setPreviousEvents(data.previousEvents);
     } catch (err) {
-        console.error("Error fetching organiser profile:", err);
+      console.error("Error fetching organiser profile:", err);
     }
-};
+  };
 
+  if (organiserId && userRole === "organizer") {
+    fetchProfile();
+  }
+}, [organiserId, userRole]);
 
-        if (organiserId && userRole === "organiser") {
-            fetchProfile();
-        }
-    }, [organiserId, userRole]);
 
     const handleLogout = () => {
         localStorage.clear();
@@ -54,7 +54,7 @@ const fetchProfile = async () => {
             <div className="profile_boxM2">
                 <div className="profile_box2">
                     <div className="profile_box2_name"><span>Name: </span>{profile?.name}</div>
-                    <div className="profile_box2_email"><span>Email: </span>{profile?.email}</div>
+                    <div className="profile_box2_email"><span>Email: </span>{profile?.username}</div>
                 </div>
 
                 <div className="profile_box3">
