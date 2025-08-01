@@ -41,7 +41,7 @@ const server = createServer(app);
 
 app.use(express.json());
 app.use(cors());
-app.use('/uploads', express.static('uploads'));
+
 
 
 
@@ -895,7 +895,93 @@ app.get("/profile/:role/:id", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+app.get("/admin/users", async (req, res) => {
+  try {
+    const [users] = await db.promise().query(`
+      SELECT 
+        u.user_id, u.name, u.email, u.date_joined,
+        COUNT(r.registration_id) AS event_count
+      FROM users u
+      LEFT JOIN registrations r ON u.user_id = r.user_id
+      GROUP BY u.user_id
+    `);
 
+    res.json(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+app.get("/admin/user-events", async (req, res) => {
+  const { user_id } = req.query;
+
+
+  if (!user_id) {
+    return res.status(400).json({ error: "Missing user_id" });
+  }
+
+  try {
+    const [rows] = await db.promise().query(
+      `
+      SELECT e.event_id, e.title, e.date, r.submitted_at
+      FROM registrations r
+      JOIN events e ON r.event_id = e.event_id
+      WHERE r.user_id = ?
+      ORDER BY r.submitted_at DESC
+      `,
+      [user_id]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Error in /admin/user-events:", err);  
+    res.status(500).json({ error: "Server error" });
+  }
+});
+app.get('/admin/organizers', async (req, res) => {
+  try {
+    const [rows] = await db.promise().query(`
+      SELECT o.organiser_id, o.name, o.username, o.date_joined,
+             COUNT(e.event_id) AS event_count
+      FROM organisers o
+      LEFT JOIN events e ON o.organiser_id = e.organiser
+      GROUP BY o.organiser_id
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
+app.get("/admin/organizer-events/:organiser_id", async (req, res) => {
+  const { organiser_id } = req.params;
+
+  if (!organiser_id) {
+    return res.status(400).json({ error: "Missing organiser_id" });
+  }
+
+  try {
+    const [rows] = await db.promise().query(
+      `
+      SELECT event_id, title AS event_name, date AS event_date
+      FROM events
+      WHERE organiser = ?
+      ORDER BY date DESC
+      `,
+      [organiser_id]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Error in /admin/organizer-events/:id:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+
+app.use('/uploads', express.static('uploads'));
 
 
 const PORT = process.env.PORT || 5000;
