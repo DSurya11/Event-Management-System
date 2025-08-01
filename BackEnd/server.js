@@ -963,39 +963,39 @@ app.post("/send-email", (req, res) => {
   });
 });
 app.get('/organiser/:id/events', (req, res) => {
-    const organiserId = req.params.id;
-    db.query("SELECT event_id, title FROM events WHERE organiser = ?", [organiserId], (err, result) => {
-        if (err) return res.status(500).json({ error: "DB error" });
-        res.json(result);
-    });
+  const organiserId = req.params.id;
+  db.query("SELECT event_id, title FROM events WHERE organiser = ?", [organiserId], (err, result) => {
+    if (err) return res.status(500).json({ error: "DB error" });
+    res.json(result);
+  });
 });
 
 app.get('/api/organiserp/:id', (req, res) => {
-    const organiserId = req.params.id;
+  const organiserId = req.params.id;
 
-    const organiserQuery = `SELECT * FROM organisers WHERE organiser_id = ?`;
-    db.query(organiserQuery, [organiserId], (err, organiserResults) => {
-        if (err || organiserResults.length === 0) {
-            return res.status(404).json({ error: 'Organiser not found' });
-        }
+  const organiserQuery = `SELECT * FROM organisers WHERE organiser_id = ?`;
+  db.query(organiserQuery, [organiserId], (err, organiserResults) => {
+    if (err || organiserResults.length === 0) {
+      return res.status(404).json({ error: 'Organiser not found' });
+    }
 
-        const organiser = organiserResults[0];
+    const organiser = organiserResults[0];
 
-        const eventQuery = `SELECT * FROM events WHERE organiser = ?`;
-        db.query(eventQuery, [organiserId], (err2, eventResults) => {
-            if (err2) return res.status(500).json({ error: 'Event fetch failed' });
+    const eventQuery = `SELECT * FROM events WHERE organiser = ?`;
+    db.query(eventQuery, [organiserId], (err2, eventResults) => {
+      if (err2) return res.status(500).json({ error: 'Event fetch failed' });
 
-            const now = new Date();
-            const ongoing = eventResults.filter(e => new Date(e.date) >= now);
-            const completed = eventResults.filter(e => new Date(e.date) < now);
+      const now = new Date();
+      const ongoing = eventResults.filter(e => new Date(e.date) >= now);
+      const completed = eventResults.filter(e => new Date(e.date) < now);
 
-            res.json({
-                organiser,
-                ongoingEvents: ongoing,
-                previousEvents: completed
-            });
-        });
+      res.json({
+        organiser,
+        ongoingEvents: ongoing,
+        previousEvents: completed
+      });
     });
+  });
 });
 app.get('/admin/organizers', async (req, res) => {
   try {
@@ -1084,13 +1084,74 @@ app.delete('/organizer/delete-event/:event_id', async (req, res) => {
   }
 });
 
+app.put('/organizer/event/:id', upload.single('cover_image'), async (req, res) => {
+  const { id } = req.params;
+  const {
+    title,
+    description,
+    date,
+    time,
+    venue,
+    capacity,
+    organiser,
+    approved,
+    reg_start_date,
+    reg_end_date,
+    price
+  } = req.body;
+
+  const cover_image = req.file ? `/uploads/${req.file.filename}` : null;
+  console.log(cover_image);
+  console.log(capacity);
+  try {
+    const query = `
+      UPDATE events SET
+        title = ?, description = ?, date = ?, time = ?, venue = ?,
+        capacity = ?, ${cover_image ? 'cover_image = ?,' : ''} organiser = ?, approved = ?,
+        reg_start_date = ?, reg_end_date = ?, price = ?
+      WHERE event_id = ?
+    `;
+
+    const params = [
+      title, description, date, time, venue, capacity,
+      ...(cover_image ? [cover_image] : []),
+      organiser, approved, reg_start_date, reg_end_date, price, id
+    ];
+
+    await db.promise().query(query, params);
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error", details: err.message });
+  }
+});
+
+// in your backend (e.g., Express app)
+app.get('/organizer/editevent/:id', async (req, res) => {
+  const eventId = req.params.id;
+  try {
+    const [rows] = await db.promise().query("SELECT * FROM events WHERE event_id = ?", [eventId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    const event = rows[0];
+
+    // Fetch categories if stored separately
+    const [catRows] = await db.promise().query(
+      "SELECT category FROM categories WHERE event_id = ?", [eventId]
+    );
+    const categories = catRows.map(row => row.category);
+
+    res.json({ ...event, categories });
+  } catch (err) {
+    res.status(500).json({ error: "Database error", details: err.message });
+  }
+});
+
+
 
 app.use('/uploads', express.static('uploads'));
-
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
 
 
 const PORT = process.env.PORT || 3000;
