@@ -898,5 +898,34 @@ app.get("/profile/:role/:id", async (req, res) => {
 
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.get('/api/organiser/:id', (req, res) => {
+    const organiserId = req.params.id;
+
+    const organiserQuery = `SELECT * FROM organisers WHERE organiser_id = ?`;
+    db.query(organiserQuery, [organiserId], (err, organiserResults) => {
+        if (err || organiserResults.length === 0) {
+            return res.status(404).json({ error: 'Organiser not found' });
+        }
+
+        const organiser = organiserResults[0];
+
+        const eventQuery = `SELECT * FROM events WHERE organiser_id = ?`;
+        db.query(eventQuery, [organiserId], (err2, eventResults) => {
+            if (err2) return res.status(500).json({ error: 'Event fetch failed' });
+
+            const now = new Date();
+            const ongoing = eventResults.filter(e => new Date(e.date) >= now);
+            const completed = eventResults.filter(e => new Date(e.date) < now);
+
+            res.json({
+                organiser,
+                ongoingEvents: ongoing,
+                previousEvents: completed
+            });
+        });
+    });
+});
+

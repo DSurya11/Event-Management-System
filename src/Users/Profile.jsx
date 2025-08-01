@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
+
 function Profile() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState(null);

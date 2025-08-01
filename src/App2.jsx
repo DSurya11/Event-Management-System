@@ -12,12 +12,13 @@ import VdEvent_On from "./Admin/VdEvent_On.jsx";
 import VdEvent_Up from "./Admin/VdEvent_Up.jsx";
 import Admin_Org from "./Admin/Admin_Org.jsx";
 import Admin_User from "./Admin/Admin_User.jsx";
+import Orgprofile from "./Organisers/Orgprofile.jsx"
 function App2() {
     return (
         <BrowserRouter>
             <AdminNavbar />
             <Routes>
-                <Route path="/" element={<Regevent/>} />
+                <Route path="/" element={<Orgprofile/>} />
             </Routes>
         </BrowserRouter>
     )
