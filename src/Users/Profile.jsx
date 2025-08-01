@@ -5,7 +5,7 @@ import "./Profile.css";
 
 function Profile() {
     const navigate = useNavigate();
-    const [profile, setProfile] = useState(null);
+    const [profile, setProfile] = useState([]);
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("userRole");
 
