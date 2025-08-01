@@ -934,7 +934,7 @@ app.get("/admin/user-events", async (req, res) => {
 
     res.json(rows);
   } catch (err) {
-    console.error("Error in /admin/user-events:", err);  
+    console.error("Error in /admin/user-events:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -978,7 +978,52 @@ app.get("/admin/organizer-events/:organiser_id", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+app.get("/organizer/registrations/:eventId", async (req, res) => {
+  const { eventId } = req.params;
 
+  try {
+    const [rows] = await db.promise().query(
+      `SELECT u.user_id, u.name, u.email, u.date_joined
+       FROM registrations r
+       JOIN users u ON r.user_id = u.user_id
+       WHERE r.event_id = ?`,
+      [eventId]
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch registrations" });
+  }
+});
+
+app.put('/organizer/close-registration/:event_id', async (req, res) => {
+  const { event_id } = req.params;
+  const yesterday = new Date(Date.now() - 86400000);  // subtract 1 day
+  const formattedDate = yesterday.toISOString().slice(0, 19).replace('T', ' ');
+
+  try {
+    await db.promise().query(
+      `UPDATE events SET reg_end_date = ? WHERE event_id = ?`,
+      [formattedDate, event_id]
+    );
+    res.json({ success: true, message: 'Registration closed.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to close registration.' });
+  }
+});
+app.delete('/organizer/delete-event/:event_id', async (req, res) => {
+  const { event_id } = req.params;
+  try {
+    const [del] = await db.promise().query(
+      'DELETE FROM events WHERE event_id = ?',
+      [event_id]
+    );
+    res.json({ success: true, message: 'Event deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 
 
 app.use('/uploads', express.static('uploads'));

@@ -166,10 +166,11 @@ textarea {
 }
 
 .host-form input:focus,
-textarea:focus{
-    
+textarea:focus {
+
     outline: 2px solid lightseagreen;
 }
+
 textarea {
     height: 300px;
 }
