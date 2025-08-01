@@ -11,7 +11,7 @@ import fs from "fs";
 import Razorpay from "razorpay";
 import { createServer } from "http";
 import { Server } from "socket.io";
-
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -680,6 +680,20 @@ app.get("/attendee/:id", (req, res) => {
     res.json(results[0]);
   });
 });
+app.get("/registrations/check", (req, res) => {
+  const { eventId, userId } = req.query;
+
+  const query = `
+    SELECT 1 FROM Registrations
+    WHERE event_id = ? AND user_id = ?
+    LIMIT 1
+  `;
+
+  db.query(query, [eventId, userId], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+    res.json({ registered: results.length > 0 });
+  });
+});
 
 app.get('/organizer/events', async (req, res) => {
   const organizerId = req.query.organizerId;
@@ -894,6 +908,66 @@ app.get("/profile/:role/:id", async (req, res) => {
     console.error("Error fetching profile and events:", err);
     res.status(500).json({ error: "Server error" });
   }
+});
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+app.post("/send-email", (req, res) => {
+  const { eventId, subject, body } = req.body;
+
+  if (!eventId || !subject || !body) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const query = `
+    SELECT email FROM users 
+    JOIN registrations ON users.user_id = registrations.user_id 
+    WHERE registrations.event_id = ? AND registrations.notify = 1
+  `;
+
+  db.query(query, [eventId], (err, results) => {
+    if (err) {
+      console.error("❌ DB Error:", err);
+      return res.status(500).json({ error: "Database error", details: err });
+    }
+
+    const emails = results.map(row => row.email);
+    console.log("📨 Sending to:", emails);
+
+    if (emails.length === 0) {
+      return res.status(404).json({ error: "No attendees opted for notifications" });
+    }
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: emails,
+      subject,
+      text: body
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("❌ Email failed:", error);
+        return res.status(500).json({ error: "Email failed", details: error.message });
+      }
+
+      console.log("✅ Email sent:", info.response);
+      res.status(200).json({ message: "Emails sent", info });
+    });
+  });
+});
+app.get('/organiser/:id/events', (req, res) => {
+    const organiserId = req.params.id;
+    db.query("SELECT event_id, title FROM events WHERE organiser = ?", [organiserId], (err, result) => {
+        if (err) return res.status(500).json({ error: "DB error" });
+        res.json(result);
+    });
 });
 
 

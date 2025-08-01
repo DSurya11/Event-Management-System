@@ -36,7 +36,7 @@ function OrgNav() {
             <div className='nb-button'>
                 <Link to="/organizer/home"><button className='btn'>Home</button></Link>
                 <Link to="/organizer/host"><button className='btn'>Host</button></Link>
-                <Link to="/contact"><button className='btn'>Contact</button></Link>
+                <Link to="/organizer/notify"><button className='btn'>Notify</button></Link>
                 
             </div>
             <Link to='/chat'>

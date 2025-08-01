@@ -35,7 +35,7 @@ function Host() {
     ];
 
     useEffect(() => {
-        const storedOrganizerId = localStorage.getItem("organizerId");
+        const storedOrganizerId = localStorage.getItem("userId");
         if (storedOrganizerId) {
             setOrganizerId(storedOrganizerId);
             setFormData(prev => ({ ...prev, organiser: storedOrganizerId }));

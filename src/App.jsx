@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Admin from './Admin/Admin.jsx';
+import Admin_User from './Admin/Admin_User.jsx';
+
+
 import Home from './Users/Home.jsx';
 import Guesthome from './Users/Guesthome.jsx';
 import Browse from './Users/Browse.jsx';
@@ -19,6 +22,7 @@ import Razerpay from './Payments/Razerpay.jsx';
 
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';
+import Email from './Organisers/Email.jsx';
 
 import Navbar from './Components/Navbar.jsx';
 import OrgNav from './Components/OrgNav.jsx';
@@ -71,6 +75,7 @@ function App() {
           <>
             <Route path="/organizer/home" element={<OrgHome />} />
             <Route path="/organizer/host" element={<Host />} />
+            <Route path="/organizer/notify" element={<Email />} />
             <Route path="/chat" element={<Chat role="organizer" />} />
             <Route path="/chat/organizers/:eventId/:attendeeId" element={<Chat role="organizer" />} />
           </>
