@@ -997,6 +997,101 @@ app.get('/api/organiserp/:id', (req, res) => {
         });
     });
 });
+app.get('/admin/organizers', async (req, res) => {
+  try {
+    const [rows] = await db.promise().query(`
+      SELECT o.organiser_id, o.name, o.username, o.date_joined,
+             COUNT(e.event_id) AS event_count
+      FROM organisers o
+      LEFT JOIN events e ON o.organiser_id = e.organiser
+      GROUP BY o.organiser_id
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
+app.get("/admin/organizer-events/:organiser_id", async (req, res) => {
+  const { organiser_id } = req.params;
+
+  if (!organiser_id) {
+    return res.status(400).json({ error: "Missing organiser_id" });
+  }
+
+  try {
+    const [rows] = await db.promise().query(
+      `
+      SELECT event_id, title AS event_name, date AS event_date
+      FROM events
+      WHERE organiser = ?
+      ORDER BY date DESC
+      `,
+      [organiser_id]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Error in /admin/organizer-events/:id:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+app.get("/organizer/registrations/:eventId", async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+    const [rows] = await db.promise().query(
+      `SELECT u.user_id, u.name, u.email, u.date_joined
+       FROM registrations r
+       JOIN users u ON r.user_id = u.user_id
+       WHERE r.event_id = ?`,
+      [eventId]
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch registrations" });
+  }
+});
+
+app.put('/organizer/close-registration/:event_id', async (req, res) => {
+  const { event_id } = req.params;
+  const yesterday = new Date(Date.now() - 86400000);  // subtract 1 day
+  const formattedDate = yesterday.toISOString().slice(0, 19).replace('T', ' ');
+
+  try {
+    await db.promise().query(
+      `UPDATE events SET reg_end_date = ? WHERE event_id = ?`,
+      [formattedDate, event_id]
+    );
+    res.json({ success: true, message: 'Registration closed.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to close registration.' });
+  }
+});
+app.delete('/organizer/delete-event/:event_id', async (req, res) => {
+  const { event_id } = req.params;
+  try {
+    const [del] = await db.promise().query(
+      'DELETE FROM events WHERE event_id = ?',
+      [event_id]
+    );
+    res.json({ success: true, message: 'Event deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
+app.use('/uploads', express.static('uploads'));
+
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

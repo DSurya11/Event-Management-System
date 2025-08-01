@@ -18,11 +18,11 @@ function BrowseOrg() {
                     </div>
                     <div className='org_upcoming'>
                         <div className='event_upcoming'>
-                            <img src=".\public\white.jpeg" alt="" />
+                            <img src=".\white.jpeg" alt="" />
                             <h3>Club_Name</h3>
                         </div>
                         <div className='event_upcoming'>
-                            <img src=".\public\white.jpeg" alt="" />
+                            <img src=".\white.jpeg" alt="" />
                             <h3>Club_Name</h3>
                         </div>
                     </div>
@@ -32,11 +32,11 @@ function BrowseOrg() {
                     </div>
                     <div className='org_prev'>
                         <div className='event_prev'>
-                            <img src=".\public\white.jpeg" alt="" />
+                            <img src=".\white.jpeg" alt="" />
                             <h3>Club_Name</h3>
                         </div>
                         <div className='event_prev'>
-                            <img src=".\public\white.jpeg" alt="" />
+                            <img src=".\white.jpeg" alt="" />
                             <h3>Club_Name</h3>
                         </div>
                     </div>

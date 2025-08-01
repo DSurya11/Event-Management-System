@@ -1,4 +1,4 @@
-.home-heading{
+.home-heading {
     padding-top: 130px;
     color: white;
     font-size: 45px;
@@ -6,36 +6,41 @@
     margin-bottom: 0px;
 }
 
-.home-head{
+.home-head {
     text-align: center;
     height: 400px;
     background-color: lightseagreen;
     width: 100%;
 }
+
 .head-text-card {
     font-family: "Roboto Slab", serif;
     font-optical-sizing: auto;
     font-style: normal;
-  }
+}
+
 .subhead-text-card {
     font-family: "Playfair Display", serif;
     font-style: normal;
     padding-left: 50px;
     padding-top: 30px;
     padding-bottom: 17px;
-  }
-  .no-events-msg{
+}
+
+.no-events-msg {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 320px;
-  }
-.no-events-msg p{
+}
+
+.no-events-msg p {
     text-align: center;
     font-size: large;
 }
-.host-event-btn{
+
+.host-event-btn {
     height: 50px;
     width: 165px;
     border-radius: 5px;
@@ -51,25 +56,28 @@
     transition-duration: 0.2s;
 
 }
-.host-event-btn:hover{
+
+.host-event-btn:hover {
     transform: scale(1.2);
     transition-duration: 0.2s;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 16px 16px -8px;
 }
-  .subhead-text-card-v2{
+
+.subhead-text-card-v2 {
     font-family: "Playfair Display", serif;
     font-size: xx-large;
     font-style: normal;
     text-align: center;
     padding-top: 30px;
     padding-bottom: 17px;
-  }
-.home-head p{
-    color: white;
-    font-size: large ;
 }
 
-.ongoing_events-home{
+.home-head p {
+    color: white;
+    font-size: large;
+}
+
+.ongoing_events-home {
     display: flex;
     justify-content: left;
     column-gap: 10px;
@@ -87,12 +95,16 @@
     padding: 10px 0;
 }
 
-.ongoing_event_cards h1{
+.ongoing_event_cards h1 {
     padding-left: 25px;
     padding-bottom: 0%;
     margin-bottom: 0;
 }
-.ongoing_event_cards #cat,#datetime,#deadline,#location{
+
+.ongoing_event_cards #cat,
+#datetime,
+#deadline,
+#location {
     padding-top: 0;
     margin-top: 0;
     padding-left: 25px;
@@ -100,7 +112,8 @@
     padding-bottom: 10px;
 
 }
-.ongoing-btns svg{
+
+.ongoing-btns svg {
     position: absolute;
     height: 30px;
     right: 0;
@@ -109,18 +122,22 @@
     stroke: grey;
     opacity: 0.7;
 }
-.ongoing-btns svg:hover{
+
+.ongoing-btns svg:hover {
     cursor: pointer;
 }
+
 #deadline {
     font-weight: 600;
 }
-.circle-prog{
+
+.circle-prog {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.circle-prog .box{
+
+.circle-prog .box {
     position: relative;
     display: flex;
     height: 300px;
@@ -131,37 +148,43 @@
     align-items: center;
     padding-bottom: 20px;
 }
-.circle-prog .box .percent{
+
+.circle-prog .box .percent {
     height: 150px;
     width: 150px;
     position: relative;
 }
-.circle-prog .box .percent svg{
+
+.circle-prog .box .percent svg {
     position: relative;
     width: 150px;
     height: 150px;
 
 }
-.circle-prog .box .percent svg circle{
+
+.circle-prog .box .percent svg circle {
     width: 150px;
     height: 150px;
     fill: none;
     stroke-width: 10;
     stroke: #111;
-    transform: translate(5px,5px);
+    transform: translate(5px, 5px);
     stroke-dashoffset: 440;
     stroke-dasharray: 440;
     stroke-linecap: round;
 }
-.circle-prog .box .percent svg circle:nth-child(1){
+
+.circle-prog .box .percent svg circle:nth-child(1) {
     stroke-dashoffset: 0;
     stroke: #f3f3f3;
 }
-.circle-prog .box .percent svg circle:nth-child(2){
-    
+
+.circle-prog .box .percent svg circle:nth-child(2) {
+
     stroke: lightseagreen;
 }
-.circle-prog .box .percent .number{
+
+.circle-prog .box .percent .number {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -171,21 +194,24 @@
     justify-content: center;
     align-items: center;
 }
-.circle-prog .box .percent .number h2{
+
+.circle-prog .box .percent .number h2 {
     font-size: 40px;
 }
-.circle-prog .box .percent .number h2 span{
+
+.circle-prog .box .percent .number h2 span {
     font-size: 26px;
 }
 
-.ongoing-btns{
-    
+.ongoing-btns {
+
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: end;
 }
-.ongoing-btns button{
+
+.ongoing-btns button {
     height: 50px;
     width: 165px;
     margin-bottom: 10px;
@@ -199,20 +225,24 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 4px -8px;
 
 }
-.ongoing-btns button:nth-child(4){
+
+.ongoing-btns button:nth-child(4) {
     background-color: rgb(198, 70, 70);
     color: #cfdbd5;
 }
+
 .ongoing-btns button:hover {
     background-color: lightseagreen;
     color: white;
     transition-duration: 0.2s;
 }
-.ongoing-btns button:nth-child(4):hover{
+
+.ongoing-btns button:nth-child(4):hover {
     background-color: rgb(198, 70, 70);
     color: #cfdbd5;
 }
-.previous-events{
+
+.previous-events {
     display: flex;
     justify-content: left;
     column-gap: 10px;
@@ -229,12 +259,16 @@
     width: 19%;
 }
 
-.previous_event_cards h1{
+.previous_event_cards h1 {
     padding-left: 25px;
     padding-bottom: 0%;
     margin-bottom: -20px;
 }
-.previous_event_cards #cat,#datetime,#deadline,#location{
+
+.previous_event_cards #cat,
+#datetime,
+#deadline,
+#location {
     padding-top: 0;
     margin-top: 20px;
     padding-left: 25px;
@@ -242,7 +276,8 @@
     padding-bottom: 10px;
 
 }
-.previous_event_cards button{
+
+.previous_event_cards button {
     height: 50px;
     width: 165px;
     margin-bottom: 10px;
@@ -255,18 +290,21 @@
     font-weight: 400;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 4px -8px;
 }
+
 .previous_event_cards button:hover {
     background-color: lightseagreen;
 
     transition-duration: 0.2s;
 }
-.vertical-progress{
+
+.vertical-progress {
     position: relative;
     margin-left: -20px;
     height: 90%;
     bottom: -12px;
 }
-.vertical-bar{
+
+.vertical-bar {
     height: 100%;
     background-color: white;
     width: 10px;
@@ -276,7 +314,8 @@
     right: 20px;
 
 }
-.vertical-bar-prog{
+
+.vertical-bar-prog {
     background-color: lightseagreen;
     width: 10px;
     position: absolute;
@@ -284,11 +323,113 @@
     z-index: 10;
     right: 20px;
 }
-.vertical-progress p{
-    
+
+.vertical-progress p {
+
     rotate: -90deg;
     width: max-content;
     position: absolute;
     bottom: 95px;
     right: -10px;
+}
+
+.reg_modal_backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.reg_modal {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.reg_modal_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reg_modal_header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.close_btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.close_btn:hover {
+    background: #c0392b;
+}
+
+.reg-table-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #E8EDDF;
+    z-index: 9999;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.reg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reg-header h3 {
+    margin: 0;
+}
+
+.reg-header button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.reg-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.reg-table th,
+.reg-table td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: left;
+}
+
+.reg-table th {
+    background-color: #f4f4f4;
 }

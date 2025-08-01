@@ -152,7 +152,7 @@ function Browse() {
                                         <div className="location">
                                             <p>{event.venue}</p>
                                             <Link to={`/register/${event.event_id}`}>
-                                                <button>Register now</button>
+                                                <button>Details</button>
                                             </Link>
                                         </div>
                                     </div>

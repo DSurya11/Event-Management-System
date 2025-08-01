@@ -6,15 +6,15 @@ function Organizers() {
             <h2>Organizers</h2>
             <div className='Org'>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
                 <div className='Event'>
-                    <img src=".\public\white.jpeg" alt="" />
+                    <img src=".\white.jpeg" alt="" />
                     <h3>Club_Name</h3>
                 </div>
             </div>
