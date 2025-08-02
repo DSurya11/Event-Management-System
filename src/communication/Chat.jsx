@@ -236,9 +236,13 @@ function Chat({ role }) {
                   : `${msg.sender_name} (Attendee)`;
 
               return (
-                <p key={i} className={isMe ? "message me" : "message other"}>
-                  <b>{displayName}:</b> {msg.message}
-                </p>
+                <div
+                  key={i}
+                  className={`chat-bubble ${isMe ? "outgoing" : "incoming"}`}
+                >
+                  <span className="chat-sender">{displayName}:</span>
+                  <span className="chat-text">{msg.message}</span>
+                </div>
               );
             })
           )}

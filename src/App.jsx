@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Admin from './Admin/Admin.jsx';
 import Admin_User from './Admin/Admin_User.jsx';
-
+import Admin_Org from './Admin/Admin_Org.jsx';
 
 import Home from './Users/Home.jsx';
 import Guesthome from './Users/Guesthome.jsx';
@@ -92,8 +92,8 @@ function App() {
 
         {/* Admin and fallback */}
         <Route path="/admin" element={<Admin />} />
-        <Route path="/adminuser" element={<Adminuser />} />
-        <Route path="/adminorganizer" element={<Adminorg />} />
+        <Route path="/adminuser" element={<Admin_User />} />
+        <Route path="/adminorganizer" element={<Admin_Org />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

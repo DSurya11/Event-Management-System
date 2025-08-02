@@ -292,3 +292,74 @@
     bottom: 95px;
     right: -10px;
 }
+
+/* --- Responsive improvements for Organiser Home Page --- */
+
+@media (max-width: 900px) {
+  .ongoing_events-home, .previous-events {
+    flex-direction: column;
+    gap: 16px;
+    margin: 24px 0 0 0;
+  }
+  .ongoing_event_cards, .previous_event_cards {
+    width: 100%;
+    min-width: unset;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 8px;
+  }
+  .circle-prog .box {
+    width: 100%;
+    height: auto;
+    padding-bottom: 10px;
+  }
+  .ongoing-btns, .ongoing-btns button, .previous_event_cards button {
+    width: 100%;
+    margin: 8px 0 0 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-head {
+    min-height: 180px;
+    padding: 16px 0;
+    border-radius: 0 0 12px 12px;
+  }
+  .home-heading {
+    font-size: 2rem;
+    padding-top: 40px;
+  }
+  .subhead-text-card, .subhead-text-card-v2 {
+    font-size: 1.1rem;
+    padding-left: 10px;
+    padding-top: 16px;
+    padding-bottom: 10px;
+  }
+  .ongoing_event_cards, .previous_event_cards {
+    padding: 10px 2px;
+    border-radius: 8px;
+  }
+  .circle-prog .box .percent {
+    width: 100px;
+    height: 100px;
+  }
+  .circle-prog .box .percent svg {
+    width: 100px;
+    height: 100px;
+  }
+  .circle-prog .box .percent .number h2 {
+    font-size: 24px;
+  }
+  .ongoing-btns button, .previous_event_cards button {
+    font-size: 0.95rem;
+    padding: 8px 0;
+    width: 100%;
+    margin: 6px 0 0 0;
+  }
+  .vertical-progress {
+    margin-left: 0;
+    min-width: 60px;
+  }
+}
+
+/* --- End responsive improvements --- */
