@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ import this
 import './Admin.css';
 import AdminNavbar from '../Components/AdminNavbar';
+import { useNavigate } from 'react-router-dom';
 
 function Admin() {
     const [pendingEvents, setPendingEvents] = useState([]);
     const [ongoingEvents, setOngoingEvents] = useState([]);
-    const navigate = useNavigate(); // ✅ initialize
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchEvents();
@@ -59,7 +60,7 @@ function Admin() {
                                 })}
                             </div>
 
-                            <button className='event_btns_vd' onClick={() => handleViewDetails(event.event_id)}>View Details</button>
+                            <button className='event_btns_vd' onClick={() => navigate(`/admin/events/${event.event_id}`)}>View Details</button>
                             <button
                                 className='event_btns_rej'
                                 onClick={() => updateEventStatus(event.event_id, 2)}
@@ -92,8 +93,8 @@ function Admin() {
                                     day: 'numeric'
                                 })}
                             </div>
-
-                            <button className='event_btns_vd' onClick={() => handleViewDetails(event.event_id)}>View Details</button>
+                            
+                            <button className='event_btns_vd' onClick={() => navigate(`/admin/events/${event.event_id}`)}>View Details</button>
                         </div>
                     ))}
                 </div>

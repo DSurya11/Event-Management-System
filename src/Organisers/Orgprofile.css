@@ -6,43 +6,49 @@ margin-top: 100px;
     background-color: lightseagreen;
     border: none;
     text-align: center;
-    margin-left: 30%;
-    margin-top: 20%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    margin-left: 36%;
+    margin-top: 10%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
     border-radius: 2px;
     cursor: pointer;
-    font-size: large;
 }
 .Orgprofilelogout:hover{
-    background-color:rgb(19, 102, 98)
+    cursor: pointer;
+    scale: 1.05;
+    background-color:rgb(19, 102, 98);
+    transition-duration: 0.2s;
 
 }
 .Organizers_profile .OrgProfile_boxM1{
+    width:20%;
 background-color:   #E8EDDF ;
 margin-left: 30px;
 }
-.Profile_boxM1 .profile_logo{
-    width:300px;
-    height:450px;
+.Profile_boxM1 .Orgprofile_logo{
     background-color: #E8EDDF;
     margin-top: 100px;
     border-radius: 8px;
 }
-.OrgProfile_boxM1 .profile_logo img{
-    margin: 30px;
-    margin-left: 44px;
+.OrgProfile_boxM1 .Orgprofile_logo img{
+    margin: 5px;
+    margin-top: 20px;
+    margin-left: 55px;
     height: 200px;
     width: 200px;
     border-radius: 100%;
     border: lightseagreen solid 2px;
 }
-.OrgProfile_boxM1 .profile_logo p{
+.OrgProfile_boxM1 .Orgprofile_logo .Orgname{
     text-align: center;
     font-family:'Merriweather',serif;
     font-size: 20px;
+    margin-top: 30px;
+}
+.OrgProfile_boxM1 .Orgprofile_logo input{
+    margin-left: 20%;
 }
 .Role{
     text-align: center;
@@ -56,7 +62,7 @@ margin-left: 30px;
 }
 .Organizers_profile .OrgProfile_boxM2 .Profile_box_1{
     width:1000px;
-    height:150px;
+    height:fit-content;
     background-color: #E8EDDF;
     border-radius: 8px;
     padding: 2px;
@@ -69,17 +75,6 @@ margin-left: 30px;
     padding: 5px;
 }
 .OrgProfile_boxM2 .Profile_box_1 .profile_box1_name span{
-    font-weight: 600;
-
-}
-.OrgProfile_boxM2 .Profile_box_1 .profile_box1_email{
-    font-size: larger;
-    font-family:'Merriweather',serif;
-    margin-top:30px;
-    margin-left:10px;
-    padding: 5px;
-}
-.OrgProfile_boxM2 .Profile_box_1 .profile_box1_email span{
     font-weight: 600;
 
 }
@@ -152,6 +147,84 @@ margin-left: 30px;
     cursor: pointer;
 }
 
+.profile_edit_btn{
+    background-color: lightseagreen;
+    border: none;
+    text-align: center;
+    padding: 5px 15px;
+    margin-left: 94%;
+    border-radius: 4px;
+}
+.profile_edit_btn:hover{
+    background-color:rgb(19, 102, 98);
+    cursor: pointer;
+    scale: 1.05;
+    transition-duration: 0.2s;
+}
+.profile_change_img_btn{
+    background-color:white;
+    color: black;
+    border: none;
+    text-align: center;
+    padding: 5px 15px;
+    margin-left: 28%;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+.profile_change_img_btn:hover{
+    cursor: pointer;
+}
+.Edit_Profile_Box{
+    width: 500px;
+}
 
+.modal-backdropOrg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
 
+.modal-contentOrg {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    width: 500px;
+    text-align: center;
+}
+
+.modal-buttonsOrg {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.cancel-btnOrg {
+    background: lightseagreen;
+    border: none;
+    width: 40%;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+.confirm-btnOrg {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 40%;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+.Edit_Profile_Box input{
+    background-color: white;
+     
+}
 
