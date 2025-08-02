@@ -433,3 +433,10 @@
 .reg-table th {
     background-color: #f4f4f4;
 }
+
+.disabled-btn {
+    background-color: #ccc;
+    color: #555;
+    cursor: not-allowed;
+    border: none;
+}

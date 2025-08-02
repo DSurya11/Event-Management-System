@@ -710,14 +710,15 @@ app.get('/organizer/events', async (req, res) => {
 
   try {
     const [events] = await db.promise().query(
-      `SELECT e.event_id, e.title, e.date, e.time, e.venue, e.capacity, e.reg_end_date, 
-                  GROUP_CONCAT(DISTINCT c.category) AS category
-           FROM Events e
-           LEFT JOIN Categories c ON e.event_id = c.event_id
-           WHERE e.organiser = ?
-           GROUP BY e.event_id`,
+      `SELECT e.event_id, e.title, e.date, e.time, e.venue, e.capacity, e.reg_end_date, e.approved,
+          GROUP_CONCAT(DISTINCT c.category) AS category
+   FROM Events e
+   LEFT JOIN Categories c ON e.event_id = c.event_id
+   WHERE e.organiser = ?
+   GROUP BY e.event_id`,
       [organizerId]
     );
+
 
     const now = new Date();
 

@@ -2,8 +2,10 @@ import './Browse.css'
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 import ChatIcon from '../Components/ChatIcon';
+import { useNavigate } from 'react-router-dom';
 
 function Browse() {
+    const navigate = useNavigate();
     const [selectedStartDate, setSelectedStartDate] = useState('');
     const [selectedEndDate, setSelectedEndDate] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -12,6 +14,15 @@ function Browse() {
     const [eventMode, setEventMode] = useState('ongoing');
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
+    };
+    const handleDetailsClick = (eventId) => {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            navigate(`/register/${eventId}`);
+        } else {
+            navigate('/signin');
+        }
     };
 
     useEffect(() => {
@@ -182,9 +193,8 @@ function Browse() {
                                         </div>
                                         <div className="location">
                                             <p>{event.venue}</p>
-                                            <Link to={`/register/${event.event_id}`}>
-                                                <button>Details</button>
-                                            </Link>
+                                            <button onClick={() => handleDetailsClick(event.event_id)}>Details</button>
+
                                         </div>
                                     </div>
                                 </div>
