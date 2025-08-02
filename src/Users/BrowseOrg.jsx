@@ -27,14 +27,18 @@ function BrowseOrg() {
 
     return (
         <div className='browse_org'>
-            <div className='browse_org_header'>
-                <h1>{org.name}</h1>
-            </div>
-            <div className='browse_org_logo'>
-                <img src={org.logo} />
-            </div>
-            <div className='browse_org_info'>
-                {org.Description || 'No description available.'}
+            <div className='browse_org_main'>
+                <div className='browse_org_logo'>
+                    <img src={org.logo ? `/${org.logo.replace(/\\/g, '/')}` : '/placeholder.jpg'} alt="Logo" />
+                </div>
+                <div className='browse_org_info'>
+                    <div className='browse_org_head'>
+                        <h1>{org.name}</h1>
+                    </div>
+                    <div className='browse_org_description'>
+                        {org.Description || 'No description available.'}
+                    </div>
+                </div>
             </div>
 
             <div className='browse_org_events'>
