@@ -1018,6 +1018,51 @@ app.post("/send-email", (req, res) => {
     });
   });
 });
+app.get("/admin/users", async (req, res) => {
+  try {
+    const [users] = await db.promise().query(`
+      SELECT 
+        u.user_id, u.name, u.email, u.date_joined,
+        COUNT(r.registration_id) AS event_count
+      FROM users u
+      LEFT JOIN registrations r ON u.user_id = r.user_id
+      GROUP BY u.user_id
+    `);
+
+    res.json(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+app.get("/admin/user-events", async (req, res) => {
+  const { user_id } = req.query;
+  console.log("Received request for user_id:", user_id);  // ✅ debug log
+
+  if (!user_id) {
+    return res.status(400).json({ error: "Missing user_id" });
+  }
+
+  try {
+    const [rows] = await db.promise().query(
+      `
+      SELECT e.event_id, e.title, e.date, r.submitted_at
+      FROM registrations r
+      JOIN events e ON r.event_id = e.event_id
+      WHERE r.user_id = ?
+      ORDER BY r.submitted_at DESC
+      `,
+      [user_id]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Error in /admin/user-events:", err);  // ✅ log actual error
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 app.get('/organiser/:id/events', (req, res) => {
   const organiserId = req.params.id;
   db.query("SELECT event_id, title FROM events WHERE organiser = ?", [organiserId], (err, result) => {
@@ -1026,7 +1071,7 @@ app.get('/organiser/:id/events', (req, res) => {
   });
 });
 
-app.get('/api/organiserp/:id', (req, res) => {
+app.get('/api/organiser/:id', (req, res) => {
   const organiserId = req.params.id;
 
   const organiserQuery = `SELECT * FROM organisers WHERE organiser_id = ?`;
@@ -1205,6 +1250,23 @@ app.get('/organizer/editevent/:id', async (req, res) => {
   }
 });
 
+app.get('/api/organizers', (req, res) => {
+  const query = 'SELECT name, logo FROM organisers';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching organizers:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+
+    const organizers = results.map(org => ({
+      name: org.name,
+      logo: org.logo.replace(/\\/g, '/')
+    }));
+
+    res.json(organizers);
+  });
+});
 
 // --- Update organizer profile image (logo) ---
 app.post('/api/organiserp/:id/logo', upload.single('logo'), (req, res) => {

@@ -13,10 +13,10 @@ function Regevent() {
     const [showSupportModal, setShowSupportModal] = useState(false);
     const navigate = useNavigate();
 
-    const userId = localStorage.getItem('userId'); // 🔐 You can update based on your auth logic
+    const userId = localStorage.getItem('userId'); 
 
     useEffect(() => {
-        // Fetch selected event
+        
         fetch(`http://localhost:3000/events/${eventId}`)
             .then(response => response.json())
             .then(data => {
