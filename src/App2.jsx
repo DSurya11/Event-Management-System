@@ -17,14 +17,8 @@ import BrowseOrg from "./Users/BrowseOrg.jsx";
 function App2() {
     return (
         <BrowserRouter>
-            <AdminNavbar />
-            <Routes>
-                <Route path="/" element={<Regevent/>} />
-            </Routes>
         </BrowserRouter>
     )
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App2 />);
 export default App2;

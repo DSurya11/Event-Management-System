@@ -11,7 +11,7 @@ const id = localStorage.getItem('userId');
 
 root.render(
   <React.StrictMode>
-    <App2/>
+    <App/>
     {id ? <Footer /> : null}
   </React.StrictMode>
 );
