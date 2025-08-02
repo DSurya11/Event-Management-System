@@ -492,17 +492,23 @@ app.get("/events/recent", (req, res) => {
   });
 });
 app.get("/events/filter", (req, res) => {
-  const { startDate, endDate, categories, search } = req.query;
+  const { startDate, endDate, categories, search, mode } = req.query;
 
   let query = `
-      SELECT e.event_id, e.title, e.description, e.date, e.time, e.venue, e.cover_image, 
-             GROUP_CONCAT(c.category) AS categories
-      FROM Events e
-      LEFT JOIN Categories c ON e.event_id = c.event_id
-      WHERE e.approved = 1 AND e.reg_end_date >= CURDATE()
-  `;
-  let queryParams = [];
+    SELECT e.event_id, e.title, e.description, e.date, e.time, e.venue, e.cover_image, 
+           GROUP_CONCAT(c.category) AS categories
+    FROM Events e
+    LEFT JOIN Categories c ON e.event_id = c.event_id
+    WHERE e.approved = 1
+    `;
 
+
+  let queryParams = [];
+  if (mode === "previous") {
+    query += " AND e.date < CURDATE()";
+  } else {
+    query += " AND e.date >= CURDATE()";
+  }
   if (startDate) {
     query += " AND e.date >= ?";
     queryParams.push(startDate);

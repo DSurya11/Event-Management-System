@@ -9,14 +9,14 @@ function Browse() {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [events, setEvents] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [eventMode, setEventMode] = useState('ongoing');
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
     useEffect(() => {
         fetchEvents();
-    }, [selectedStartDate, selectedEndDate, selectedCategories, searchTerm]);
+    }, [selectedStartDate, selectedEndDate, selectedCategories, searchTerm, eventMode]);
 
 
     const fetchEvents = () => {
@@ -25,6 +25,7 @@ function Browse() {
         if (selectedEndDate) query.append("endDate", selectedEndDate);
         if (selectedCategories.length > 0) query.append("categories", selectedCategories.join(","));
         if (searchTerm.trim() !== "") query.append("search", searchTerm.trim());
+        if (eventMode === "previous") query.append("mode", "previous");
 
         fetch(`http://localhost:3000/events/filter?${query.toString()}`)
             .then(response => response.json())
@@ -33,6 +34,7 @@ function Browse() {
             })
             .catch(error => console.error("Error fetching events:", error));
     };
+
 
 
     const handleStartDateChange = (e) => {
@@ -124,6 +126,35 @@ function Browse() {
                                 <label htmlFor={category}>{category}</label>
                             </div>
                         ))}
+                    </div>
+
+                    <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
+                    <h4>Event Status</h4>
+                    <div className='categories'>
+                        <div className='each-category'>
+                            <input
+                                type="radio"
+                                id="ongoing"
+                                name="eventMode"
+                                value="ongoing"
+                                checked={eventMode === 'ongoing'}
+                                onChange={() => setEventMode('ongoing')}
+                                className="check"
+                            />
+                            <label htmlFor="ongoing">Ongoing Events</label>
+                        </div>
+                        <div className='each-category'>
+                            <input
+                                type="radio"
+                                id="previous"
+                                name="eventMode"
+                                value="previous"
+                                checked={eventMode === 'previous'}
+                                onChange={() => setEventMode('previous')}
+                                className="check"
+                            />
+                            <label htmlFor="previous">Previous Events</label>
+                        </div>
                     </div>
 
                     <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
