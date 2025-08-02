@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ✅ import this
 import './Admin.css';
 import AdminNavbar from '../Components/AdminNavbar';
 import { useNavigate } from 'react-router-dom';

@@ -37,7 +37,7 @@ function Orgprofile() {
       const fetchProfile = async () => {
         try {
           console.log("Fetching profile for organiser ID:", organiserId);
-          const res = await fetch(`http://localhost:3000/api/organiserp/${organiserId}`);
+          const res = await fetch(`http://localhost:3000/api/organiser/${organiserId}`);
           if (!res.ok) {
             throw new Error(`HTTP error ${res.status}`);
           }
