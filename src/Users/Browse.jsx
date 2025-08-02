@@ -10,6 +10,11 @@ function Browse() {
     const [events, setEvents] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [eventMode, setEventMode] = useState('ongoing');
+    const [showFilters, setShowFilters] = useState(false);
+
+    const handleToggleFilters = () => {
+    setShowFilters((prev) => !prev);
+  };
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
@@ -76,7 +81,18 @@ function Browse() {
             />
 
             <div className="browse">
-                <div className='filters'>
+                {!showFilters && (
+                    <button className="filter-toggle-btn" onClick={handleToggleFilters}>
+                        Show Filters
+                    </button> 
+                )}
+                <div className={`filter-sidebar ${showFilters ? "visible" : ""}`}>
+                     {showFilters && (
+                        <button className="filter-hide-btn" onClick={handleToggleFilters}>
+                            Hide Filters
+                        </button>
+                    )}
+                 <div className='filters'>
                     <h3>Filter</h3>
                     <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
 
@@ -158,8 +174,8 @@ function Browse() {
                     </div>
 
                     <hr style={{ color: "lightseagreen", width: "100%", marginLeft: "0%" }} />
+                 </div>
                 </div>
-
                 <div className='browse-list'>
                     {events.length === 0 ? (
                         <p>No events available</p>
