@@ -112,11 +112,11 @@
 
 .event_info2 {
     display: flex;
+    align-items: flex-start;
 }
 
 .artists {
     background-color: #e8eddf;
-    height: 700px;
     width: 20%;
     margin-bottom: 70px;
 }
@@ -124,7 +124,7 @@
 .event_motto {
     background-color: #e8eddf;
     min-height: 700px;
-    height: fit-content;
+    height: auto;
     width: 80%;
     margin-left: 10px;
     margin-right: 10px;
@@ -133,7 +133,7 @@
 .uc_event {
     background-color: #e8eddf;
     min-height: 700px;
-    height: fit-content;
+    height: auto;
     width: 20%;
     margin-bottom: 70px;
 }

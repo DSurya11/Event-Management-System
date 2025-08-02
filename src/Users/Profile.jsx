@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../components/ConfirmationModal"; // adjust path if needed
 import "./Profile.css";
-
 
 function Profile() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState([]);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("userRole");
 
@@ -28,6 +29,7 @@ function Profile() {
     const handleLogout = () => {
         localStorage.clear();
         navigate("/");
+        window.location.reload(); // Force reload after logout
     };
 
     return (
@@ -37,7 +39,7 @@ function Profile() {
                     <img src="/profile_pic2.jpg" alt="Profile" />
                     <p>Hey {profile?.name || "User"}</p>
                     <p className="Designation">{userRole === "attendee" ? "Student" : "Organizer"}</p>
-                    <button className="profilelogout" onClick={handleLogout}>Log Out</button>
+                    <button className="profilelogout" onClick={() => setShowLogoutModal(true)}>Log Out</button>
                 </div>
             </div>
 
@@ -72,6 +74,14 @@ function Profile() {
                     </div>
                 )}
             </div>
+
+            {/* Confirmation Modal for Logout */}
+            <ConfirmationModal
+                isOpen={showLogoutModal}
+                message="Are you sure you want to log out?"
+                onCancel={() => setShowLogoutModal(false)}
+                onConfirm={handleLogout}
+            />
         </div>
     );
 }

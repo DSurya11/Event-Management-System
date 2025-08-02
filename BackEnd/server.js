@@ -194,10 +194,6 @@ io.on("connection", (socket) => {
 
 
 
-
-
-// ==================== EXISTING ROUTES ====================
-
 app.post("/create-order", async (req, res) => {
   try {
     const { amount } = req.body;
@@ -225,10 +221,11 @@ app.post("/attendee/signup", async (req, res) => {
     if (results.length > 0) return res.status(400).json({ error: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const dateJoined = new Date(); // Current date and time
 
     db.query(
-      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-      [name, email, hashedPassword],
+      "INSERT INTO users (name, email, password, date_joined) VALUES (?, ?, ?, ?)",
+      [name, email, hashedPassword, dateJoined],
       (err, result) => {
         if (err) return res.status(500).json({ error: "Database error" });
 
@@ -237,6 +234,7 @@ app.post("/attendee/signup", async (req, res) => {
     );
   });
 });
+
 
 app.get("/admin/events", (req, res) => {
   const pendingQuery = `
@@ -917,6 +915,57 @@ app.get("/profile/:role/:id", async (req, res) => {
   }
 });
 
+// --- OTP store (in-memory, for demo; use Redis or DB for production) ---
+const otpStore = {};
+
+// --- Send OTP to email ---
+app.post("/attendee/send-otp", async (req, res) => {
+  const { email, purpose } = req.body;
+  if (!email) return res.status(400).json({ error: "Email required" });
+  // Generate 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  otpStore[email] = otp;
+
+  // Set subject and body based on purpose
+  let subject = "Your Planova Signup OTP";
+  let text = `Your OTP for signup is: ${otp}`;
+  if (purpose === "forgot") {
+    subject = "Your Planova Password Reset OTP";
+    text = `Your OTP for password reset is: ${otp}`;
+  }
+
+  // Send email
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject,
+      text,
+    });
+    res.json({ success: true, message: "OTP sent" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to send OTP" });
+  }
+});
+
+// --- Verify OTP ---
+app.post("/attendee/verify-otp", (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) return res.status(400).json({ error: "Email and OTP required" });
+  if (otpStore[email] && otpStore[email] === otp) {
+    delete otpStore[email]; // Remove OTP after verification
+    return res.json({ success: true });
+  }
+  res.status(400).json({ error: "Invalid OTP" });
+});
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -1163,3 +1212,53 @@ app.use('/uploads', express.static('uploads'));
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// --- Reset password with OTP ---
+app.post("/attendee/reset-password", async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  if (!email || !otp || !newPassword) return res.status(400).json({ error: "Email, OTP, and new password required" });
+
+  // Check if user exists
+  db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+    if (results.length === 0) return res.status(404).json({ error: "User not found" });
+
+    // Check OTP
+    if (!otpStore[email] || otpStore[email] !== otp) {
+      return res.status(400).json({ error: "Invalid OTP" });
+    }
+    delete otpStore[email];
+
+    // Update password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    db.query("UPDATE users SET password = ? WHERE email = ?", [hashedPassword, email], (err2) => {
+      if (err2) return res.status(500).json({ error: "Database error" });
+      res.json({ success: true, message: "Password reset successful" });
+    });
+  });
+});
+
+// --- Reset password with OTP for organizers ---
+app.post("/organizer/reset-password", async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  if (!email || !otp || !newPassword) return res.status(400).json({ error: "Email, OTP, and new password required" });
+
+  // Check if organizer exists
+  db.query("SELECT * FROM organisers WHERE username = ?", [email], async (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+    if (results.length === 0) return res.status(404).json({ error: "Organizer not found" });
+
+    // Check OTP
+    if (!otpStore[email] || otpStore[email] !== otp) {
+      return res.status(400).json({ error: "Invalid OTP" });
+    }
+    delete otpStore[email];
+
+    // Update password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    db.query("UPDATE organisers SET password = ? WHERE username = ?", [hashedPassword, email], (err2) => {
+      if (err2) return res.status(500).json({ error: "Database error" });
+      res.json({ success: true, message: "Password reset successful" });
+    });
+  });
+});

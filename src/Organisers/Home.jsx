@@ -20,7 +20,7 @@ const handleCloseClick = (event_id) => {
 };
 
 const handleCancelClick = (event_id) => {
-    setModalMessage("Cancel this event? This action cannot be undone. Don't forget to NOTIFY participants.");
+    setModalMessage("Cancel this event? This action cannot be undone. Notify your participants before cancelling.");
     setOnModalConfirm(() => () => cancelEvent(event_id));
     setModalOpen(true);
 };

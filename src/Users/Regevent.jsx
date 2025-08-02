@@ -129,7 +129,10 @@ function Regevent() {
                         <h3 className='motto_header'>What makes this event stand out from others?</h3>
                         <div className='motto'>
                             <div className='motto_info description-event'>
-                                <p>{event.description || "No description available for this event."}</p>
+                                {event.description
+                                    ? event.description.split('\n').map((para, i) => <p key={i}>{para}</p>)
+                                    : <p>No description available for this event.</p>}
+
                             </div>
                         </div>
                     </div>

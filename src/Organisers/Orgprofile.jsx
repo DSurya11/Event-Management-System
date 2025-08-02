@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../components/ConfirmationModal";
 import "./Orgprofile.css";
 
 function Orgprofile() {
@@ -7,7 +8,7 @@ function Orgprofile() {
     const [profile, setProfile] = useState([]);
     const [ongoingEvents, setOngoingEvents] = useState([]);
     const [previousEvents, setPreviousEvents] = useState([]);
-
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
     const organiserId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("userRole");
 
@@ -38,6 +39,7 @@ useEffect(() => {
     const handleLogout = () => {
         localStorage.clear();
         navigate("/");
+        window.location.reload();
     };
 
     return (
@@ -47,7 +49,7 @@ useEffect(() => {
                     <img src={profile?.logo || "/profile_pic2.jpg"} alt="Profile" />
                     <p>Hey {profile?.name || "Organizer"}</p>
                     <p className="Designation">Organizer</p>
-                    <button className="profilelogout" onClick={handleLogout}>Log Out</button>
+                    <button className="profilelogout" onClick={() => setShowLogoutModal(true)}>Log Out</button>
                 </div>
             </div>
 
@@ -97,6 +99,12 @@ useEffect(() => {
                     </div>
                 </div>
             </div>
+            <ConfirmationModal
+                isOpen={showLogoutModal}
+                message="Are you sure you want to log out?"
+                onCancel={() => setShowLogoutModal(false)}
+                onConfirm={handleLogout}
+            />
         </div>
     );
 }
