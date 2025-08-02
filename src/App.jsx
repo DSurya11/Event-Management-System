@@ -19,6 +19,7 @@ import Organizerssignup from './signin/Organizerssignup.jsx';
 import Signin from './signin/signin.jsx';
 import Profile from './Users/Profile.jsx';
 import Razerpay from './Payments/Razerpay.jsx';
+import AdminEvents from './Admin/AdminEvents.jsx';
 
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';
@@ -64,6 +65,7 @@ function App() {
         {userRole === 'attendee' && (
           <>
 
+
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
             <Route path="/organizers" element={<Organizers />} />
@@ -94,7 +96,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/adminuser" element={<Admin_User />} />
         <Route path="/adminorganizer" element={<Admin_Org />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/admin/events/:eventId" element={<AdminEvents />} />
       </Routes>
     </BrowserRouter>
   );
