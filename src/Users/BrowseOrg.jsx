@@ -30,6 +30,9 @@ function BrowseOrg() {
             <div className='browse_org_header'>
                 <h1>{org.name}</h1>
             </div>
+            <div className='browse_org_logo'>
+                <img src={org.logo} />
+            </div>
             <div className='browse_org_info'>
                 {org.Description || 'No description available.'}
             </div>
