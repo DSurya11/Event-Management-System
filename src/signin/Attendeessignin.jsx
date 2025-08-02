@@ -15,21 +15,22 @@ function Attendeessignin({ setUserRole }) {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         try {
             const res = await fetch("http://localhost:3000/attendee/signin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
-
             const data = await res.json();
             if (!res.ok) throw new Error(data.error);
-
+            // Check if user is disabled
+            if (data.status === 0) {
+                setMessage("Your account has been disabled by the admin. Please contact the admin for any queries.");
+                return;
+            }
             localStorage.setItem("token", data.token);
             localStorage.setItem("userRole", "attendee");
             localStorage.setItem("userId", data.user_id);
-
             setUserRole("attendee");
             setMessage("Login successful!");
 

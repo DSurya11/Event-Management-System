@@ -288,22 +288,18 @@ app.put('/events/:id/reject', (req, res) => {
 
 app.post("/attendee/signin", async (req, res) => {
   const { email, password } = req.body;
-
   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });
     if (results.length === 0) return res.status(401).json({ error: "Invalid credentials" });
-
     const user = results[0];
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
-
     const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-    // ✅ Send back both token and user ID
     res.json({
       message: "Login successful",
       token,
-      user_id: user.user_id, // Make sure this matches your DB column
+      user_id: user.user_id,
+      status: user.status
     });
   });
 });
@@ -1072,27 +1068,24 @@ app.get('/organiser/:id/events', (req, res) => {
 
 app.get('/api/organiser/:id', (req, res) => {
   const organiserId = req.params.id;
-
-  const organiserQuery = `SELECT * FROM organisers WHERE organiser_id = ?`;
-  db.query(organiserQuery, [organiserId], (err, organiserResults) => {
+  db.query('SELECT * FROM organisers WHERE organiser_id = ?', [organiserId], (err, organiserResults) => {
     if (err || organiserResults.length === 0) {
       return res.status(404).json({ error: 'Organiser not found' });
     }
 
     const organiser = organiserResults[0];
 
-    const eventQuery = `SELECT * FROM events WHERE organiser = ?`;
-    db.query(eventQuery, [organiserId], (err2, eventResults) => {
+    db.query('SELECT * FROM events WHERE organiser = ?', [organiserId], (err2, eventResults) => {
       if (err2) return res.status(500).json({ error: 'Event fetch failed' });
 
       const now = new Date();
-      const ongoing = eventResults.filter(e => new Date(e.date) >= now);
-      const completed = eventResults.filter(e => new Date(e.date) < now);
+      const ongoingEvents = eventResults.filter(e => new Date(e.date) >= now);
+      const previousEvents = eventResults.filter(e => new Date(e.date) < now);
 
       res.json({
         organiser,
-        ongoingEvents: ongoing,
-        previousEvents: completed
+        ongoingEvents,
+        previousEvents
       });
     });
   });
