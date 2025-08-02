@@ -69,7 +69,6 @@ function Admin_Org() {
                         <div className='event_card1_name'>Name</div>
                         <div className='event_card1_Orgname'>Email</div>
                         <div className='event_card1_date'>Events Conducted</div>
-                        <div className='event_card1_datej'>Date Joined</div>
                         <div className='event_card1_btn'></div>
                     </div>
 
@@ -79,7 +78,7 @@ function Admin_Org() {
                                 <div className='event_card1_name'>{org.name}</div>
                                 <div className='event_card1_Orgname'>{org.username}</div>
                                 <div className='event_card1_date'>{orgEvents[org.organiser_id]?.length || 0}</div>
-                                <div className='event_card1_datej'>{formatDate(org.date_joined)}</div>
+                                
                                 <button
                                     className='event_btns_rem'
                                     onClick={() => toggleEvents(org.organiser_id)}

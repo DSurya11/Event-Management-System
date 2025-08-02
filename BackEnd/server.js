@@ -1056,7 +1056,7 @@ app.get('/api/organiserp/:id', (req, res) => {
 app.get('/admin/organizers', async (req, res) => {
   try {
     const [rows] = await db.promise().query(`
-      SELECT o.organiser_id, o.name, o.username, o.date_joined,
+      SELECT o.organiser_id, o.name, o.username, 
              COUNT(e.event_id) AS event_count
       FROM organisers o
       LEFT JOIN events e ON o.organiser_id = e.organiser
@@ -1206,6 +1206,30 @@ app.get('/organizer/editevent/:id', async (req, res) => {
 });
 
 
+// --- Update organizer profile image (logo) ---
+app.post('/api/organiserp/:id/logo', upload.single('logo'), (req, res) => {
+  const organiserId = req.params.id;
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  // Get organiser name
+  db.query('SELECT name FROM organisers WHERE organiser_id = ?', [organiserId], (err, results) => {
+    if (err || results.length === 0) return res.status(500).json({ error: 'Organizer not found' });
+    const organiserName = results[0].name.replace(/\s+/g, '_');
+    const ext = path.extname(req.file.originalname);
+    const newFileName = `${organiserName}${ext}`;
+    const orgdpDir = path.join(__dirname, '../public/orgdp');
+    if (!fs.existsSync(orgdpDir)) fs.mkdirSync(orgdpDir, { recursive: true });
+    const newPath = path.join(orgdpDir, newFileName);
+    fs.rename(req.file.path, newPath, (err) => {
+      if (err) return res.status(500).json({ error: 'Error saving image' });
+      const relPath = `orgdp/${newFileName}`;
+      db.query('UPDATE organisers SET logo = ? WHERE organiser_id = ?', [relPath, organiserId], (err2) => {
+        if (err2) return res.status(500).json({ error: 'DB error' });
+        res.json({ success: true, logo: relPath });
+      });
+    });
+  });
+});
 
 app.use('/uploads', express.static('uploads'));
 
@@ -1260,5 +1284,30 @@ app.post("/organizer/reset-password", async (req, res) => {
       if (err2) return res.status(500).json({ error: "Database error" });
       res.json({ success: true, message: "Password reset successful" });
     });
+  });
+});
+
+// --- Update organizer profile (name, description) ---
+app.put('/api/organiserp/:id', (req, res) => {
+  const organiserId = req.params.id;
+  const { name, description } = req.body;
+  if (!name && !description) {
+    return res.status(400).json({ error: 'No fields to update' });
+  }
+  const fields = [];
+  const values = [];
+  if (name) {
+    fields.push('name = ?');
+    values.push(name);
+  }
+  if (description !== undefined) {
+    fields.push('description = ?');
+    values.push(description);
+  }
+  values.push(organiserId);
+  const query = `UPDATE organisers SET ${fields.join(', ')} WHERE organiser_id = ?`;
+  db.query(query, values, (err, result) => {
+    if (err) return res.status(500).json({ error: 'Database error', details: err });
+    res.json({ success: true });
   });
 });
