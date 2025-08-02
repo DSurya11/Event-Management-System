@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ConfirmationModal from '../Components/ConfirmationModal';
 import './Home.css';
 
 function OrgHome() {
@@ -8,6 +9,22 @@ function OrgHome() {
     const [regData, setRegData] = useState([]);
     const [showRegFor, setShowRegFor] = useState(null);
     const navigate = useNavigate();
+
+    const [modalOpen, setModalOpen] = useState(false);
+const [modalMessage, setModalMessage] = useState('');
+const [onModalConfirm, setOnModalConfirm] = useState(() => () => {});
+
+const handleCloseClick = (event_id) => {
+    setModalMessage("Close registrations for this event?");
+    setOnModalConfirm(() => () => closeReg(event_id));
+    setModalOpen(true);
+};
+
+const handleCancelClick = (event_id) => {
+    setModalMessage("Cancel this event? This action cannot be undone. Don't forget to NOTIFY participants.");
+    setOnModalConfirm(() => () => cancelEvent(event_id));
+    setModalOpen(true);
+};
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -255,6 +272,15 @@ function OrgHome() {
                     </table>
                 </div>
             )}
+            <ConfirmationModal
+    isOpen={modalOpen}
+    message={modalMessage}
+    onConfirm={() => {
+        onModalConfirm();
+        setModalOpen(false);
+    }}
+    onCancel={() => setModalOpen(false)}
+/>
         </div>
     );
 }
