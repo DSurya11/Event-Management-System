@@ -1097,6 +1097,17 @@ app.get('/api/organiser/:id', (req, res) => {
     });
   });
 });
+app.get('/api/organizers', (req, res) => {
+  const query = 'SELECT organiser_id, name, logo FROM organisers';
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('❌ Error fetching organizers:', err);
+      return res.status(500).json({ error: 'Failed to fetch organizers' });
+    }
+    res.json(result);
+  });
+});
+
 app.get('/admin/organizers', async (req, res) => {
   try {
     const [rows] = await db.promise().query(`
@@ -1291,7 +1302,18 @@ app.post('/api/organiserp/:id/logo', upload.single('logo'), (req, res) => {
     });
   });
 });
-
+app.get('/api/event/:id/image', async (req, res) => {
+  const event_id = req.params.id
+  try {
+    const [rows] = await db.query('SELECT cover_image FROM events WHERE event_id = ?', [event_id])
+    if (rows.length === 0) return res.status(404).json({ error: 'event not found' })
+    const img = rows[0].cover_image
+    res.json({ image_url: `/uploads/${img.replace(/\\/g, '/')}` })
+  } catch (err) {
+    console.error('error fetching image:', err)
+    res.status(500).json({ error: 'internal error' })
+  }
+})
 app.use('/uploads', express.static('uploads'));
 
 

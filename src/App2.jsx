@@ -11,17 +11,12 @@ import AdminNavbar from "./Components/AdminNavbar.jsx";
 import Admin_Org from "./Admin/Admin_Org.jsx";
 import Admin_User from "./Admin/Admin_User.jsx";
 import Orgprofile from "./Organisers/Orgprofile.jsx"
+import BrowseOrg from "./Users/BrowseOrg.jsx";
 function App2() {
     return (
         <BrowserRouter>
-            <AdminNavbar />
-            <Routes>
-                <Route path="/" element={<Orgprofile/>} />
-            </Routes>
         </BrowserRouter>
     )
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App2 />);
 export default App2;

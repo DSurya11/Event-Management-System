@@ -79,8 +79,9 @@ function Regevent() {
                         <div className="thumbnail-container">
                             {allImages.map((img, index) => (
                                 <div
-                                    key={index}
+                                    key={img || index}
                                     className={`thumbnail ${selectedImageIndex === index ? "active" : ""}`}
+   
                                     onClick={() => setSelectedImageIndex(index)}
                                 >
                                     <img src={`../${img}`} alt={`Thumbnail ${index}`} />
@@ -154,8 +155,8 @@ function Regevent() {
                         <div className='events'>
                             {recentEvents
                                 .filter(e => e.event_id !== parseInt(eventId))
-                                .map((e, index) => (
-                                    <Link to={`/register/${e.event_id}`} key={index} className='UC_event'>
+                                .map((e) => (
+                                    <Link to={`/register/${e.event_id}`} key={e.event_id} className='UC_event'>
                                         <div className='event1'>
                                             <img className='event_photo' src={`../${e.cover_image}`} alt={e.title} />
                                             <div className='artist_name'>{e.title}</div>

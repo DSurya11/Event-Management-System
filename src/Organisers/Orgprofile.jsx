@@ -3,6 +3,22 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../components/ConfirmationModal";
 import "./Orgprofile.css";
 
+function OrgConfirmationModal({ isOpen, onConfirm, onCancel, message }) {
+    if (!isOpen) return null;
+
+    return (
+        <div className="modal-backdropOrg">
+            <div className="modal-contentOrg">
+                <p>{message}</p>
+                <div className="modal-buttonsOrg">
+                    <button onClick={onCancel} className="cancel-btn">No</button>
+                    <button onClick={onConfirm} className="confirm-btn">Yes</button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function Orgprofile() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState([]);
@@ -94,38 +110,38 @@ function Orgprofile() {
     };
 
     return (
-        <div className="profile_page">
-            <div className="profile_boxM1">
-                <div className="profile_logo">
+        <div className="Organizers_profile">
+            <div className="OrgProfile_boxM1">
+                <div className="Orgprofile_logo">
                     <img src={profile?.logo || "/profile_pic2.jpg"} alt="Profile" />
-                    <button className="profile_change_img_btn" onClick={() => setShowImageInput(true)} disabled={uploadingImage} style={{ marginTop: "10px" }}>
+                    <button className="profile_change_img_btn" onClick={() => setShowImageInput(true)} disabled={uploadingImage} style={{ marginTop: "5px" }}>
                         {uploadingImage ? "Uploading..." : "Change Image"}
                     </button>
                     {showImageInput && (
                         <input type="file" accept="image/*" onChange={handleImageChange} style={{ marginTop: "10px" }} />
                     )}
-                    <p>Hey {profile?.name || "Organizer"}</p>
-                    <p className="Designation">Organizer</p>
-                    <button className="profilelogout" onClick={() => setShowLogoutModal(true)}>Log Out</button>
+                    <p className="Orgname">Hey {profile?.name || "Organizer"}</p>
+                    <p className="Role">Organizer</p>
+                    <button className="Orgprofilelogout" onClick={() => setShowLogoutModal(true)}>Log Out</button>
                 </div>
             </div>
 
-            <div className="profile_boxM2">
-                <div className="profile_box2">
-                    <div className="profile_box2_name"><span>Name: </span>{profile?.name}</div>
-                    <div className="profile_box2_name"><span>Email: </span>{profile?.username}</div>
-                    <div className="profile_box2_name"><span>Description: </span>{profile?.description || "No description"}</div>
+            <div className="OrgProfile_boxM2">
+                <div className="Profile_box_1">
+                    <div className="profile_box1_name"><span>Name: </span>{profile?.name}</div>
+                    <div className="profile_box1_name"><span>Email: </span>{profile?.username}</div>
+                    <div className="profile_box1_name"><span>Description: <br /></span>{profile?.description || "No description"}</div>
                     <button className="profile_edit_btn" onClick={handleEditClick}>Edit</button>
                 </div>
 
-                <div className="profile_box3">
+                <div className="Profile_box_2">
                     <p>Ongoing Events</p>
-                    <div className="Prev_attended_events">
+                    <div className="Ongoing_Organised_events">
                         {ongoingEvents.length > 0 ? (
                             ongoingEvents.map((event, index) => (
                                 <div
                                     key={index}
-                                    className="Prev_event_1"
+                                    className="Ongoing_event1"
                                     onClick={() => navigate(`/register/${event.event_id}`)}
                                     style={{ cursor: "pointer" }}
                                 >
@@ -133,19 +149,19 @@ function Orgprofile() {
                                 </div>
                             ))
                         ) : (
-                            <div className="Prev_event_1">No ongoing events.</div>
+                            <div className="Ongoing_event1">No ongoing events.</div>
                         )}
                     </div>
                 </div>
 
-                <div className="profile_box3">
+                <div className="Profile_box_3">
                     <p>Completed Events</p>
-                    <div className="Prev_attended_events">
+                    <div className="Prev_Organised_events">
                         {previousEvents.length > 0 ? (
                             previousEvents.map((event, index) => (
                                 <div
                                     key={index}
-                                    className="Prev_event_1"
+                                    className="Pre_event1"
                                     onClick={() => navigate(`/register/${event.event_id}`)}
                                     style={{ cursor: "pointer" }}
                                 >
@@ -153,7 +169,7 @@ function Orgprofile() {
                                 </div>
                             ))
                         ) : (
-                            <div className="Prev_event_1">No completed events yet.</div>
+                            <div className="Pre_event1">No completed events yet.</div>
                         )}
                     </div>
                 </div>
@@ -164,13 +180,13 @@ function Orgprofile() {
                 onCancel={() => setShowLogoutModal(false)}
                 onConfirm={handleLogout}
             />
-            <ConfirmationModal
+            <OrgConfirmationModal  className="Edit_Profile_Box"
                 isOpen={showEditModal}
                 message={
                     <div>
                         <div style={{ marginBottom: "10px" }}>
                             <label>Name:</label>
-                            <input type="text" value={editName} onChange={e => setEditName(e.target.value)} />
+                            <input style={{ backgroundColour:"white" }} type="text" value={editName} onChange={e => setEditName(e.target.value)} />
                         </div>
                         <div>
                             <label>Description:</label>

@@ -69,10 +69,9 @@ width: 80%;
   left: 0; /* Slide in */
 }
 .filter-toggle-btn {
-  position: fixed;
   top: 20%;
+  position: fixed;
   left: 20px;
-  z-index: 1100;
   padding: 10px 20px;
   background: lightseagreen;
   color: #fff;
