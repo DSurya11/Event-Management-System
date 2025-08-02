@@ -1,39 +1,48 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Organizers.css';
 
 function Organizers() {
     const [organizers, setOrganizers] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('http://localhost:3000/api/organizers')
             .then(res => {
-
-                console.log(res);
-                if (!res.ok) {
-                    throw new Error(`Server responded with status ${res.status}`);
-                }
-
-                return res.json(); // This will throw if content is not valid JSON
+                if (!res.ok) throw new Error(`Status ${res.status}`);
+                return res.json();
             })
             .then(data => {
-                console.log("Fetched organizers data:", data);
+                console.log("✅ fetched organizers:", data);
                 setOrganizers(data);
             })
-            .catch(err => {
-                console.error("❌ Error fetching organizers:", err);
-            });
+            .catch(err => console.error("❌ Error fetching organizers:", err));
     }, []);
+
+    const handleClick = (org_id) => {
+        console.log("🛠 org_id passed to navigate:", org_id);
+        navigate(`/browse-organizer/${org_id}`);
+    };
+
 
     return (
         <div className='organizers_browse'>
             <h2>Organizers</h2>
             <div className='Org'>
-                {organizers.map((org, index) => (
-                    <div className='Event' key={index}>
-                        <img src={org.logo.replace(/\\/g, '/')} alt={org.name} />
-                        <h3>{org.name}</h3>
-                    </div>
-                ))}
+                {organizers.map((org, index) => {
+                    console.log("org:", org);
+                    return (
+                        <div
+                            key={org.organiser_id || org.id || index}
+                            className='Event'
+                            onClick={() => handleClick(org.organiser_id || org.id)}
+                        >
+                            <img src={org.logo?.replace(/\\/g, '/')} alt={org.name} />
+                            <h3>{org.name}</h3>
+                        </div>
+                    );
+                })}
+
             </div>
         </div>
     );

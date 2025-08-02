@@ -19,11 +19,12 @@ import Organizerssignup from './signin/Organizerssignup.jsx';
 import Signin from './signin/signin.jsx';
 import Profile from './Users/Profile.jsx';
 import Razerpay from './Payments/Razerpay.jsx';
-
+import VdEvent_On from './Admin/VdEvent_On.jsx';
+import VdEvent_Up from './Admin/VdEvent_Up.jsx';
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';
 import Email from './Organisers/Email.jsx';
-
+import BrowseOrg from './Users/BrowseOrg.jsx';
 import Navbar from './Components/Navbar.jsx';
 import OrgNav from './Components/OrgNav.jsx';
 
@@ -67,6 +68,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
             <Route path="/organizers" element={<Organizers />} />
+            <Route path='/browse-organizer/:org_id' element={<BrowseOrg />} />
             <Route path="/chat" element={<Chat role="attendee" />} />
             <Route path="/chat/attendees/:eventId/:organizerId" element={<Chat role="attendee" />} />
           </>
@@ -94,6 +96,8 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/adminuser" element={<Admin_User />} />
         <Route path="/adminorganizer" element={<Admin_Org />} />
+        <Route path="/adminup" element={<VdEvent_Up />} />
+        <Route path="/adminon" element={<VdEvent_On />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
