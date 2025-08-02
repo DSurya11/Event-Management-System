@@ -11,7 +11,7 @@ import Regevent from './Users/Regevent.jsx';
 import Chat from './communication/Chat.jsx';
 import Organizers from './Users/Organizers.jsx';
 import Orgprofile from './Organisers/Orgprofile.jsx';
-
+import EditEvent from './Organisers/EditEvent.jsx';
 import Attendeessignin from './signin/attendeessignin.jsx';
 import Attendeessignup from './signin/Attendeessignup.jsx';
 import Organizerssignin from './signin/Organizerssignin.jsx';
@@ -80,6 +80,7 @@ function App() {
             <Route path="/chat" element={<Chat role="organizer" />} />
             <Route path="/chat/organizers/:eventId/:attendeeId" element={<Chat role="organizer" />} />
             <Route path="/orgprofile" element={<Orgprofile />} />
+            <Route path="/organizer/edit/:id" element={<EditEvent />} />
           </>
         )}
 
