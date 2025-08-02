@@ -6,6 +6,11 @@ function Attendeessignin({ setUserRole }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [otpModalOpen, setOtpModalOpen] = useState(false);
+    const [otp, setOtp] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [otpError, setOtpError] = useState("");
+    const [forgotPending, setForgotPending] = useState(false);
     const navigate = useNavigate(); 
 
     const handleLogin = async (e) => {
@@ -29,8 +34,57 @@ function Attendeessignin({ setUserRole }) {
             setMessage("Login successful!");
 
             navigate("/");
+            window.location.reload();
         } catch (error) {
             setMessage(error.message || "Login failed");
+        }
+    };
+
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        setOtpError("");
+        setMessage("");
+        if (!email) {
+            setMessage("Please enter your email first.");
+            return;
+        }
+        setForgotPending(true);
+        try {
+            // Check if email exists and send OTP
+            const res = await fetch("http://localhost:3000/attendee/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to send OTP");
+            setOtpModalOpen(true);
+        } catch (error) {
+            setMessage(error.message || "Failed to send OTP");
+        }
+        setForgotPending(false);
+    };
+
+    const handleOtpSubmit = async (e) => {
+        e.preventDefault();
+        setOtpError("");
+        if (!newPassword) {
+            setOtpError("Please enter a new password.");
+            return;
+        }
+        try {
+            // Verify OTP and update password
+            const res = await fetch("http://localhost:3000/attendee/reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, otp, newPassword })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.error || "Invalid OTP or password reset failed");
+            setOtpModalOpen(false);
+            setMessage("Password reset successful! You can now login.");
+        } catch (error) {
+            setOtpError(error.message || "OTP verification failed");
         }
     };
 
@@ -68,7 +122,11 @@ function Attendeessignin({ setUserRole }) {
                             />
                         </div>
 
-                        <div className="pass"><a href="#">Forgot password?</a></div>
+                        <div className="pass">
+                            <a href="#" onClick={handleForgotPassword} style={{ color: forgotPending ? '#aaa' : '' }}>
+                                {forgotPending ? "Sending OTP..." : "Forgot password?"}
+                            </a>
+                        </div>
 
                         <div className="row button">
                             <input type="submit" value="Login" />
@@ -80,6 +138,36 @@ function Attendeessignin({ setUserRole }) {
                     {message && <p className="message">{message}</p>}
                 </div>
             </div>
+
+            {otpModalOpen && (
+                <div className="otp-modal">
+                    <div className="otp-modal-content">
+                        <h3>Reset Password</h3>
+                        <p>Enter the OTP sent to your email and your new password:</p>
+                        <form onSubmit={handleOtpSubmit}>
+                            <input
+                                type="text"
+                                value={otp}
+                                onChange={e => setOtp(e.target.value)}
+                                placeholder="Enter OTP"
+                                required
+                                className="otp-input"
+                            />
+                            <input
+                                type="password"
+                                value={newPassword}
+                                onChange={e => setNewPassword(e.target.value)}
+                                placeholder="New Password"
+                                required
+                                className="otp-input"
+                                style={{ marginTop: 8 }}
+                            />
+                            <button type="submit">Reset Password</button>
+                        </form>
+                        {otpError && <p className="error-message">{otpError}</p>}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
