@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import './Admin_User.css';
 import AdminNavbar from '../Components/AdminNavbar';
+import ConfirmationModal from '../Components/ConfirmationModal';
 
 function Admin_User() {
     const [users, setUsers] = useState([]);
     const [userEvents, setUserEvents] = useState({});
     const [openUserId, setOpenUserId] = useState(null);
     const [disabledUsers, setDisabledUsers] = useState(new Set());
+    const [confirmUser, setConfirmUser] = useState(null); // { id, action } | null
 
     useEffect(() => {
         fetch('http://localhost:3000/admin/users')
@@ -32,10 +34,27 @@ function Admin_User() {
         setOpenUserId(user_id);
     };
 
+    const toggleUserStatus = async (user_id, currentStatus) => {
+        try {
+            const newStatus = currentStatus === 1 ? 0 : 1;
+            const res = await fetch(`http://localhost:3000/admin/user-status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id, status: newStatus })
+            });
+            if (!res.ok) throw new Error('Failed to update user status');
+            setUsers(prev => prev.map(u => u.user_id === user_id ? { ...u, status: newStatus } : u));
+        } catch (err) {
+            alert('Error updating user status');
+            console.error(err);
+        }
+    };
 
-    const disableUser = (user_id) => {
-        setDisabledUsers(prev => new Set(prev).add(user_id));
-        alert(`User ${user_id} marked as disabled (frontend only).`);
+    const handleConfirm = () => {
+        if (confirmUser) {
+            toggleUserStatus(confirmUser.id, confirmUser.action === 'disable' ? 1 : 0);
+            setConfirmUser(null);
+        }
     };
 
     return (
@@ -52,7 +71,6 @@ function Admin_User() {
                         <div className='event_card1_datej'>Date of Joining</div>
                         <div className='event_card1_btn'></div>
                     </div>
-
                     {users.map(user => (
                         <div key={user.user_id}>
                             <div className='event_card1'>
@@ -74,10 +92,10 @@ function Admin_User() {
                                 </button>
                                 <button
                                     className='event_btns_rem'
-                                    style={{ marginLeft: '8px', backgroundColor: '#aaa' }}
-                                    onClick={() => disableUser(user.user_id)}
+                                    style={{ marginLeft: '8px', backgroundColor: user.status === 0 ? 'lightseagreen' : '#aaa' }}
+                                    onClick={() => setConfirmUser({ id: user.user_id, action: user.status === 0 ? 'enable' : 'disable' })}
                                 >
-                                    Disable
+                                    {user.status === 0 ? 'Enable' : 'Disable'}
                                 </button>
                             </div>
 
@@ -102,6 +120,12 @@ function Admin_User() {
                     ))}
                 </div>
             </div>
+            <ConfirmationModal
+                isOpen={!!confirmUser}
+                message={confirmUser ? `Are you sure you want to ${confirmUser.action} this user?` : ''}
+                onConfirm={handleConfirm}
+                onCancel={() => setConfirmUser(null)}
+            />
         </div>
     );
 }

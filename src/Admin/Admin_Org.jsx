@@ -1,12 +1,14 @@
 import './Admin_Org.css'
 import { useEffect, useState } from 'react'
 import AdminNavbar from '../Components/AdminNavbar'
+import ConfirmationModal from '../Components/ConfirmationModal'
 
 function Admin_Org() {
     const [orgs, setOrgs] = useState([])
     const [expanded, setExpanded] = useState(null)
     const [orgEvents, setOrgEvents] = useState({})
     const [disabledOrgs, setDisabledOrgs] = useState(new Set())
+    const [confirmOrg, setConfirmOrg] = useState(null); // { id, action } | null
 
     useEffect(() => {
         fetch('http://localhost:3000/admin/organizers')
@@ -56,6 +58,29 @@ function Admin_Org() {
         alert(`Organizer ${orgId} marked as disabled (frontend only).`)
     }
 
+    const toggleOrgStatus = async (orgId, currentStatus) => {
+        try {
+            const newStatus = currentStatus === 1 ? 0 : 1;
+            const res = await fetch(`http://localhost:3000/admin/organizer-status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ organiser_id: orgId, status: newStatus })
+            });
+            if (!res.ok) throw new Error('Failed to update organizer status');
+            setOrgs(prev => prev.map(o => o.organiser_id === orgId ? { ...o, status: newStatus } : o));
+        } catch (err) {
+            alert('Error updating organizer status');
+            console.error(err);
+        }
+    };
+
+    const handleConfirm = () => {
+        if (confirmOrg) {
+            toggleOrgStatus(confirmOrg.id, confirmOrg.action === 'disable' ? 1 : 0);
+            setConfirmOrg(null);
+        }
+    };
+
     return (
         <div className='admin Main'>
             <AdminNavbar />
@@ -71,14 +96,12 @@ function Admin_Org() {
                         <div className='event_card1_date'>Events Conducted</div>
                         <div className='event_card1_btn'></div>
                     </div>
-
                     {orgs.map(org => (
                         <div key={org.organiser_id}>
                             <div className='event_card1'>
                                 <div className='event_card1_name'>{org.name}</div>
                                 <div className='event_card1_Orgname'>{org.username}</div>
                                 <div className='event_card1_date'>{orgEvents[org.organiser_id]?.length || 0}</div>
-                                
                                 <button
                                     className='event_btns_rem'
                                     onClick={() => toggleEvents(org.organiser_id)}
@@ -87,10 +110,10 @@ function Admin_Org() {
                                 </button>
                                 <button
                                     className='event_btns_rem'
-                                    style={{ marginLeft: '8px', backgroundColor: '#aaa' }}
-                                    onClick={() => disableOrg(org.organiser_id)}
+                                    style={{ marginLeft: '8px', backgroundColor: org.status === 0 ? 'lightseagreen' : '#aaa' }}
+                                    onClick={() => setConfirmOrg({ id: org.organiser_id, action: org.status === 0 ? 'enable' : 'disable' })}
                                 >
-                                    Disable
+                                    {org.status === 0 ? 'Enable' : 'Disable'}
                                 </button>
                             </div>
 
@@ -112,6 +135,12 @@ function Admin_Org() {
                     ))}
                 </div>
             </div>
+            <ConfirmationModal
+                isOpen={!!confirmOrg}
+                message={confirmOrg ? `Are you sure you want to ${confirmOrg.action} this organizer?` : ''}
+                onConfirm={handleConfirm}
+                onCancel={() => setConfirmOrg(null)}
+            />
         </div>
     )
 }

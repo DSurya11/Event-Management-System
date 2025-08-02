@@ -1022,7 +1022,7 @@ app.get("/admin/users", async (req, res) => {
   try {
     const [users] = await db.promise().query(`
       SELECT 
-        u.user_id, u.name, u.email, u.date_joined,
+        u.user_id, u.name, u.email, u.date_joined, u.status,
         COUNT(r.registration_id) AS event_count
       FROM users u
       LEFT JOIN registrations r ON u.user_id = r.user_id
@@ -1037,7 +1037,6 @@ app.get("/admin/users", async (req, res) => {
 });
 app.get("/admin/user-events", async (req, res) => {
   const { user_id } = req.query;
-  console.log("Received request for user_id:", user_id);  // ✅ debug log
 
   if (!user_id) {
     return res.status(400).json({ error: "Missing user_id" });
@@ -1372,4 +1371,31 @@ app.put('/api/organiserp/:id', (req, res) => {
     if (err) return res.status(500).json({ error: 'Database error', details: err });
     res.json({ success: true });
   });
+});
+
+app.put('/admin/user-status', async (req, res) => {
+  const { user_id, status } = req.body;
+  if (typeof user_id === 'undefined' || typeof status === 'undefined') {
+    return res.status(400).json({ error: 'Missing user_id or status' });
+  }
+  try {
+    await db.promise().query('UPDATE users SET status = ? WHERE user_id = ?', [status, user_id]);
+    res.json({ success: true, message: `User ${user_id} status updated to ${status}` });
+  } catch (err) {
+    console.error('Error updating user status:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+app.put('/admin/organizer-status', async (req, res) => {
+  const { organiser_id, status } = req.body;
+  if (typeof organiser_id === 'undefined' || typeof status === 'undefined') {
+    return res.status(400).json({ error: 'Missing organiser_id or status' });
+  }
+  try {
+    await db.promise().query('UPDATE organisers SET status = ? WHERE organiser_id = ?', [status, organiser_id]);
+    res.json({ success: true, message: `Organizer ${organiser_id} status updated to ${status}` });
+  } catch (err) {
+    console.error('Error updating organizer status:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
 });

@@ -7,8 +7,8 @@ function AdminNavbar() {
             <h2 className='title'>Planova</h2>
             <div className='nb-button'>
                 <Link to="/admin"><button className='btn'>Events</button></Link>
-                <Link to="/adminuser"><button className='btn'>Users</button></Link>
-                <Link to="/adminorganizer"><button className='btn'>Organizers</button></Link>
+                <Link to="/admin/user"><button className='btn'>Users</button></Link>
+                <Link to="/admin/organizer"><button className='btn'>Organizers</button></Link>
             </div>
 
             <svg className='logoutsvg' width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(180)">

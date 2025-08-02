@@ -11,6 +11,7 @@ function AdminEvents() {
     const [showSupportModal, setShowSupportModal] = useState(false);
     const [regData, setRegData] = useState([]);
     const [showRegFor, setShowRegFor] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null); // 'approve' | 'reject' | null
     const navigate = useNavigate();
 
     const fetchEvent = () => {
@@ -104,8 +105,8 @@ function AdminEvents() {
                                 </button>
                             ) : (
                                 <>
-                                    <button className="ApproveBtn" onClick={handleApprove}>Approve</button>
-                                    <button className="RejectBtn" onClick={handleReject}>Reject</button>
+                                    <button className="ApproveBtn" onClick={() => setConfirmAction('approve')}>Approve</button>
+                                    <button className="RejectBtn" onClick={() => setConfirmAction('reject')}>Reject</button>
                                 </>
                             )}
                         </div>
@@ -170,6 +171,17 @@ function AdminEvents() {
                     </table>
                 </div>
             )}
+
+            <ConfirmationModal
+                isOpen={!!confirmAction}
+                message={confirmAction === 'approve' ? 'Are you sure you want to approve this event?' : confirmAction === 'reject' ? 'Are you sure you want to reject this event?' : ''}
+                onConfirm={() => {
+                    if (confirmAction === 'approve') handleApprove();
+                    if (confirmAction === 'reject') handleReject();
+                    setConfirmAction(null);
+                }}
+                onCancel={() => setConfirmAction(null)}
+            />
         </div>
     );
 }

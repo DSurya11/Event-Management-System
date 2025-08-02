@@ -161,9 +161,8 @@ const handleCancelClick = (event_id) => {
                                     )}
 
 
-                                    <button onClick={() => closeReg(event.event_id)}>Close Registrations</button>
-
-                                    <button onClick={() => cancelEvent(event.event_id)}>Cancel Event</button>
+                                    <button onClick={() => handleCloseClick(event.event_id)}>Close Registrations</button>
+                                    <button onClick={() => handleCancelClick(event.event_id)}>Cancel Event</button>
 
                                 </div>
                             </div>
