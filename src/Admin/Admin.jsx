@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ✅ import this
 import './Admin.css';
 import AdminNavbar from '../Components/AdminNavbar';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +35,9 @@ function Admin() {
             .catch(err => console.error("Error updating event:", err));
     };
 
+    const handleViewDetails = (event_id) => {
+        navigate(`/register/${event_id}`); // ✅ navigate to event page
+    };
 
     return (
         <div className='admin Main'>
