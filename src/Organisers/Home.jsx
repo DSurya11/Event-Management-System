@@ -9,7 +9,6 @@ function OrgHome() {
     const [regData, setRegData] = useState([]);
     const [showRegFor, setShowRegFor] = useState(null);
     const navigate = useNavigate();
-
     const [modalOpen, setModalOpen] = useState(false);
 const [modalMessage, setModalMessage] = useState('');
 const [onModalConfirm, setOnModalConfirm] = useState(() => () => {});
