@@ -23,7 +23,6 @@ function Admin_User() {
         if (!userEvents[user_id]) {
             try {
                 const res = await fetch(`http://localhost:3000/admin/user-events?user_id=${user_id}`);
-
                 const data = await res.json();
                 setUserEvents(prev => ({ ...prev, [user_id]: data }));
             } catch (err) {
@@ -32,6 +31,7 @@ function Admin_User() {
         }
         setOpenUserId(user_id);
     };
+
 
     const disableUser = (user_id) => {
         setDisabledUsers(prev => new Set(prev).add(user_id));
@@ -89,7 +89,7 @@ function Admin_User() {
                                         userEvents[user.user_id].map(event => (
                                             <div className='event_card1 event_detail' key={event.event_id}>
                                                 <div className='event_card1_name'>{event.title}</div>
-                                                <div className='event_card1_Orgname'>ID: {event.event_id}</div>
+                                                
                                                 <div className='event_card1_datej'>
                                                     {new Date(event.date).toLocaleDateString('en-GB')}
                                                 </div>
