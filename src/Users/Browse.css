@@ -5,9 +5,9 @@
 }
 
 .searchbox {
-    width: 80%;
+    width: 83%;
     height: 40px;
-    margin-left: 10%;
+    margin-left: 14%;
     margin-bottom: 10px;
     margin-top: 20px;
     background-color: #E8EDDF;
@@ -25,24 +25,83 @@
     transition-duration: 0.3s;
 
 }
-
+.date-filter {
+width: 80%;
+}
 .date-filter button {
-    padding: 10px 14px;
-    background-color: #E8EDDF;
+    border: 0.5px solid gray;
+    font-size: small;
+    background-color: white;
+    padding: 5px 12px;
     border-radius: 4px;
-    border: 1px solid rgb(174, 172, 172);
-    color: black;
+    color: grey;
     margin-left: 6px;
     margin-bottom: 10px;
 }
+.date-filter button:hover {
+    background-color: lightseagreen;
+    color: white;
+    transition-duration: 0.5s;
+    scale:1.05;
+    cursor: pointer;
+}
+.filter-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-sidebar {
+  position: fixed;
+  top: 83px;
+  bottom: 50%;
+  left: -320px; /* Hide sidebar by default */
+  width: 320px;
+  height: 90%;
+  background:  #E8EDDF;
+  box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+}
+.filter-sidebar.visible {
+  left: 0; /* Slide in */
+}
+.filter-toggle-btn {
+  position: fixed;
+  top: 20%;
+  left: 20px;
+  z-index: 1100;
+  padding: 10px 20px;
+  background: lightseagreen;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition-delay: 1s;
+}
+.filter-hide-btn {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: lightseagreen;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  z-index: 1010;
+}
 .filters{
-    width: 17%;
-    margin-left: 10px;
+    width: 100%;
+    padding: 15px;
+    padding-top: 20px;
 }
 .filters h4 {
     margin-bottom: 3px;
-    margin-top: 6px;
-    margin-left: 10px;
+    margin-top: 12px;
+    margin-left: 12px;
 }
 
 .each-category input {
@@ -51,21 +110,31 @@
 }
 
 .categories {
-    display: flex;
-    flex-wrap: wrap;
+    /* display: flex;
+    flex-wrap: wrap; */
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 2px;
+    padding: 5px;
 }
 
 .each-category {
     border: 1px solid grey;
-    width: fit-content;
+    width: 40%;
     padding: 5px 12px;
-    margin: 3px;
-    display: flex;
     align-items: center;
+    
 }
-
+.each-category :hover{
+    background-color: lightseagreen;
+    color: white;
+    transition-duration: 0.5s;
+    scale:1.05;
+    cursor: pointer;
+}
 .each-category label {
+    font-size: small;
     padding: 5px 12px;
     margin: -5px -12px;
     transition-duration: 0.2s;
@@ -80,13 +149,16 @@
 }
 .browse{
     display: flex;
+    gap: 30px;
+    padding: 20px;
 }
 .browse-list {
-    width: 75%;
+    width: 85%;
     margin-left: 3%;
     margin-right: 3%;
     margin-top: 30px;
     background-color: #CFDBD5;
+     margin-left: 15%;
 
 }
 
@@ -99,6 +171,7 @@
     background-color: #E8EDDF;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -4px;
     transition-duration: 0.2s;
+
 }
 
 .browseitem:hover{

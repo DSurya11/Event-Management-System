@@ -411,4 +411,10 @@
 .reg-table th {
     background-color: #f4f4f4;
 }
-/* --- End responsive improvements --- */
+
+.disabled-btn {
+    background-color: #ccc;
+    color: #555;
+    cursor: not-allowed;
+    border: none;
+}

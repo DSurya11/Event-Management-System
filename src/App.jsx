@@ -60,10 +60,10 @@ function App() {
 
         {/* Public route for viewing event details */}
         <Route path="/register/:eventId" element={<Regevent />} />
-
+        <Route path="/browse" element={<Browse />} />
         {userRole === 'attendee' && (
           <>
-            <Route path="/browse" element={<Browse />} />
+
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
             <Route path="/organizers" element={<Organizers />} />

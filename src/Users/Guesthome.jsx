@@ -71,7 +71,7 @@ function Guesthome() {
             </div>
 
             <div className="divider">
-                <Link to="/signin"><button className="cta-button">Browse all Events</button></Link>
+                <Link to="/browse"><button className="cta-button">Browse all Events</button></Link>
                 <div className="divider-line short-line"></div>
                 <div className="divider-line shorter-line"></div>
             </div>
