@@ -5,7 +5,7 @@ import Regevent from './Users/Regevent.jsx'
 import OrgNav from "./Components/OrgNav.jsx";
 import Host from "./Organisers/Host.jsx";
 import Razerpay from "./Payments/Razerpay.jsx";
-import Profile from "./Users/Profile.jsx";
+import Profile from "./Organisers/profile.jsx";
 import Admin from "./Admin/Admin.jsx";
 import AdminNavbar from "./Components/AdminNavbar.jsx";
 import VdEvent_On from "./Admin/VdEvent_On.jsx";
@@ -17,7 +17,7 @@ function App2() {
         <BrowserRouter>
             <AdminNavbar />
             <Routes>
-                <Route path="/" element={<Admin_Org/>} />
+                <Route path="/" element={<Profile/>} />
             </Routes>
         </BrowserRouter>
     )
