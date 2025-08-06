@@ -6,29 +6,59 @@ function Attendeessignup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [otpModalOpen, setOtpModalOpen] = useState(false);
+    const [otp, setOtp] = useState("");
+    const [otpError, setOtpError] = useState("");
+    const [signupPending, setSignupPending] = useState(false);
 
     const handleSignup = async (e) => {
         e.preventDefault();
-
+        setMessage("");
+        setOtpError("");
+        setSignupPending(true);
         try {
-            const res = await fetch("http://localhost:3000/attendee/signup", {
+            // Send OTP to email
+            const res = await fetch("http://localhost:3000/attendee/send-otp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ email })
             });
-
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error);
+            if (!res.ok) throw new Error(data.error || "Failed to send OTP");
+            setOtpModalOpen(true);
+        } catch (error) {
+            setMessage(error.message || "Failed to send OTP");
+        }
+        setSignupPending(false);
+    };
 
+    const handleOtpSubmit = async (e) => {
+        e.preventDefault();
+        setOtpError("");
+        try {
+            // Verify OTP
+            const res = await fetch("http://localhost:3000/attendee/verify-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, otp })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.error || "Invalid OTP");
+            // Proceed with signup
+            const signupRes = await fetch("http://localhost:3000/attendee/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password })
+            });
+            const signupData = await signupRes.json();
+            if (!signupRes.ok) throw new Error(signupData.error);
             setMessage("Signup successful! Redirecting to login...");
-
-            
+            setOtpModalOpen(false);
             setTimeout(() => {
                 window.location.href = "/attendee/signin";
             }, 2000);
-
         } catch (error) {
-            setMessage(error.message || "Signup failed");
+            setOtpError(error.message || "OTP verification failed");
         }
     };
 
@@ -78,13 +108,34 @@ function Attendeessignup() {
                         </div>
 
                         <div className="row button">
-                            <input type="submit" value="Signup" />
+                            <input type="submit" value={signupPending ? "Sending OTP..." : "Signup"} disabled={signupPending} />
                         </div>
                     </form>
 
                     {message && <p className="message">{message}</p>}
                 </div>
             </div>
+
+            {otpModalOpen && (
+                <div className="otp-modal">
+                    <div className="otp-modal-content">
+                        <h3>Email Verification</h3>
+                        <p>Enter the OTP sent to your email:</p>
+                        <form onSubmit={handleOtpSubmit}>
+                            <input
+                                type="text"
+                                value={otp}
+                                onChange={e => setOtp(e.target.value)}
+                                placeholder="Enter OTP"
+                                required
+                                className="otp-input"
+                            />
+                            <button type="submit">Verify OTP</button>
+                        </form>
+                        {otpError && <p className="error-message">{otpError}</p>}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

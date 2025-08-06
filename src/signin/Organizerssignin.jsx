@@ -7,38 +7,86 @@ function Organizerssignin({ setUserRole }) {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [otpModalOpen, setOtpModalOpen] = useState(false);
+    const [otp, setOtp] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [otpError, setOtpError] = useState("");
+    const [forgotPending, setForgotPending] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMessage(""); 
+        setMessage("");
         setLoading(true);
-    
         try {
             const res = await fetch("http://localhost:3000/organizer/signin", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
-    
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Login failed");
-    
-           
             localStorage.setItem("token", data.token);
             localStorage.setItem("userRole", "organizer");
-            localStorage.setItem("organizerId", data.organizerId); 
-            setUserRole("organizer"); 
-    
+            localStorage.setItem("userId", data.organizerId);
+            setUserRole("organizer");
             setMessage("Login successful! Redirecting...");
-    
             setTimeout(() => navigate("/organizer/home"), 1000);
+            window.location.reload();
         } catch (error) {
             setMessage(error.message || "Login failed. Please try again.");
         } finally {
             setLoading(false);
         }
-    };    
+    };
+
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        setOtpError("");
+        setMessage("");
+        if (!email) {
+            setMessage("Please enter your email first.");
+            return;
+        }
+        setForgotPending(true);
+        try {
+            // Send OTP for password reset
+            const res = await fetch("http://localhost:3000/attendee/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, purpose: "forgot" })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to send OTP");
+            setOtpModalOpen(true);
+        } catch (error) {
+            setMessage(error.message || "Failed to send OTP");
+        }
+        setForgotPending(false);
+    };
+
+    const handleOtpSubmit = async (e) => {
+        e.preventDefault();
+        setOtpError("");
+        if (!newPassword) {
+            setOtpError("Please enter a new password.");
+            return;
+        }
+        try {
+            // Verify OTP and update password
+            const res = await fetch("http://localhost:3000/organizer/reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, otp, newPassword })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.error || "Invalid OTP or password reset failed");
+            setOtpModalOpen(false);
+            setMessage("Password reset successful! You can now login.");
+        } catch (error) {
+            setOtpError(error.message || "OTP verification failed");
+        }
+    };
 
     return (
         <div className="loginsignin body1">
@@ -74,7 +122,11 @@ function Organizerssignin({ setUserRole }) {
                             />
                         </div>
 
-                        <div className="pass"><a href="#">Forgot password?</a></div>
+                        <div className="pass">
+                            <a href="#" onClick={handleForgotPassword} style={{ color: forgotPending ? '#aaa' : '' }}>
+                                {forgotPending ? "Sending OTP..." : "Forgot password?"}
+                            </a>
+                        </div>
 
                         <div className="row button">
                             <input type="submit" value={loading ? "Logging in..." : "Login"} disabled={loading} />
@@ -88,6 +140,36 @@ function Organizerssignin({ setUserRole }) {
                     {message && <p className="message">{message}</p>}
                 </div>
             </div>
+
+            {otpModalOpen && (
+                <div className="otp-modal">
+                    <div className="otp-modal-content">
+                        <h3>Reset Password</h3>
+                        <p>Enter the OTP sent to your email and your new password:</p>
+                        <form onSubmit={handleOtpSubmit}>
+                            <input
+                                type="text"
+                                value={otp}
+                                onChange={e => setOtp(e.target.value)}
+                                placeholder="Enter OTP"
+                                required
+                                className="otp-input"
+                            />
+                            <input
+                                type="password"
+                                value={newPassword}
+                                onChange={e => setNewPassword(e.target.value)}
+                                placeholder="New Password"
+                                required
+                                className="otp-input"
+                                style={{ marginTop: 8 }}
+                            />
+                            <button type="submit">Reset Password</button>
+                        </form>
+                        {otpError && <p className="error-message">{otpError}</p>}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -5,9 +5,11 @@ import './Razerpay.css';
 function Razerpay() {
     const location = useLocation();
     const { eventId, amount, customFields } = location.state || {};
-
+    const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [formData, setFormData] = useState({});
     const [orderId, setOrderId] = useState("");
+    const [getNotified, setGetNotified] = useState(false);
+
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -15,6 +17,26 @@ function Razerpay() {
         script.async = true;
         script.onload = () => console.log("Razorpay SDK Loaded");
         document.body.appendChild(script);
+
+        // Fetch user info
+        const fetchUserData = async () => {
+            const userId = localStorage.getItem("userId");
+            if (!userId) return;
+
+            try {
+                const res = await fetch(`http://localhost:3000/attendee/${userId}`);
+                const data = await res.json();
+                setFormData((prev) => ({
+                    ...prev,
+                    Name: data.name || "",
+                    Email: data.email || ""
+                }));
+            } catch (err) {
+                console.error("Failed to fetch user info:", err);
+            }
+        };
+
+        fetchUserData();
     }, []);
 
     const handleInputChange = (e) => {
@@ -58,50 +80,82 @@ function Razerpay() {
             order_id: orderId,
             handler: async (response) => {
                 alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-
-                // Submit registration data to your backend
+            
                 await fetch("http://localhost:3000/register", {
                     method: "POST",
                     headers: {
-                      "Content-Type": "application/json",
-                      "x-user-id": localStorage.getItem("userId")  // assuming you stored user ID on login
+                        "Content-Type": "application/json",
+                        "x-user-id": localStorage.getItem("userId")
                     },
                     body: JSON.stringify({
-                      event_id: eventId,
-                      form_data: formData,
-                      razorpay_payment_id: response.razorpay_payment_id
+                        event_id: eventId,
+                        form_data: formData,
+                        notify: getNotified ? 1 : 0,
+                        razorpay_payment_id: response.razorpay_payment_id
                     })
-                  });
-                  
+                });
+            
+                setRegistrationSuccess(true);
+            
+                // ⏳ Redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.href = `/register/${eventId}`;
+                }, 3000);
             },
-            prefill: {
-                name: formData["Name"] || "",
-                email: formData["Email"] || "",
-            }
+            
         };
 
         const rzp = new window.Razorpay(options);
         rzp.open();
     };
-
+    if (registrationSuccess) {
+        return (
+            <div className="paymentmain">
+                <h2>🎉 Registration Successful!</h2>
+                <p>You will be redirected shortly...</p>
+            </div>
+        );
+    }
+    
     return (
         <div className="paymentmain">
             <h2>Event Registration</h2>
 
             <form className="form">
-                {customFields && customFields.map((field, index) => (
-                    <div key={index} className="form-field">
-                        <label>{field.name}:</label>
-                        <input
-                            type={field.type}
-                            name={field.name}
-                            value={formData[field.name] || ""}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
-                ))}
+                <table className="fillform-table">
+                    <tbody>
+                        {customFields && customFields.map((field, index) => (
+                            <tr key={index}>
+                                <td>
+                                    <label htmlFor={field.name}>{field.name}:</label>
+                                </td>
+                                <td>
+                                    <input
+                                        type={field.type}
+                                        name={field.name}
+                                        id={field.name}
+                                        value={formData[field.name] || ""}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </form>
+
+            <div className="switch">
+                <p>Get notified about this event:</p>
+                <input
+                    type="checkbox"
+                    name="toggle1"
+                    id="toggle1"
+                    checked={getNotified}
+                    onChange={() => setGetNotified(!getNotified)}
+                />
+                <label htmlFor="toggle1"></label>
+            </div>
 
             <button onClick={createOrder} className="generatebutton">
                 Continue To Pay ₹{amount / 100}

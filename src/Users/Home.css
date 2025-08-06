@@ -5,35 +5,40 @@
 
 .home p {
     padding-bottom: 20px;
-    
+
 
 }
+
 .head-text {
     font-family: "Roboto Slab", serif;
     font-optical-sizing: auto;
 
     font-style: normal;
-  }
+}
+
 .subhead-text {
     font-family: "Playfair Display", serif;
     font-optical-sizing: auto;
     font-style: normal;
-  }
-.home-head p{
+}
+
+.home-head p {
     color: white;
     padding-left: 20px;
-    font-size: large ;
+    font-size: large;
 }
-.sidehead{
+
+.sidehead {
     text-align: left;
     padding-left: 180px;
     padding-top: 70px;
 }
-body{
+
+body {
     margin: 0;
 }
 
-.home-heading{
+.home-heading {
     padding-top: 130px;
     color: white;
     padding-left: 20px;
@@ -42,21 +47,23 @@ body{
     margin-bottom: 0px;
 }
 
-.home-head{
-    
+.home-head {
+
     height: 400px;
     background-color: lightseagreen;
     width: 100%;
 }
 
-.discover-cards{
+.discover-cards {
     display: flex;
     text-align: left;
     justify-content: space-around;
     width: 75%;
     margin: 0 auto;
+    
 }
-.discover-cards div{
+
+.discover-cards div {
     width: 30%;
 }
 
@@ -125,8 +132,9 @@ body{
 
 .asvg {
     margin-bottom: -6px;
-    
+
 }
+
 .cta-button {
     background-color: lightseagreen;
     width: 220px;
@@ -137,19 +145,22 @@ body{
     justify-self: end;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
     transition-duration: 0.2s;
-    
+
 }
+
 .cta-button:hover {
     transform: scale(1.039);
     transition-duration: 0.2s;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 
 }
-.quick-signup p{
+
+.quick-signup p {
     width: 70%;
     margin-left: 15%;
 }
-.quick-signup input{
+
+.quick-signup input {
     width: 25%;
     background-color: #E8EDDF;
     height: 40px;
@@ -162,7 +173,8 @@ body{
     padding-left: 14px;
     font-size: medium;
 }
-.quick-signup button{
+
+.quick-signup button {
     margin-left: 5px;
     height: 40px;
     width: 90px;
@@ -172,4 +184,30 @@ body{
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
     border-radius: 3px;
     margin-bottom: 100px;
+}
+
+.home-subtext {
+    color: white;
+    padding-left: 20px;
+    font-size: large;
+}
+
+.divider {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.divider-line {
+    background-color: lightseagreen;
+    height: 2px;
+    margin: 7px auto;
+}
+
+.short-line {
+    width: 10%;
+}
+
+.shorter-line {
+    width: 6%;
 }
