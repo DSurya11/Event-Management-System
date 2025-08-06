@@ -142,7 +142,6 @@ function Orgprofile() {
                                 <div
                                     key={index}
                                     className="Ongoing_event1"
-                                    onClick={() => navigate(`/register/${event.event_id}`)}
                                     style={{ cursor: "pointer" }}
                                 >
                                     {event.title}
@@ -162,7 +161,6 @@ function Orgprofile() {
                                 <div
                                     key={index}
                                     className="Pre_event1"
-                                    onClick={() => navigate(`/register/${event.event_id}`)}
                                     style={{ cursor: "pointer" }}
                                 >
                                     {event.title}
