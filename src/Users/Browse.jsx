@@ -82,7 +82,8 @@ function Browse() {
 
     return (
         <div className="browsemain Main">
-            <h2 id='searchh2'>Find Your Next College Experience</h2>
+          <div className='home-head'>
+            <h1 className='home-heading head-text'>Find Your Next College Experience</h1>
             <input
                 className='searchbox'
                 type="text"
@@ -90,13 +91,14 @@ function Browse() {
                 value={searchTerm}
                 onChange={handleSearchChange}
             />
-
-            <div className="browse">
-                {!showFilters && (
+           </div>
+            {!showFilters && (
                     <button className="filter-toggle-btn" onClick={handleToggleFilters}>
                         Show Filters
                     </button> 
                 )}
+            <div className="browse">
+
                 <div className={`filter-sidebar ${showFilters ? "visible" : ""}`}>
                      {showFilters && (
                         <button className="filter-hide-btn" onClick={handleToggleFilters}>

@@ -1,16 +1,16 @@
-.organizers_browse{
-    margin-top: 100px;
-    margin-left: 20px;
-}
+
 .Org{
  display: flex;
+    flex-direction:row;
+    justify-content: center;
+    flex-wrap: wrap;
 
 }
 .Org .Event{
     margin: 10px;
     text-align: center;
-    height: 30%;
-    width: 18%;
+    height:300px;
+    width: 300px;
     margin: 25px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 10px 20px -1px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
     border-radius: 18px;
@@ -25,9 +25,26 @@
 
 
 .Org .Event img{
-    height:200px;
-    width:100%;
+    height:250px;
+    width:300px;
     object-fit: cover;
     border-top-right-radius: 9%;
     border-top-left-radius: 9%;
+}
+.Orgheadbrowsetext {
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    margin-left: 17%;
+    font-style: normal;
+}
+.Orgheadbrowse p {
+    color: white;
+    padding-left: 20px;
+    font-size: large;
+}
+.Orgheadbrowse {
+
+    height: 480px;
+    background-color: lightseagreen;
+    width: 100%;
 }
