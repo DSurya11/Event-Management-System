@@ -42,7 +42,6 @@ function BrowseOrg() {
             </div>
 
             <div className='browse_org_events'>
-
                 {/* Upcoming Events */}
                 <div className='browse_org_upcoming'>
                     <div id='browse_org_upcoming_header'>
@@ -60,7 +59,7 @@ function BrowseOrg() {
                         }) : <p>No upcoming events.</p>}
                     </div>
                 </div>
-
+<hr style={{ color: "lightseagreen", width: "94%", marginLeft: "2%", marginBottom: "2%" }} />
                 {/* Previous Events */}
                 <div className='browse_org_prev'>
                     <div id='browse_org_prev_header'>
