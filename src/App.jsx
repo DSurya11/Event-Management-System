@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+
 
 import Admin from './Admin/Admin.jsx';
 import Admin_User from './Admin/Admin_User.jsx';
@@ -22,7 +22,7 @@ import Profile from './Users/Profile.jsx';
 import Razerpay from './Payments/Razerpay.jsx';
 import AdminEvents from './Admin/AdminEvents.jsx';
 
-import AdminEvents from './Admin/AdminEvents.jsx';
+
 import BrowseOrg from './Users/BrowseOrg.jsx';
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';

@@ -1389,6 +1389,10 @@ app.post("/organizer/reset-password", async (req, res) => {
 app.put('/api/organiserp/:id', (req, res) => {
   const organiserId = req.params.id;
   const { name, description } = req.body;
+  console.log(name, description);
+  if (!name && description === undefined) {
+    return res.status(400).json({ error: 'Name or description required' });
+  }
   if (!name && !description) {
     return res.status(400).json({ error: 'No fields to update' });
   }
@@ -1399,7 +1403,7 @@ app.put('/api/organiserp/:id', (req, res) => {
     values.push(name);
   }
   if (description !== undefined) {
-    fields.push('description = ?');
+    fields.push('Description = ?');
     values.push(description);
   }
   values.push(organiserId);

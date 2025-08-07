@@ -27,9 +27,9 @@ function Organizers() {
 
     return (
         <div className='organizers_browse Main' >
-            <div className='home-head'>
-                <h1 className="home-heading head-text">Organizers</h1>
-                <p>"Discover the passionate teams and creative minds who bring every event to life."</p>
+            <div className='home-head-new'>
+                <h1 className="home-heading-new head-text">Discover Event Organizers</h1>
+                <p>"Connect with the teams behind your favorite events."</p>
             </div>
 
             <div className='Org'>
@@ -48,6 +48,8 @@ function Organizers() {
                 })}
 
             </div>
+
+
         </div>
     );
 }
