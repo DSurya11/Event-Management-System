@@ -55,7 +55,7 @@ function AppRoutes({ userRole, setUserRole }) {
         {/* Public route for viewing event details */}
         <Route path="/register/:eventId" element={<Regevent />} />
         <Route path="/browse" element={<Browse />} />
-        <Route path="/guestregevent" element={<Guestregevent />} />
+        <Route path="/guestregevent/:eventId" element={<Guestregevent />} />
         {userRole === 'attendee' && (
           <>
 

@@ -167,7 +167,7 @@ function OrgHome() {
                             <div className='previous_event_cards' key={event.event_id}>
                                 <div className='col-flex'><>
                                     <h1 className='head-text-card-small'>{event.title}</h1>
-                                    <p id='cat'>{event.category}</p>
+                                    <p id='cat' style={{width: '150px'}}>{event.category}</p>
                                     </>
                                     <>
                                     <p id='datetime'>{event.time}<br />{new Date(event.date).toLocaleDateString()}</p>

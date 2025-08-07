@@ -72,7 +72,7 @@ function Home() {
 
                     <div className="event-cardholder">
                         {events.length > 0 ? (
-                            events.map((event) => (
+                            events.slice(0, 6).map((event) => (
                                 <div className="content" key={event.event_id}>
                                     <div className="contentimg">
                                         <img

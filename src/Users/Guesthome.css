@@ -9,6 +9,14 @@
     justify-content: center;
     row-gap: 10px;
 }
+.discover-ghome {
+    width: 95%;
+    border-radius: 10px;
+    margin: 30px 2.5%;
+    background-color: #E8EDDF;
+    min-height: 750px;
+    
+}
 .guesthome-heading {
     color: white;
     font-size: 50px;

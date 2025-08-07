@@ -477,8 +477,7 @@ app.get("/events/recent", (req, res) => {
       SELECT event_id, title,DATE_FORMAT(date, '%Y-%m-%d') as date, cover_image 
       FROM Events 
       WHERE approved = 1 
-      ORDER BY event_id DESC 
-      LIMIT 6
+      ORDER BY event_id DESC
   `;
 
   db.query(query, (err, results) => {
