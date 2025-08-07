@@ -73,7 +73,7 @@ function BrowseOrg() {
                 {/* Previous Events */}
                 <div className='discover-browseorg'>
                     <div className='row-flex'>
-                        <h1 className='sidehead head-text'>Upcoming Events</h1>
+                        <h1 className='sidehead head-text'>Previous Events</h1>
                     </div>
                     <hr className='subhead-divider' />
 

@@ -25,6 +25,9 @@
     transition-duration: 0.2s;
 
 }
+.head-text-card-small{
+    width: 150px;
+}
 .host-event-btn:hover{
     transform: scale(1.2);
     transition-duration: 0.2s;

@@ -166,7 +166,7 @@ function OrgHome() {
                         {previousEvents.map(event => (
                             <div className='previous_event_cards' key={event.event_id}>
                                 <div>
-                                    <h1 className='head-text-card'>{event.title}</h1>
+                                    <h1 className='head-text-card-small'>{event.title}</h1>
                                     <p id='cat'>{event.category}</p>
                                     <p id='datetime'>{event.time}<br />{new Date(event.date).toLocaleDateString()}</p>
                                     <p id='location'>{event.venue}</p>
