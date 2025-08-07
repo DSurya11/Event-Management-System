@@ -1,5 +1,5 @@
 .browse_org{
-    margin-top: 100px;
+    margin-top: 70px;
 }
 .browse_org .browse_org_info{
    margin-left: 30px;
@@ -76,3 +76,50 @@
     transform: scale(1.04);
     cursor: pointer;
    }
+   .browse_org_main{
+    top:0;
+    height: 500px;
+    margin-top: 0;
+    background-color: lightseagreen;
+    display: flex;
+   }
+   .browse_org_logo{
+    width: 30%;
+   }
+   img{
+   width: 500px;
+   height: 500px;
+   object-fit: cover;
+   }
+   .browse_org_info{
+    padding: 20px;
+    width:65%;
+    height: 500px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+   } 
+   .browse_org_info .browse_org_head{
+    font-family: "Roboto Slab";
+   }
+    .browse_org_info .browse_org_description{
+        font-size: 20px;
+        height: fit-content;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    }
+    .org_prev p{
+        font-size: 20px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: black;
+        margin-left: 23px;
+    }
+    .org_upcoming p{
+        font-size: 20px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: black;
+        margin-left: 23px;
+    }

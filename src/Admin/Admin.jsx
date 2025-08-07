@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
 import './Admin.css';
 import AdminNavbar from '../Components/AdminNavbar';
 
@@ -46,7 +45,8 @@ function Admin() {
             {/* Pending Events Section */}
             <div className='events_tobeapproved'>
                 <div className='events_approval_header'><h2>Events to be approved</h2></div>
-                <hr />
+                                <hr />
+
                 <div className='event_cards'>
                     {pendingEvents.map((event, idx) => (
                         <div className='event_card1' key={idx}>
@@ -81,6 +81,11 @@ function Admin() {
             {/* Ongoing Events Section */}
             <div className='events_ongoing'>
                 <div className='events_ongoing_header'><h2>Ongoing Events</h2></div>
+                                <div className='Card_headers'>
+                    <div className='card1_Eventname'>Event</div>
+                        <div className='card1_Organame'>Organizer</div>
+                        <div className='card1_date'>Date of Event</div>
+                </div>
                 <div className='event_cards'>
                     {ongoingEvents.map((event) => (
                         <div className='event_card1' key={event.event_id}>

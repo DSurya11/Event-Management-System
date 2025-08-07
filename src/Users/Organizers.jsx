@@ -26,8 +26,12 @@ function Organizers() {
 
 
     return (
-        <div className='organizers_browse'>
-            <h2>Organizers</h2>
+        <div className='organizers_browse Main' >
+            <div className='home-head'>
+                <h1 className="home-heading head-text">Organizers</h1>
+                <p>"Discover the passionate teams and creative minds who bring every event to life."</p>
+            </div>
+
             <div className='Org'>
                 {organizers.map((org, index) => {
                     console.log("org:", org);
