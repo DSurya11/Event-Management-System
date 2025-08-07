@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "../components/ConfirmationModal"; // adjust path if needed
+import ConfirmationModal from "../components/ConfirmationModal";
 import "./Profile.css";
 
 function Profile() {
@@ -35,12 +35,10 @@ function Profile() {
     return (
         <div className="profile_page">
             <div className="profile_boxM1">
-                <div className="profile_logo">
                     <img src="/profile_pic2.jpg" alt="Profile" />
                     <p>Hey {profile?.name || "User"}</p>
                     <p className="Designation">{userRole === "attendee" ? "Student" : "Organizer"}</p>
                     <button className="profilelogout" onClick={() => setShowLogoutModal(true)}>Log Out</button>
-                </div>
             </div>
 
             <div className="profile_boxM2">

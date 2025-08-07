@@ -1,6 +1,10 @@
 .Organizers_profile{
-display: flex;
+    display: flex;
+    column-gap: 10px;
+    justify-content: center;
 margin-top: 100px;
+margin-bottom: 15px;
+
 }
 .Orgprofilelogout{
     background-color: lightseagreen;
@@ -25,7 +29,7 @@ margin-top: 100px;
 .Organizers_profile .OrgProfile_boxM1{
     width:20%;
 background-color:   #E8EDDF ;
-margin-left: 30px;
+border-radius: 10px;
 }
 .Profile_boxM1 .Orgprofile_logo{
     background-color: #E8EDDF;
@@ -57,9 +61,6 @@ margin-left: 30px;
     color: rgb(168, 167, 167);
     margin-top: 10px;
 }
-.Organizers_profile .OrgProfile_boxM2{
-    margin-left: 50px;
-}
 .Organizers_profile .OrgProfile_boxM2 .Profile_box_1{
     width:1000px;
     height:fit-content;
@@ -79,15 +80,18 @@ margin-left: 30px;
     font-weight: 600;
 
 }
+.OrgProfile_boxM2{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
 .OrgProfile_boxM2 .Profile_box_2{
     width:1000px;
     height: fit-content;
     min-height:140px;
     background-color: #E8EDDF;
-    margin-top: 20px;
     border-radius: 8px;
     padding: 10px;
-    margin-bottom: 15px;
 }
 .OrgProfile_boxM2 .Profile_box_2 p{
     padding: 10px;
@@ -117,11 +121,9 @@ margin-left: 30px;
     width:1000px;
     height: fit-content;
     min-height:140px;
-    background-color: #E8EDDF;
-    margin-top: 20px;
+    background-color: #E8EDDF;;
     border-radius: 8px;
     padding: 10px;
-    margin-bottom: 15px;
 }
 .OrgProfile_boxM2 .Profile_box_3 p{
     padding: 10px;

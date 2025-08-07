@@ -21,7 +21,7 @@ import Signin from './signin/signin.jsx';
 import Profile from './Users/Profile.jsx';
 import Razerpay from './Payments/Razerpay.jsx';
 import AdminEvents from './Admin/AdminEvents.jsx';
-
+import Guestregevent from './Users/Guestregevent.jsx';
 
 import BrowseOrg from './Users/BrowseOrg.jsx';
 import OrgHome from './Organisers/Home.jsx';
@@ -54,6 +54,7 @@ function AppRoutes({ userRole, setUserRole }) {
         {/* Public route for viewing event details */}
         <Route path="/register/:eventId" element={<Regevent />} />
         <Route path="/browse" element={<Browse />} />
+        <Route path="/guestregevent" element={<Guestregevent />} />
         {userRole === 'attendee' && (
           <>
 

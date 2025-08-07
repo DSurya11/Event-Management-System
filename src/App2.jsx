@@ -5,7 +5,7 @@ import Regevent from './Users/Regevent.jsx'
 import OrgNav from "./Components/OrgNav.jsx";
 import Host from "./Organisers/Host.jsx";
 import Razerpay from "./Payments/Razerpay.jsx";
-import Profile from "./Organisers/profile.jsx";
+import Profile from "./Users/Profile.jsx";
 import Admin from "./Admin/Admin.jsx";
 import AdminNavbar from "./Components/AdminNavbar.jsx";
 import Admin_Org from "./Admin/Admin_Org.jsx";
