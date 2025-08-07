@@ -59,7 +59,7 @@ function BrowseOrg() {
                                         <img src={`/${imgPath}`}/>
                                     </div>
                                     <h2 className="contenth1">{e.title}</h2>
-                                    <h5 className='content-date'>11th, Aug, 2025</h5>
+                                    <h5 className='content-date'>ㅤ</h5>
                                     <Link to={`/register/${e.event_id}`} className='contenta'>
                                         <button className='discover-details'>Details</button>
                                     </Link>
@@ -88,7 +88,7 @@ function BrowseOrg() {
                                         <img src={`/${imgPath}`}/>
                                     </div>
                                     <h2 className="contenth1">{e.title}</h2>
-                                    <h5 className='content-date'>11th, Aug, 2025</h5>
+                                    <h5 className='content-date'>ㅤ</h5>
                                     <Link to={`/register/${e.event_id}`} className='contenta'>
                                         <button className='discover-details'>Details</button>
                                     </Link>

@@ -165,11 +165,16 @@ function OrgHome() {
                     <div className='previous-events'>
                         {previousEvents.map(event => (
                             <div className='previous_event_cards' key={event.event_id}>
-                                <div>
+                                <div className='col-flex'><>
                                     <h1 className='head-text-card-small'>{event.title}</h1>
                                     <p id='cat'>{event.category}</p>
+                                    </>
+                                    <>
                                     <p id='datetime'>{event.time}<br />{new Date(event.date).toLocaleDateString()}</p>
+                                    </>
+                                    <>
                                     <p id='location'>{event.venue}</p>
+                                    
                                     {event.approved == 1 ? (
                                         <button onClick={() => fetchRegs(event.event_id, event.title)}>Registrations</button>
                                     ) : event.approved == 2 ? (
@@ -177,6 +182,7 @@ function OrgHome() {
                                     ) : (
                                         <button disabled style={{ backgroundColor: "#6c757d", color: "white" }}>Not Approved</button>
                                     )}
+                                    </>
                                 </div>
                                 <div className='vertical-progress'>
                                     <p>Occupancy: {event.occupancy}%</p>
