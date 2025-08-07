@@ -5,7 +5,7 @@
 }
 
 .searchbox {
-    width: 86%;
+    width: 85%;
     height: 40px;
     margin-left: 20px;
     margin-bottom: 10px;
@@ -201,7 +201,7 @@
 
 .browsingimg {
     object-fit: cover;
-    height: 26vh;
+    height: 100%;
     width: 26%;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;

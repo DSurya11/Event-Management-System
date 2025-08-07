@@ -31,6 +31,10 @@ function Organizers() {
                 <h1 className="home-heading-new head-text">Discover Event Organizers</h1>
                 <p>"Connect with the teams behind your favorite events."</p>
             </div>
+            <div className='discover-orgs'>
+                        <h1 className='sidehead head-text'>Organizers</h1>
+                    
+                    <hr className='subhead-divider' />
 
             <div className='Org'>
                 {organizers.map((org, index) => {
@@ -48,6 +52,7 @@ function Organizers() {
                 })}
 
             </div>
+        </div>
 
 
         </div>

@@ -108,6 +108,8 @@ function Email() {
     const [body, setBody] = useState('');
     const [status, setStatus] = useState('');
     const [eventDetails, setEventDetails] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [sending, setSending] = useState(false);
 
     const organiserId = localStorage.getItem("userId"); // Adjust if different
 
@@ -166,18 +168,18 @@ function Email() {
 
     const sendEmail = async () => {
         if (!selectedEvent || !subject || !body) {
+            setShowModal(false);
             return alert("Please fill all fields.");
         }
-
+        setSending(true);
+        setStatus('Sending...');
         try {
             const res = await fetch('http://localhost:3000/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ eventId: selectedEvent, subject, body })
             });
-
             const data = await res.json();
-
             if (res.ok) {
                 setStatus('✅ Email sent successfully!');
                 setSubject('');
@@ -188,30 +190,55 @@ function Email() {
         } catch (error) {
             setStatus(`❌ Failed: ${error.message}`);
         }
-
+        setSending(false);
+        setShowModal(false);
         setTimeout(() => setStatus(''), 4000);
     };
 
     return (
         <div className="email-main Main">
             <div className="email-container">
+                {/* Modal for confirmation and sending */}
+                {showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            {!sending ? (
+                                <>
+                                    <h3>Confirm Send Notification</h3>
+                                    <p>Are you sure you want to send this notification to all attendees?</p>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                                        <button className="modal-cancel" onClick={() => setShowModal(false)}>Cancel</button>
+                                        <button className="modal-confirm" onClick={sendEmail}>Confirm</button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <h3>Sending...</h3>
+                                    <p>Please wait while your notification is being sent.</p>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 {status && (
                     <div className="email-popup">
                         <p>{status}</p>
                     </div>
                 )}
-                <h2>Notify your Attendees</h2>
 
                 <div className="email-input">
                     <div className="email-text">
                         {/* Event Dropdown */}
+                        <h2 className='sidehead head-text'>Notify your Attendees</h2>
+                        <hr className='subhead-divider'/>
                         <div className="form-group">
                             <select
                                 value={selectedEvent}
                                 onChange={(e) => setSelectedEvent(e.target.value)}
                                 className="email-dropdown"
                             >
-                                <option value="">-- Select an Event --</option>
+                                <option value=""> Select an Event </option>
                                 {events.map(event => (
                                     <option key={event.event_id} value={event.event_id}>
                                         {event.title}
@@ -243,14 +270,15 @@ function Email() {
 
                         {/* Send Button */}
                         <div className="form-group" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <button className="send-button" onClick={sendEmail}>
+                            <button className="send-button" onClick={() => setShowModal(true)} disabled={sending}>
                                 Send Notification
                             </button>
                         </div>
                     </div>
 
                     <div className="email-templates">
-                        <h3>Templates</h3>
+                        <h2 className='sidehead head-text'>Templates</h2>
+                        <hr className='subhead-divider'/>
                         <div className="template-buttons">
                             {templates.map((t, i) => (
                                 <button key={i} onClick={() => autofillTemplate(t)}>
@@ -261,7 +289,7 @@ function Email() {
                     </div>
                 </div>
 
-                <p className="to-container">
+                <p className="to-container" style={{ textAlign: 'center', margin: '20px' }}>
                     <i>This email will be sent to all the attendees who opted for notifications.</i>
                 </p>
 

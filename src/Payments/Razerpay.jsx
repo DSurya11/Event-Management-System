@@ -45,25 +45,53 @@ function Razerpay() {
     };
 
     const createOrder = async () => {
-        if (!customFields.every(field => formData[field.name])) {
-            alert("Please fill all required fields.");
-            return;
-        }
+    if (!customFields.every(field => formData[field.name])) {
+        alert("Please fill all required fields.");
+        return;
+    }
 
+    if (amount === 0) {
         try {
-            const res = await fetch("http://localhost:3000/create-order", {
+            await fetch("http://localhost:3000/register", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount }) // Amount in paise
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-user-id": localStorage.getItem("userId")
+                },
+                body: JSON.stringify({
+                    event_id: eventId,
+                    form_data: formData,
+                    notify: getNotified ? 1 : 0,
+                    razorpay_payment_id: 'free'
+                })
             });
 
-            const data = await res.json();
-            setOrderId(data.id);
-            openRazorpay(data.id);
+            setRegistrationSuccess(true);
+            setTimeout(() => {
+                window.location.href = `/register/${eventId}`;
+            }, 3000);
         } catch (err) {
-            console.error("Error creating order:", err);
+            console.error("Error registering for free event:", err);
         }
-    };
+
+        return;
+    }
+
+    try {
+        const res = await fetch("http://localhost:3000/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount }) // Amount in paise
+        });
+
+        const data = await res.json();
+        setOrderId(data.id);
+        openRazorpay(data.id);
+    } catch (err) {
+        console.error("Error creating order:", err);
+    }
+};
+
 
     const openRazorpay = (orderId) => {
         if (!window.Razorpay) {

@@ -4,7 +4,7 @@
     margin: auto;
     height: 360px;
     margin-bottom: 20px;
-    background-color: lightseagreen;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
     width: 100%;
     text-align: center;
     
@@ -124,7 +124,7 @@
 
 .signinbut {
     color: #E8EDDF;
-    background-color: lightseagreen;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
     border: 1px solid #CFDBD5;
     border-radius: 6px;
     height: 45px;

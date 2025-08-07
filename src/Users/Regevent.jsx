@@ -13,10 +13,10 @@ function Regevent() {
     const [showSupportModal, setShowSupportModal] = useState(false);
     const navigate = useNavigate();
 
-    const userId = localStorage.getItem('userId'); 
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
-        
+
         fetch(`http://localhost:3000/events/${eventId}`)
             .then(response => response.json())
             .then(data => {
@@ -59,6 +59,8 @@ function Regevent() {
     };
 
     if (!event) return <p>Loading event details...</p>;
+    const now = new Date();
+    const regClosed = event.reg_end_date && new Date(event.reg_end_date) < now;
 
     const allImages = [event.cover_image, ...(event.pictures || [])];
 
@@ -81,7 +83,7 @@ function Regevent() {
                                 <div
                                     key={img || index}
                                     className={`thumbnail ${selectedImageIndex === index ? "active" : ""}`}
-   
+
                                     onClick={() => setSelectedImageIndex(index)}
                                 >
                                     <img src={`../${img}`} alt={`Thumbnail ${index}`} />
@@ -105,10 +107,10 @@ function Regevent() {
                             </Link>
 
                             <button
-                                className={`Register ${isRegistered ? 'disabled' : ''}`}
-                                disabled={isRegistered}
+                                className={`Register ${isRegistered || regClosed ? 'disabled' : ''}`}
+                                disabled={isRegistered || regClosed}
                                 onClick={() =>
-                                    !isRegistered &&
+                                    !isRegistered && !regClosed &&
                                     navigate(`/register/${event.event_id}/fillform`, {
                                         state: {
                                             eventId: event.event_id,
@@ -122,7 +124,7 @@ function Regevent() {
                                     })
                                 }
                             >
-                                {isRegistered ? "Registered" : "Register now"}
+                                {regClosed ? "Closed" : isRegistered ? "Registered" : "Register now"}
                             </button>
                         </div>
                     </div>

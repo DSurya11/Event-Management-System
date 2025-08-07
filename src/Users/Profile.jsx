@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "../components/ConfirmationModal"; // adjust path if needed
+import ConfirmationModal from "../components/ConfirmationModal";
 import "./Profile.css";
 
 function Profile() {
@@ -35,12 +35,10 @@ function Profile() {
     return (
         <div className="profile_page">
             <div className="profile_boxM1">
-                <div className="profile_logo">
                     <img src="/profile_pic2.jpg" alt="Profile" />
                     <p>Hey {profile?.name || "User"}</p>
                     <p className="Designation">{userRole === "attendee" ? "Student" : "Organizer"}</p>
                     <button className="profilelogout" onClick={() => setShowLogoutModal(true)}>Log Out</button>
-                </div>
             </div>
 
             <div className="profile_boxM2">
@@ -54,7 +52,7 @@ function Profile() {
 
                 {userRole === "attendee" && (
                     <div className="profile_box3">
-                        <p>Previous attended events</p>
+                        <p>Registered events</p>
                         <div className="Prev_attended_events">
                             {profile?.previous_events?.length > 0 ? (
                                 profile.previous_events.map((event, index) => (
@@ -68,7 +66,7 @@ function Profile() {
                                     </div>
                                 ))
                             ) : (
-                                <div className="Prev_event_1">No events attended yet.</div>
+                                <div className="Prev_event_1">No events registered yet.</div>
                             )}
                         </div>
                     </div>

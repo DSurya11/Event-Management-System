@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import './Home.css';
+import './GuestHome.css';
 
 function Guesthome() {
     const [events, setEvents] = useState([]);
@@ -18,11 +18,11 @@ function Guesthome() {
     };
 
     return (
-        <div className="home main">
-            <div className="home-head">
-                <h1 className="home-heading head-text">College Events made easy!</h1>
-                <p className="home-subtext">Explore a variety of college events and easily register to participate in the ones that excite you the most!</p>
-                <button className="cta-button" onClick={handleSignin}>Sign In</button>
+        <div className="guesthome main">
+            <div className="guesthome-head">
+                <h1 className="guesthome-heading guesthead-text">College Events made easy!</h1>
+                <p className="guesthome-subtext">Explore a variety of college events and easily register to participate in the ones that excite you the most!</p>
+                <button className="guestsignin" onClick={handleSignin}>Sign In</button>
             </div>
 
             <h1 className="sidehead subhead-text">Discover Events</h1>
@@ -57,10 +57,10 @@ function Guesthome() {
                                     ? event.description.substring(0, 150) + "..."
                                     : event.description}
                             </div>
-                            <Link to="/signin" className="contenta">
+                            <Link to="/guestregevent" className="contenta">
                                 View Details
                                 <svg className="asvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="lightseagreen">
-                                    <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+                                    <path d="M647-4 40H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
                                 </svg>
                             </Link>
                         </div>

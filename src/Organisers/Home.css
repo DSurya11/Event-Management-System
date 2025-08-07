@@ -1,29 +1,3 @@
-.home-heading{
-    padding-top: 130px;
-    color: white;
-    font-size: 45px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-}
-
-.home-head{
-    text-align: center;
-    height: 400px;
-    background-color: lightseagreen;
-    width: 100%;
-}
-.head-text-card {
-    font-family: "Roboto Slab", serif;
-    font-optical-sizing: auto;
-    font-style: normal;
-  }
-.subhead-text-card {
-    font-family: "Playfair Display", serif;
-    font-style: normal;
-    padding-left: 50px;
-    padding-top: 30px;
-    padding-bottom: 17px;
-  }
   .no-events-msg{
     display: flex;
     justify-content: center;
@@ -51,6 +25,9 @@
     transition-duration: 0.2s;
 
 }
+.head-text-card-small{
+    width: 150px;
+}
 .host-event-btn:hover{
     transform: scale(1.2);
     transition-duration: 0.2s;
@@ -64,18 +41,20 @@
     padding-top: 30px;
     padding-bottom: 17px;
   }
-.home-head p{
-    color: white;
-    font-size: large ;
+.ong-events-home{
+    width: 95.8%;
+    border-radius: 10px;
+    background-color: #E8EDDF;
+    margin: 0 auto;
+    margin-top:10px
 }
-
 .ongoing_events-home{
     display: flex;
     justify-content: left;
     column-gap: 10px;
     row-gap: 10px;
     flex-wrap: wrap;
-    margin-left: 2.5%;
+    margin-left: 20px;
 }
 
 .ongoing_event_cards {
@@ -83,8 +62,10 @@
     justify-content: space-between;
     border-radius: 5px;
     background-color: #E8EDDF;
-    width: 48%;
+    width: 49%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
     padding: 10px 0;
+    margin: 30px 0;
 }
 
 .ongoing_event_cards h1{
@@ -135,6 +116,11 @@
     height: 150px;
     width: 150px;
     position: relative;
+}
+.col-flex{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .circle-prog .box .percent svg{
     position: relative;
@@ -227,6 +213,8 @@
     border-radius: 5px;
     background-color: #E8EDDF;
     width: 19%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
+    margin: 10px 0;
 }
 
 .previous_event_cards h1{
@@ -411,10 +399,4 @@
 .reg-table th {
     background-color: #f4f4f4;
 }
-
-.disabled-btn {
-    background-color: #ccc;
-    color: #555;
-    cursor: not-allowed;
-    border: none;
-}
+/* --- End responsive improvements --- */

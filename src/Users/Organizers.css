@@ -1,7 +1,8 @@
-.Org {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+
+.Org{
+ display: flex;
+    flex-direction:row;
+    justify-content: left;
     flex-wrap: wrap;
 
 }
@@ -11,7 +12,7 @@
     text-align: center;
     height: 300px;
     width: 300px;
-    margin: 25px;
+    margin: 20px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 10px 20px -1px, rgba(0, 0, 0, 0.3) 0px 8px 10px -8px;
     border-radius: 18px;
     background-color: #e8eddf;
@@ -23,66 +24,20 @@
     scale: 1.05;
     transition-duration: 0.5s;
 }
-
-.organizers_browse p {
-    padding-bottom: 20px;
-}
-
-.head-text {
-    font-family: "Roboto Slab", serif;
-    font-optical-sizing: auto;
-
-    font-style: normal;
-}
-
-.subhead-text {
-    font-family: "Playfair Display", serif;
-    font-optical-sizing: auto;
-    font-style: normal;
-}
-
-.home-head-new p {
-    padding-left: 20px;
-    font-size: large;
-}
-
-.sidehead {
-    text-align: left;
-    padding: 10px 0px;
-}
-
-body {
-    margin: 0;
-}
-
-.home-heading-new {
-    font-size: 35px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-}
-
-.home-head-new {
-    
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 90px;
+.discover-orgs{
+    width: 95.8%;
     border-radius: 10px;
-    text-align: left;
     background-color: #E8EDDF;
+    margin: 0 auto;
+    margin-top: 10px;
 }
-.org-main{
-    margin-top: 20px;
-    width:90%;
-    margin:auto;
-    background-color: #E8EDDF;
-}
-.Org .Event img {
-    height: 250px;
-    width: 300px;
+
+.Org .Event img{
+    height:250px;
+    width:300px;
     object-fit: cover;
     border-top-right-radius: 9%;
     border-top-left-radius: 9%;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
 }
 
 .Orgheadbrowsetext {
