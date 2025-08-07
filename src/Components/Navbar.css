@@ -23,6 +23,23 @@
     right: 140px;
 }
 
+.nb-button-guest {
+    position: absolute;
+    right: 50px;
+}
+
+.btn-signin {
+    background-color: lightseagreen !important;
+    color: white !important;
+    border: none;
+    transition: background 0.2s;
+}
+
+.btn-signin:hover {
+    background-color: #159c8c !important;
+}
+
+
 .chaticon {
     position: absolute;
     right: 100px;
@@ -77,6 +94,31 @@
 
 }
 
+.nb-button-guest .btn {
+    padding-left: 10px;
+    padding-top: 6.5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    margin-left: 10px;
+    margin-top: 23px;
+    background-color: inherit;
+    color: black;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    transition-duration: .2s;
+
+}
+
+.nb-button-guest .btn:hover {
+    color: lightseagreen;
+
+    cursor: pointer;
+    transform: scale(1.08);
+    transition-duration: .2s;
+
+}
+
 .profilesvg {
     height: 40px;
     width: 40px;
@@ -105,4 +147,3 @@
     right: 2.5%;
     cursor: pointer;
 }
-

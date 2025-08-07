@@ -29,6 +29,7 @@ import Host from './Organisers/Host.jsx';
 import Email from './Organisers/Email.jsx';
 
 import Navbar from './Components/Navbar.jsx';
+import GuestNavbar from './Components/GuestNavbar.jsx';
 import OrgNav from './Components/OrgNav.jsx';
 import AdminNavbar from './Components/AdminNavbar';
 
@@ -36,7 +37,7 @@ function AppRoutes({ userRole, setUserRole }) {
   const location = useLocation();
   return (
     <>
-      {location.pathname.startsWith('/admin') ? <AdminNavbar /> : userRole === 'organizer' ? <OrgNav /> : userRole === 'attendee' ? <Navbar /> : null}
+      {location.pathname.startsWith('/admin') ? <AdminNavbar /> : userRole === 'organizer' ? <OrgNav /> : userRole === 'attendee' ? <Navbar /> : <GuestNavbar />}
       <Routes>
         {/* Landing route */}
         <Route
@@ -54,7 +55,7 @@ function AppRoutes({ userRole, setUserRole }) {
         {/* Public route for viewing event details */}
         <Route path="/register/:eventId" element={<Regevent />} />
         <Route path="/browse" element={<Browse />} />
-        <Route path="/guestregevent" element={<Guestregevent />} />
+        <Route path="/guestregevent/:eventId" element={<Guestregevent />} />
         {userRole === 'attendee' && (
           <>
 

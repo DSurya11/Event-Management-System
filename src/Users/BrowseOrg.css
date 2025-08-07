@@ -82,7 +82,7 @@
     background-color: #e8eddf;
     display: flex;
    }
-   img{
+   .browse_org_logo img{
    width: 400px;
    height: 400px;
    object-fit: cover;

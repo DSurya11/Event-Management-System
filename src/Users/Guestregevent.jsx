@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import './Regevent.css';
+import Footer from '../Components/Footer';
 import ConfirmationModal from "../Components/ConfirmationModal";
 
 function Guestregevent() {
@@ -102,14 +103,12 @@ function Guestregevent() {
                         <div className='reg-btns'>
 
                             <button
-                                className={`Register ${isRegistered || regClosed ? 'disabled' : ''}`}
-                                disabled={isRegistered || regClosed}
+                                className={`Register`}
                                 onClick={() =>
-                                    !isRegistered && !regClosed &&
                                     navigate(`/signin`)
                                 }
                             >
-                                
+                                Register
                             </button>
                         </div>
                     </div>
@@ -141,9 +140,9 @@ function Guestregevent() {
                         <h3 className='uc_event_header'>More Events</h3>
                         <div className='events'>
                             {recentEvents
-                                .filter(e => e.event_id !== parseInt(eventId))
+                                .filter(e => e.event_id !== parseInt(eventId)).slice(0,4)
                                 .map((e) => (
-                                    <Link to={`/register/${e.event_id}`} key={e.event_id} className='UC_event'>
+                                    <Link to={`/guestregevent/${e.event_id}`} key={e.event_id} className='UC_event'>
                                         <div className='event1'>
                                             <img className='event_photo' src={`../${e.cover_image}`} alt={e.title} />
                                             <div className='artist_name'>{e.title}</div>
@@ -161,6 +160,7 @@ function Guestregevent() {
                 onCancel={handleSupportCancel}
                 onConfirm={handleSupportConfirm}
             />
+            <Footer></Footer>
         </div>
     );
 }

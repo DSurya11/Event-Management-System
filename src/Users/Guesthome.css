@@ -1,5 +1,6 @@
 .guesthome-head{
     background:linear-gradient(135deg, #1abc9c, #16a085) ;
+    margin-top: 80px;
     height: 360px;
     color: white;
     display: flex;
@@ -7,6 +8,14 @@
     align-items: center;
     justify-content: center;
     row-gap: 10px;
+}
+.discover-ghome {
+    width: 95%;
+    border-radius: 10px;
+    margin: 30px 2.5%;
+    background-color: #E8EDDF;
+    min-height: 750px;
+    
 }
 .guesthome-heading {
     color: white;

@@ -156,7 +156,7 @@ function Regevent() {
                         <h3 className='uc_event_header'>More Events</h3>
                         <div className='events'>
                             {recentEvents
-                                .filter(e => e.event_id !== parseInt(eventId))
+                                .filter(e => e.event_id !== parseInt(eventId)).slice(0,6)
                                 .map((e) => (
                                     <Link to={`/register/${e.event_id}`} key={e.event_id} className='UC_event'>
                                         <div className='event1'>
