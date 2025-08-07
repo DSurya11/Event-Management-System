@@ -81,7 +81,7 @@ function Home() {
                                         />
                                     </div>
                                     <h2 className="contenth1">{event.title}</h2>
-                                    <h5 className='content-date'>11th, Aug, 2025</h5>
+                                    <h5 className='content-date'>{event.date}</h5>
                                     <Link to={`/register/${event.event_id}`} className='contenta'>
                                         <button className='discover-details'>Details</button>
                                     </Link>

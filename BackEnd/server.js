@@ -474,7 +474,7 @@ app.post("/events/upload-pics", upload.fields([{ name: "images", maxCount: 10 },
 
 app.get("/events/recent", (req, res) => {
   const query = `
-      SELECT event_id, title, date, cover_image 
+      SELECT event_id, title,DATE_FORMAT(date, '%Y-%m-%d') as date, cover_image 
       FROM Events 
       WHERE approved = 1 
       ORDER BY event_id DESC 
@@ -1124,7 +1124,7 @@ app.get('/api/organiser/:id', (req, res) => {
 
     const organiser = organiserResults[0];
 
-    const eventQuery = `SELECT * FROM events WHERE organiser = ?`;
+    const eventQuery = `SELECT * FROM events WHERE organiser = ? AND approved = 1`;
     db.query(eventQuery, [organiserId], (err2, eventResults) => {
       if (err2) return res.status(500).json({ error: 'Event fetch failed' });
 

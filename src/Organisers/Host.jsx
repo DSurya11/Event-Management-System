@@ -223,28 +223,93 @@ function Host() {
                 <h3 className={step === 4 ? "active current" : step > 4 ? "active completed" : "inactive"}>Create Form</h3>
             </div>
 
-            {step === 1 && (
-                <form onSubmit={handleSubmitBasic} className="host-form">
-                    <h2 className="head-text">Enter the Details:</h2>
-                    <table><tbody>
-                        <tr><td>Event Title:</td><td><input type="text" name="title" value={formData.title} onChange={handleChange} required /></td></tr>
-                        <tr><td>Description:</td><td><textarea name="description" value={formData.description} onChange={handleChange} required /></td></tr>
-                        <tr><td>Date:</td><td><input type="date" name="date" value={formData.date} onChange={handleChange} required /></td></tr>
-                        <tr><td>Time:</td><td><input type="time" name="time" value={formData.time} onChange={handleChange} required /></td></tr>
-                        <tr><td>Venue:</td><td><input type="text" name="venue" value={formData.venue} onChange={handleChange} required /></td></tr>
-                        <tr><td>Category:</td><td><div className="categories">
-                            {categoriesList.map((category, index) => (
-                                <div key={index} className="each-category">
-                                    <input type="checkbox" id={`cat-${index}`} value={category} className="check"
-                                        checked={formData.categories.includes(category)} onChange={handleCategoryChange} />
-                                    <label htmlFor={`cat-${index}`}>{category}</label>
-                                </div>
-                            ))}
-                        </div></td></tr>
-                    </tbody></table>
-                    <button type="submit">Next</button>
-                </form>
-            )}
+           {step === 1 && (
+  <form onSubmit={handleSubmitBasic} className="host-form">
+    <h2 className="head-text">Enter the Details:</h2>
+
+    {/* Event Title Row */}
+    <table><tbody>
+      <tr>
+        <td>Event Title:</td>
+        <td>
+          <input type="text" name="title" value={formData.title} onChange={handleChange} required />
+        </td>
+      </tr>
+    </tbody></table>
+
+    {/* Date and Time in One Row */}
+<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+  {/* Date & Time Row */}
+  <div style={{ display: 'flex', width: '100%', marginTop: '10px', paddingLeft: '50px' }}>
+    {/* Date Section */}
+    <div style={{ width: '50%', display: 'flex', alignItems: 'center' }}>
+      <label style={{ fontWeight: 'bold', marginRight: '105px', whiteSpace: 'nowrap' }}>Date:</label>
+      <input 
+        type="date" 
+        name="date" 
+        value={formData.date} 
+        onChange={handleChange} 
+        required 
+        style={{ flex: 1 }} 
+      />
+    </div>
+
+    {/* Time Section */}
+    <div style={{ width: '45.5%', display: 'flex', alignItems: 'center', paddingLeft: '43px' }}>
+      <label style={{ fontWeight: 'bold', marginRight: '10px', whiteSpace: 'nowrap' }}>Time:</label>
+      <input 
+        type="time" 
+        name="time" 
+        value={formData.time} 
+        onChange={handleChange} 
+        required 
+        style={{ flex: 1 }} 
+      />
+    </div>
+  </div>
+</div>
+
+
+    {/* Description, Venue, Category */}
+    <table><tbody>
+        <tr>
+        <td>Venue:</td>
+        <td colSpan="3">
+          <input type="text" name="venue" value={formData.venue} onChange={handleChange} required />
+        </td>
+      </tr>
+      <tr>
+        <td>Description:</td>
+        <td colSpan="3">
+          <textarea name="description" value={formData.description} onChange={handleChange} required />
+        </td>
+      </tr>
+      <tr>
+        <td>Category:</td>
+        <td colSpan="3">
+          <div className="categories">
+            {categoriesList.map((category, index) => (
+              <div key={index} className="each-category">
+                <input
+                  type="checkbox"
+                  id={`cat-${index}`}
+                  value={category}
+                  className="check"
+                  checked={formData.categories.includes(category)}
+                  onChange={handleCategoryChange}
+                />
+                <label htmlFor={`cat-${index}`}>{category}</label>
+              </div>
+            ))}
+          </div>
+        </td>
+      </tr>
+    </tbody></table>
+
+    <button type="submit">Next</button>
+  </form>
+)}
+
 
             {step === 2 && (
                 <form onSubmit={handleSubmitExtra} className="host-form">

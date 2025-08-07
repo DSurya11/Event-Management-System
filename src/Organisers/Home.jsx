@@ -106,14 +106,15 @@ function OrgHome() {
     return (
         <div className="org_home Main">
             <div className='home-head'>
-                <h1 className="home-heading head-text-card">Welcome, Organizer!</h1>
+                <h1 className="home-heading head-text">Welcome, Organizer!</h1>
                 <p>"Effortlessly create and manage college events while attracting enthusiastic participants!"</p>
             </div>
 
             {/* Ongoing Events */}
             {ongoingEvents.length > 0 && (
-                <>
-                    <h2 className='subhead-text-card'>Your Ongoing Events</h2>
+                <div className='ong-events-home'>
+                    <h2 className='sidehead head-text'>Your Ongoing Events</h2>
+                    <hr className='subhead-divider' />
                     <div className='ongoing_events-home'>
                         {ongoingEvents.map(event => (
                             <div className='ongoing_event_cards' key={event.event_id}>
@@ -153,18 +154,19 @@ function OrgHome() {
                             </div>
                         ))}
                     </div>
-                </>
+                </div>
             )}
 
             {/* Previous Events */}
             {previousEvents.length > 0 && (
-                <>
-                    <h2 className='subhead-text-card'>Your Previous Events</h2>
+                <div className='ong-events-home'>
+                    <h2 className='sidehead head-text'>Your Previous Events</h2>
+                    <hr className='subhead-divider' />
                     <div className='previous-events'>
                         {previousEvents.map(event => (
                             <div className='previous_event_cards' key={event.event_id}>
                                 <div>
-                                    <h1 className='head-text-card'>{event.title}</h1>
+                                    <h1 className='head-text-card-small'>{event.title}</h1>
                                     <p id='cat'>{event.category}</p>
                                     <p id='datetime'>{event.time}<br />{new Date(event.date).toLocaleDateString()}</p>
                                     <p id='location'>{event.venue}</p>
@@ -184,7 +186,7 @@ function OrgHome() {
                             </div>
                         ))}
                     </div>
-                </>
+                </div>
             )}
 
             {/* No Events */}

@@ -13,8 +13,8 @@
     cursor: pointer;
 }
 .profilelogout:hover{
-    background-color:rgb(19, 102, 98);
-    transform : scale(1.1);
+    background-color:rgb(19, 102, 98)
+
 }
 .profile_boxM1{
     margin-left: 30px;
@@ -51,7 +51,7 @@
 }
 .profile_box2{
     width:1000px;
-    height:200px;
+    height:275px;
     background-color: #E8EDDF;
     margin-top: 100px;
     border-radius: 8px;
@@ -76,6 +76,17 @@
     padding: 5px;
 }
 .profile_box2 .profile_box2_email span{
+    font-weight: 600;
+
+}
+.profile_box2 .profile_box2_eventshosted{
+    font-size: larger;
+    font-family:'Merriweather',serif;
+    margin-top:30px;
+    margin-left:10px;
+    padding: 5px;
+}
+.profile_box2 .profile_box2_eventshosted span{
     font-weight: 600;
 
 }
@@ -107,7 +118,7 @@
     font-weight: 600;
 
 }
-.profile_box3 .Prev_attended_events{
+.profile_box3 .Prev_Hosted_events{
     display: grid;
     grid-template-columns: repeat(3,1fr); /* Creates 3 equal columns */
     grid-gap: 15px; /* Adds spacing between grid items */
