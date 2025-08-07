@@ -39,7 +39,7 @@ function GuestNavbar() {
                 <Link to="/browse"><button className='btn'>Browse</button></Link>
                 {!userId && (
                     <Link to="/signin">
-                        <button className="btn">Sign In</button>
+                        <button className="btn btn-signin">Sign In</button>
                     </Link>
                 )}
 
