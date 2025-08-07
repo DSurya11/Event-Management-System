@@ -34,26 +34,26 @@ function Orgprofile() {
     const userRole = localStorage.getItem("userRole");
 
     useEffect(() => {
-      const fetchProfile = async () => {
-        try {
-          console.log("Fetching profile for organiser ID:", organiserId);
-          const res = await fetch(`http://localhost:3000/api/organiser/${organiserId}`);
-          if (!res.ok) {
-            throw new Error(`HTTP error ${res.status}`);
-          }
-          const data = await res.json();
-          console.log("Data received:", data);
-          setProfile(data.organiser);
-          setOngoingEvents(data.ongoingEvents);
-          setPreviousEvents(data.previousEvents);
-        } catch (err) {
-          console.error("Error fetching organiser profile:", err);
-        }
-      };
+        const fetchProfile = async () => {
+            try {
+                console.log("Fetching profile for organiser ID:", organiserId);
+                const res = await fetch(`http://localhost:3000/api/organiser/${organiserId}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error ${res.status}`);
+                }
+                const data = await res.json();
+                console.log("Data received:", data);
+                setProfile(data.organiser);
+                setOngoingEvents(data.ongoingEvents);
+                setPreviousEvents(data.previousEvents);
+            } catch (err) {
+                console.error("Error fetching organiser profile:", err);
+            }
+        };
 
-      if (organiserId && userRole === "organizer") {
-        fetchProfile();
-      }
+        if (organiserId && userRole === "organizer") {
+            fetchProfile();
+        }
     }, [organiserId, userRole]);
 
 
@@ -65,7 +65,7 @@ function Orgprofile() {
 
     const handleEditClick = () => {
         setEditName(profile?.name || "");
-        setEditDescription(profile?.description || "");
+        setEditDescription(profile?.Description || "");
         setShowEditModal(true);
     };
 
@@ -74,10 +74,10 @@ function Orgprofile() {
             const res = await fetch(`http://localhost:3000/api/organiserp/${organiserId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: editName, description: editDescription })
+                body: JSON.stringify({ name: editName, description: editDescription }) // send lowercase 'description'
             });
             if (!res.ok) throw new Error("Failed to update profile");
-            setProfile(prev => ({ ...prev, name: editName, description: editDescription }));
+            setProfile(prev => ({ ...prev, name: editName, Description: editDescription })); // update capital 'Description' in state
             setShowEditModal(false);
         } catch (err) {
             alert("Error updating profile");
@@ -130,7 +130,7 @@ function Orgprofile() {
                 <div className="Profile_box_1">
                     <div className="profile_box1_name"><span>Name: </span>{profile?.name}</div>
                     <div className="profile_box1_name"><span>Email: </span>{profile?.username}</div>
-                    <div className="profile_box1_name"><span>Description: <br /></span>{profile?.description || "No description"}</div>
+                    <div className="profile_box1_name"><span>Description: <br /></span>{profile?.Description || "No Description"}</div>
                     <button className="profile_edit_btn" onClick={handleEditClick}>Edit</button>
                 </div>
 
@@ -142,7 +142,6 @@ function Orgprofile() {
                                 <div
                                     key={index}
                                     className="Ongoing_event1"
-                                    onClick={() => navigate(`/register/${event.event_id}`)}
                                     style={{ cursor: "pointer" }}
                                 >
                                     {event.title}
@@ -162,7 +161,6 @@ function Orgprofile() {
                                 <div
                                     key={index}
                                     className="Pre_event1"
-                                    onClick={() => navigate(`/register/${event.event_id}`)}
                                     style={{ cursor: "pointer" }}
                                 >
                                     {event.title}
@@ -180,13 +178,13 @@ function Orgprofile() {
                 onCancel={() => setShowLogoutModal(false)}
                 onConfirm={handleLogout}
             />
-            <OrgConfirmationModal  className="Edit_Profile_Box"
+            <OrgConfirmationModal className="Edit_Profile_Box"
                 isOpen={showEditModal}
                 message={
                     <div>
                         <div style={{ marginBottom: "10px" }}>
                             <label>Name:</label>
-                            <input style={{ backgroundColour:"white" }} type="text" value={editName} onChange={e => setEditName(e.target.value)} />
+                            <input style={{ backgroundColour: "white" }} type="text" value={editName} onChange={e => setEditName(e.target.value)} />
                         </div>
                         <div>
                             <label>Description:</label>

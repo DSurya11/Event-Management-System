@@ -288,18 +288,22 @@ app.put('/events/:id/reject', (req, res) => {
 
 app.post("/attendee/signin", async (req, res) => {
   const { email, password } = req.body;
+
   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });
     if (results.length === 0) return res.status(401).json({ error: "Invalid credentials" });
+
     const user = results[0];
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
+
     const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    // ✅ Send back both token and user ID
     res.json({
       message: "Login successful",
       token,
-      user_id: user.user_id,
-      status: user.status
+      user_id: user.user_id, // Make sure this matches your DB column
     });
   });
 });
@@ -470,11 +474,11 @@ app.post("/events/upload-pics", upload.fields([{ name: "images", maxCount: 10 },
 
 app.get("/events/recent", (req, res) => {
   const query = `
-      SELECT event_id, title, description, cover_image 
+      SELECT event_id, title, date, cover_image 
       FROM Events 
       WHERE approved = 1 
       ORDER BY event_id DESC 
-      LIMIT 4
+      LIMIT 6
   `;
 
   db.query(query, (err, results) => {
@@ -485,6 +489,49 @@ app.get("/events/recent", (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/registrations/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const [rows] = await db.promise().query(`
+      SELECT
+        r.registration_id,
+        r.notify,
+        e.event_id,
+        e.cover_image,
+        e.title,
+        DATE_FORMAT(e.date, '%Y-%m-%d') as date
+      FROM registrations r
+      JOIN events e ON r.event_id = e.event_id
+      WHERE r.user_id = ?
+    `, [userId]);
+
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching registered events', details: err.message });
+  }
+});
+app.post('/notifications/toggle', async (req, res) => {
+  const { registration_id, enable } = req.body;
+
+  if (typeof enable !== "boolean") {
+    return res.status(400).json({ error: 'Invalid request' });
+  }
+
+  try {
+    await db.promise().query(`
+      UPDATE registrations
+      SET notify = ?
+      WHERE registration_id = ?
+    `, [enable, registration_id]);
+
+    res.json({ success: true, notifications_enabled: enable });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update notification preference', details: err.message });
+  }
+});
+
 app.get("/events/filter", (req, res) => {
   const { startDate, endDate, categories, search, mode } = req.query;
 
@@ -1068,24 +1115,27 @@ app.get('/organiser/:id/events', (req, res) => {
 
 app.get('/api/organiser/:id', (req, res) => {
   const organiserId = req.params.id;
-  db.query('SELECT * FROM organisers WHERE organiser_id = ?', [organiserId], (err, organiserResults) => {
+
+  const organiserQuery = `SELECT * FROM organisers WHERE organiser_id = ?`;
+  db.query(organiserQuery, [organiserId], (err, organiserResults) => {
     if (err || organiserResults.length === 0) {
       return res.status(404).json({ error: 'Organiser not found' });
     }
 
     const organiser = organiserResults[0];
 
-    db.query('SELECT * FROM events WHERE organiser = ?', [organiserId], (err2, eventResults) => {
+    const eventQuery = `SELECT * FROM events WHERE organiser = ?`;
+    db.query(eventQuery, [organiserId], (err2, eventResults) => {
       if (err2) return res.status(500).json({ error: 'Event fetch failed' });
 
       const now = new Date();
-      const ongoingEvents = eventResults.filter(e => new Date(e.date) >= now);
-      const previousEvents = eventResults.filter(e => new Date(e.date) < now);
+      const ongoing = eventResults.filter(e => new Date(e.date) >= now);
+      const completed = eventResults.filter(e => new Date(e.date) < now);
 
       res.json({
         organiser,
-        ongoingEvents,
-        previousEvents
+        ongoingEvents: ongoing,
+        previousEvents: completed
       });
     });
   });
@@ -1146,7 +1196,7 @@ app.get("/organizer/registrations/:eventId", async (req, res) => {
 
   try {
     const [rows] = await db.promise().query(
-      `SELECT u.user_id, u.name, u.email, u.date_joined
+      `SELECT u.user_id, u.name, u.email, r.submitted_at, r.data
        FROM registrations r
        JOIN users u ON r.user_id = u.user_id
        WHERE r.event_id = ?`,
@@ -1234,24 +1284,39 @@ app.put('/organizer/event/:id', upload.single('cover_image'), async (req, res) =
 // in your backend (e.g., Express app)
 app.get('/organizer/editevent/:id', async (req, res) => {
   const eventId = req.params.id;
+
   try {
+    // Fetch event data
     const [rows] = await db.promise().query("SELECT * FROM events WHERE event_id = ?", [eventId]);
     if (rows.length === 0) {
       return res.status(404).json({ error: "Event not found" });
     }
+
     const event = rows[0];
 
-    // Fetch categories if stored separately
+    // Fix multiline description
+    if (event.description) {
+      event.description = event.description.replace(/\\n/g, '\n');
+    }
+
+    // Fetch categories
     const [catRows] = await db.promise().query(
       "SELECT category FROM categories WHERE event_id = ?", [eventId]
     );
     const categories = catRows.map(row => row.category);
 
-    res.json({ ...event, categories });
+    // Fetch additional event images
+    const [imgRows] = await db.promise().query(
+      "SELECT address FROM eventpics WHERE event_id = ?", [eventId]
+    );
+    const additionalImages = imgRows.map(row => row.address);
+
+    res.json({ ...event, categories, additionalImages });
   } catch (err) {
     res.status(500).json({ error: "Database error", details: err.message });
   }
 });
+
 
 app.get('/api/organizers', (req, res) => {
   const query = 'SELECT name, logo FROM organisers';
@@ -1367,6 +1432,10 @@ app.post("/organizer/reset-password", async (req, res) => {
 app.put('/api/organiserp/:id', (req, res) => {
   const organiserId = req.params.id;
   const { name, description } = req.body;
+  console.log(name, description);
+  if (!name && description === undefined) {
+    return res.status(400).json({ error: 'Name or description required' });
+  }
   if (!name && !description) {
     return res.status(400).json({ error: 'No fields to update' });
   }
@@ -1377,7 +1446,7 @@ app.put('/api/organiserp/:id', (req, res) => {
     values.push(name);
   }
   if (description !== undefined) {
-    fields.push('description = ?');
+    fields.push('Description = ?');
     values.push(description);
   }
   values.push(organiserId);
