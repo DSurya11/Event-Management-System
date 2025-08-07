@@ -26,7 +26,7 @@ function Browse() {
         if (token) {
             navigate(`/register/${eventId}`);
         } else {
-            navigate('/guestregevent/${eventId}');
+            navigate(`/guestregevent/${eventId}`);
         }
     };
 
