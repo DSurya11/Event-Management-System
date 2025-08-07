@@ -102,14 +102,12 @@ function Guestregevent() {
                         <div className='reg-btns'>
 
                             <button
-                                className={`Register ${isRegistered || regClosed ? 'disabled' : ''}`}
-                                disabled={isRegistered || regClosed}
+                                className={`Register`}
                                 onClick={() =>
-                                    !isRegistered && !regClosed &&
                                     navigate(`/signin`)
                                 }
                             >
-                                
+                                Register
                             </button>
                         </div>
                     </div>
@@ -143,7 +141,7 @@ function Guestregevent() {
                             {recentEvents
                                 .filter(e => e.event_id !== parseInt(eventId))
                                 .map((e) => (
-                                    <Link to={`/register/${e.event_id}`} key={e.event_id} className='UC_event'>
+                                    <Link to={`/guestregevent/${e.event_id}`} key={e.event_id} className='UC_event'>
                                         <div className='event1'>
                                             <img className='event_photo' src={`../${e.cover_image}`} alt={e.title} />
                                             <div className='artist_name'>{e.title}</div>
