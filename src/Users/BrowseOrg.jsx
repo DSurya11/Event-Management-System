@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './BrowseOrg.css';
 
 function BrowseOrg() {
@@ -32,49 +32,71 @@ function BrowseOrg() {
                     <img src={org.logo ? `/${org.logo.replace(/\\/g, '/')}` : '/placeholder.jpg'} alt="Logo" />
                 </div>
                 <div className='browse_org_info'>
-                    <div className='browse_org_head'>
-                        <h1>{org.name}</h1>
-                    </div>
+                        <h1 className='home-heading head-text'>{org.name}</h1>
+                    <hr className='subhead-divider'/>
                     <div className='browse_org_description'>
-                        {org.Description || 'No description available.'}
+                        {org.description || 'No description available.'}
                     </div>
                 </div>
             </div>
 
             <div className='browse_org_events'>
                 {/* Upcoming Events */}
-                <div className='browse_org_upcoming'>
-                    <div id='browse_org_upcoming_header'>
-                        <h2>Upcoming Events</h2>
+                <div className='discover-browseorg'>
+                    <div className='row-flex'>
+                        <h1 className='sidehead head-text'>Upcoming Events</h1>
                     </div>
-                    <div className='org_upcoming'>
-                        {upcoming.length > 0 ? upcoming.map((e, i) => {
-                            const imgPath = e.cover_image?.replace(/\\/g, '/');
-                            return (
-                                <div className='event_upcoming' key={e.event_id || i}>
-                                    <img src={`/${imgPath}`} alt={e.title} />
-                                    <h3>{e.title}</h3>
+                    <hr className='subhead-divider' />
+
+                    <div className="event-cardholder">
+                        {upcoming.length > 0 ? (
+                            
+                            upcoming.map((e) => {const imgPath = e.cover_image?.replace(/\\/g, '/');
+                                return (
+                                
+                                <div className="content" key={e.event_id}>
+                                    <div className="contentimg">
+                                        <img src={`/${imgPath}`}/>
+                                    </div>
+                                    <h2 className="contenth1">{e.title}</h2>
+                                    <h5 className='content-date'>11th, Aug, 2025</h5>
+                                    <Link to={`/register/${e.event_id}`} className='contenta'>
+                                        <button className='discover-details'>Details</button>
+                                    </Link>
                                 </div>
-                            );
-                        }) : <p>No upcoming events.</p>}
+                            )})
+                        ) : (
+                            <p>No approved events found.</p>
+                        )}
                     </div>
                 </div>
-<hr style={{ color: "lightseagreen", width: "94%", marginLeft: "2%", marginBottom: "2%" }} />
                 {/* Previous Events */}
-                <div className='browse_org_prev'>
-                    <div id='browse_org_prev_header'>
-                        <h2>Previous Events</h2>
+                <div className='discover-browseorg'>
+                    <div className='row-flex'>
+                        <h1 className='sidehead head-text'>Upcoming Events</h1>
                     </div>
-                    <div className='org_prev'>
-                        {previous.length > 0 ? previous.map((e, i) => {
-                            const imgPath = e.cover_image?.replace(/\\/g, '/');
-                            return (
-                                <div className='event_prev' key={e.event_id || i}>
-                                    <img src={`/${imgPath}`} alt={e.title} />
-                                    <h3>{e.title}</h3>
+                    <hr className='subhead-divider' />
+
+                    <div className="event-cardholder">
+                        {previous.length > 0 ? (
+                            
+                            previous.map((e) => {const imgPath = e.cover_image?.replace(/\\/g, '/');
+                                return (
+                                
+                                <div className="content" key={e.event_id}>
+                                    <div className="contentimg">
+                                        <img src={`/${imgPath}`}/>
+                                    </div>
+                                    <h2 className="contenth1">{e.title}</h2>
+                                    <h5 className='content-date'>11th, Aug, 2025</h5>
+                                    <Link to={`/register/${e.event_id}`} className='contenta'>
+                                        <button className='discover-details'>Details</button>
+                                    </Link>
                                 </div>
-                            );
-                        }) : <p>No previous events.</p>}
+                            )})
+                        ) : (
+                            <p>No approved events found.</p>
+                        )}
                     </div>
                 </div>
             </div>

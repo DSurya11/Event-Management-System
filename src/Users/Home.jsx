@@ -1,9 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import ConfirmationModal from '../components/ConfirmationModal';
 import './Home.css';
 
 function Home() {
     const [events, setEvents] = useState([]);
+    const [registeredEvents, setRegisteredEvents] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [confirmAction, setConfirmAction] = useState(() => () => { });
+
+    const userId = localStorage.getItem("userId");
 
     useEffect(() => {
         fetch("http://localhost:3000/events/recent")
@@ -12,60 +19,114 @@ function Home() {
             .catch((err) => console.error("Error fetching events:", err));
     }, []);
 
+    useEffect(() => {
+        if (!userId) return;
+        fetch(`http://localhost:3000/registrations/user/${userId}`)
+            .then(res => res.json())
+            .then(data => setRegisteredEvents(data))
+            .catch(err => console.error("Error fetching registered events:", err));
+    }, [userId]);
+
+    const handleToggleNotification = (regEvent) => {
+        setSelectedEvent(regEvent);
+        setConfirmAction(() => () => {
+            fetch("http://localhost:3000/notifications/toggle", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    registration_id: regEvent.registration_id,
+                    enable: !regEvent.notify
+                })
+            })
+                .then(res => res.json())
+                .then(() => {
+                    // Optimistically update UI
+                    setRegisteredEvents(prev =>
+                        prev.map(e =>
+                            e.registration_id === regEvent.registration_id
+                                ? { ...e, notify: !e.notify }
+                                : e
+                        )
+                    );
+                })
+                .catch(err => console.error("Toggle failed:", err))
+                .finally(() => setModalOpen(false));
+        });
+        setModalOpen(true);
+    };
+
     return (
         <div className="home Main">
             <div className='home-head'>
-                <h1 className="home-heading head-text">College Events made easy!</h1>
-                <p>"Explore a variety of college events and easily register to participate in the ones that excite you the most!"</p>
+                <h1 className="home-heading head-text">Hey, Attendee!</h1>
+                <p>"Your college experience is what you make it. Let's get started."</p>
             </div>
+            <div className='home-flex'>
+                {/* Discover Section */}
+                <div className='discover-home'>
+                    <div className='row-flex'>
+                        <h1 className='sidehead head-text'>Discover Events</h1>
+                        <Link to="/browse"><button className='subhead-btn'>View All</button></Link>
+                    </div>
+                    <hr className='subhead-divider' />
 
-            <h1 className='sidehead subhead-text'>Discover Events</h1>
-            <div className='discover-cards'>
-                <div>
-                    <h2 className='subhead-text'>1. Fests</h2>
-                    <p>Join exciting festivals with music, dance, and cultural performances.</p>
+                    <div className="event-cardholder">
+                        {events.length > 0 ? (
+                            events.map((event) => (
+                                <div className="content" key={event.event_id}>
+                                    <div className="contentimg">
+                                        <img
+                                            src={event.cover_image || "https://via.placeholder.com/300"}
+                                            alt={event.title}
+                                        />
+                                    </div>
+                                    <h2 className="contenth1">{event.title}</h2>
+                                    <h5 className='content-date'>11th, Aug, 2025</h5>
+                                    <Link to={`/register/${event.event_id}`} className='contenta'>
+                                        <button className='discover-details'>Details</button>
+                                    </Link>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No approved events found.</p>
+                        )}
+                    </div>
                 </div>
-                <div>
-                    <h2 className='subhead-text'>2. Workshops</h2>
-                    <p>Enhance your skills with informative workshops and seminars.</p>
-                </div>
-                <div>
-                    <h2 className='subhead-text'>3. Sports</h2>
-                    <p>Compete or cheer in thrilling sports events and tournaments.</p>
-                </div>
-            </div>
 
-            <div className="event-cardholder">
-                {events.length > 0 ? (
-                    events.map((event) => (
-                        <div className="content" key={event.event_id}>
-                            <div className="contentimg">
+                {/* Registered Events Section */}
+                <div className='home-personal-reg'>
+                    <h1 className='sidehead head-text'>Registered Events</h1>
+                    <hr className='subhead-divider' />
+                    {registeredEvents.length === 0 ? (
+                        <p style={{ padding: "10px" }}>You haven't registered for any events.</p>
+                    ) : (
+                        registeredEvents.map(event => (
+                            <div className='reg-notify-tile' key={event.registration_id}>
+                                <div>
+                                    <img src={event.cover_image} />
+                                    <div>
+                                        <h2 className='notifyh1'>{event.title}</h2>
+                                        <h5 className='content-date'>{event.date || 'Date TBD'}</h5>
+                                    </div>
+                                </div>
                                 <img
-                                    src={event.cover_image ? event.cover_image : "https://via.placeholder.com/300"}
-                                    alt={event.title}
+                                    src={event.notify ? '/subscribed.svg' : '/unsubscribed.svg'}
+                                    alt="Notify toggle"
+                                    onClick={() => handleToggleNotification(event)}
+                                    style={{ cursor: "pointer", width: "24px", height: "24px" }}
                                 />
                             </div>
-                            <h2 className="contenth1">{event.title}</h2>
-                            <div className="contenttext">
-                                {event.description.length > 150 ? event.description.substring(0, 150) + "..." : event.description}
-                            </div>
-                            <Link to={`/register/${event.event_id}`} className='contenta' >
-                                View Details
-                                <svg className='asvg' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="lightseagreen">
-                                    <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-                                </svg>
-                            </Link>
-                        </div>
-                    ))
-                ) : (
-                    <p>No approved events found.</p>
-                )}
+                        ))
+                    )}
+                </div>
             </div>
 
-            <Link to="/browse"><button className='cta-button'>Browse all Events</button></Link>
-
-            <hr style={{ color: "lightseagreen", width: "10%", margin: "7px auto" }} />
-            <hr style={{ color: "lightseagreen", width: "6%", margin: "auto", marginBottom: "60px" }} />
+            <ConfirmationModal
+                isOpen={modalOpen}
+                message={`Are you sure you want to ${selectedEvent?.notify ? "disable" : "enable"} notifications for "${selectedEvent?.title}"?`}
+                onConfirm={confirmAction}
+                onCancel={() => setModalOpen(false)}
+            />
         </div>
     );
 }

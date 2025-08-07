@@ -474,11 +474,11 @@ app.post("/events/upload-pics", upload.fields([{ name: "images", maxCount: 10 },
 
 app.get("/events/recent", (req, res) => {
   const query = `
-      SELECT event_id, title, description, cover_image 
+      SELECT event_id, title, date, cover_image 
       FROM Events 
       WHERE approved = 1 
       ORDER BY event_id DESC 
-      LIMIT 4
+      LIMIT 6
   `;
 
   db.query(query, (err, results) => {
@@ -489,6 +489,49 @@ app.get("/events/recent", (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/registrations/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const [rows] = await db.promise().query(`
+      SELECT
+        r.registration_id,
+        r.notify,
+        e.event_id,
+        e.cover_image,
+        e.title,
+        DATE_FORMAT(e.date, '%Y-%m-%d') as date
+      FROM registrations r
+      JOIN events e ON r.event_id = e.event_id
+      WHERE r.user_id = ?
+    `, [userId]);
+
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching registered events', details: err.message });
+  }
+});
+app.post('/notifications/toggle', async (req, res) => {
+  const { registration_id, enable } = req.body;
+
+  if (typeof enable !== "boolean") {
+    return res.status(400).json({ error: 'Invalid request' });
+  }
+
+  try {
+    await db.promise().query(`
+      UPDATE registrations
+      SET notify = ?
+      WHERE registration_id = ?
+    `, [enable, registration_id]);
+
+    res.json({ success: true, notifications_enabled: enable });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update notification preference', details: err.message });
+  }
+});
+
 app.get("/events/filter", (req, res) => {
   const { startDate, endDate, categories, search, mode } = req.query;
 
@@ -1389,6 +1432,10 @@ app.post("/organizer/reset-password", async (req, res) => {
 app.put('/api/organiserp/:id', (req, res) => {
   const organiserId = req.params.id;
   const { name, description } = req.body;
+  console.log(name, description);
+  if (!name && description === undefined) {
+    return res.status(400).json({ error: 'Name or description required' });
+  }
   if (!name && !description) {
     return res.status(400).json({ error: 'No fields to update' });
   }
@@ -1399,7 +1446,7 @@ app.put('/api/organiserp/:id', (req, res) => {
     values.push(name);
   }
   if (description !== undefined) {
-    fields.push('description = ?');
+    fields.push('Description = ?');
     values.push(description);
   }
   values.push(organiserId);

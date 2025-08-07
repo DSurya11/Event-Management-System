@@ -54,7 +54,7 @@ function Profile() {
 
                 {userRole === "attendee" && (
                     <div className="profile_box3">
-                        <p>Previous attended events</p>
+                        <p>Registered events</p>
                         <div className="Prev_attended_events">
                             {profile?.previous_events?.length > 0 ? (
                                 profile.previous_events.map((event, index) => (
@@ -68,7 +68,7 @@ function Profile() {
                                     </div>
                                 ))
                             ) : (
-                                <div className="Prev_event_1">No events attended yet.</div>
+                                <div className="Prev_event_1">No events registered yet.</div>
                             )}
                         </div>
                     </div>

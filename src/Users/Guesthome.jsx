@@ -22,7 +22,7 @@ function Guesthome() {
             <div className="home-head">
                 <h1 className="home-heading head-text">College Events made easy!</h1>
                 <p className="home-subtext">Explore a variety of college events and easily register to participate in the ones that excite you the most!</p>
-                <button className="cta-button" onClick={handleSignin}>Sign In</button>
+                <button className="guestsignin" onClick={handleSignin}>Sign In</button>
             </div>
 
             <h1 className="sidehead subhead-text">Discover Events</h1>
