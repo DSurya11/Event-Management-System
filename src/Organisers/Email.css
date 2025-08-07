@@ -11,6 +11,9 @@
     justify-content: center;
 
 }
+.to-container{
+    color: #979696;
+}
 .email-text {
     width: 68%;
     background-color: #e8eddf;
