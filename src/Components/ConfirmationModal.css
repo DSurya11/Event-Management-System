@@ -28,7 +28,7 @@
 }
 
 .cancel-btn {
-    background: lightseagreen;
+    background: #e74c3c;
     border: none;
     width: 40%;
     padding: 10px 20px;
@@ -36,7 +36,7 @@
 }
 
 .confirm-btn {
-    background: #e74c3c;
+    background: lightseagreen;
     color: white;
     border: none;
     width: 40%;

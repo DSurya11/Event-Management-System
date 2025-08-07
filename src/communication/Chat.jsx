@@ -228,7 +228,7 @@ function Chat({ role }) {
             <p>No messages yet.</p>
           ) : (
             messages.map((msg, i) => {
-              const isMe = msg.sender_id === userId;
+              const isMe = msg.sender_id === userId && msg.sender_role === role;
               const displayName = isMe
                 ? "You"
                 : msg.sender_role === 'organizer'
