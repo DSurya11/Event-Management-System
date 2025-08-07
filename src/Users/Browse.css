@@ -78,6 +78,10 @@ width: 80%;
   cursor: pointer;
   transition-delay: 1s;
   background-color: lightseagreen;
+  transition: transform 0.2s ease-in-out;
+}
+.filter-toggle-btn:hover{
+    transform : scale(1.1);
 }
 .filter-hide-btn {
   position: absolute;

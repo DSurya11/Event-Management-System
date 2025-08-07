@@ -13,8 +13,8 @@
     cursor: pointer;
 }
 .profilelogout:hover{
-    background-color:rgb(19, 102, 98)
-
+    background-color:rgb(19, 102, 98);
+    transform : scale(1.1);
 }
 .profile_boxM1{
     margin-left: 30px;
