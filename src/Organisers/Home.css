@@ -38,7 +38,13 @@
     padding-top: 30px;
     padding-bottom: 17px;
   }
-
+.ong-events-home{
+    width: 95.8%;
+    border-radius: 10px;
+    background-color: #E8EDDF;
+    margin: 0 auto;
+    margin-top:10px
+}
 .ongoing_events-home{
     display: flex;
     justify-content: left;
@@ -53,8 +59,10 @@
     justify-content: space-between;
     border-radius: 5px;
     background-color: #E8EDDF;
-    width: 48%;
+    width: 49%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
     padding: 10px 0;
+    margin: 10px 0;
 }
 
 .ongoing_event_cards h1{
@@ -197,6 +205,8 @@
     border-radius: 5px;
     background-color: #E8EDDF;
     width: 19%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.22);
+    margin: 10px 0;
 }
 
 .previous_event_cards h1{
