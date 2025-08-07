@@ -54,7 +54,7 @@
     column-gap: 10px;
     row-gap: 10px;
     flex-wrap: wrap;
-    margin-left: 2.5%;
+    margin-left: 20px;
 }
 
 .ongoing_event_cards {
@@ -116,6 +116,11 @@
     height: 150px;
     width: 150px;
     position: relative;
+}
+.col-flex{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .circle-prog .box .percent svg{
     position: relative;

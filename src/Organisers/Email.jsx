@@ -200,18 +200,20 @@ function Email() {
                         <p>{status}</p>
                     </div>
                 )}
-                <h2>Notify your Attendees</h2>
+                
 
                 <div className="email-input">
                     <div className="email-text">
                         {/* Event Dropdown */}
+                        <h2 className='sidehead head-text'>Notify your Attendees</h2>
+                        <hr className='subhead-divider'/>
                         <div className="form-group">
                             <select
                                 value={selectedEvent}
                                 onChange={(e) => setSelectedEvent(e.target.value)}
                                 className="email-dropdown"
                             >
-                                <option value="">-- Select an Event --</option>
+                                <option value=""> Select an Event </option>
                                 {events.map(event => (
                                     <option key={event.event_id} value={event.event_id}>
                                         {event.title}
@@ -250,7 +252,8 @@ function Email() {
                     </div>
 
                     <div className="email-templates">
-                        <h3>Templates</h3>
+                        <h2 className='sidehead head-text'>Templates</h2>
+                        <hr className='subhead-divider'/>
                         <div className="template-buttons">
                             {templates.map((t, i) => (
                                 <button key={i} onClick={() => autofillTemplate(t)}>
@@ -261,7 +264,7 @@ function Email() {
                     </div>
                 </div>
 
-                <p className="to-container">
+                <p className="to-container" style={{ textAlign: 'center', margin: '20px' }}>
                     <i>This email will be sent to all the attendees who opted for notifications.</i>
                 </p>
 
