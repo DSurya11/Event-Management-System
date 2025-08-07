@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ✅ import this
+import { useNavigate } from 'react-router-dom'; 
 import './Admin.css';
 import AdminNavbar from '../Components/AdminNavbar';
-import { useNavigate } from 'react-router-dom';
+
 
 function Admin() {
     const [pendingEvents, setPendingEvents] = useState([]);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import Admin from './Admin/Admin.jsx';
 import Admin_User from './Admin/Admin_User.jsx';
@@ -19,33 +19,21 @@ import Organizerssignup from './signin/Organizerssignup.jsx';
 import Signin from './signin/signin.jsx';
 import Profile from './Users/Profile.jsx';
 import Razerpay from './Payments/Razerpay.jsx';
-import VdEvent_On from './Admin/VdEvent_On.jsx';
-import VdEvent_Up from './Admin/VdEvent_Up.jsx';import AdminEvents from './Admin/AdminEvents.jsx';
-
+import AdminEvents from './Admin/AdminEvents.jsx';
+import BrowseOrg from './Users/BrowseOrg.jsx';
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';
 import Email from './Organisers/Email.jsx';
-import BrowseOrg from './Users/BrowseOrg.jsx';
+
 import Navbar from './Components/Navbar.jsx';
 import OrgNav from './Components/OrgNav.jsx';
+import AdminNavbar from './Components/AdminNavbar';
 
-function App() {
-  const [userRole, setUserRole] = useState((localStorage.getItem('userRole') || "").toLowerCase());
-
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setUserRole(localStorage.getItem('userRole'));
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
+function AppRoutes({ userRole, setUserRole }) {
+  const location = useLocation();
   return (
-    <BrowserRouter>
-      {userRole === 'organizer' ? <OrgNav /> : userRole === 'attendee' ? <Navbar /> : null}
-
+    <>
+      {location.pathname.startsWith('/admin') ? <AdminNavbar /> : userRole === 'organizer' ? <OrgNav /> : userRole === 'attendee' ? <Navbar /> : null}
       <Routes>
         {/* Landing route */}
         <Route
@@ -70,7 +58,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
             <Route path="/organizers" element={<Organizers />} />
-            <Route path='/browse-organizer/:org_id' element={<BrowseOrg />} />
+            <Route path="/browse-organizer/:org_id" element={<BrowseOrg />} />
             <Route path="/chat" element={<Chat role="attendee" />} />
             <Route path="/chat/attendees/:eventId/:organizerId" element={<Chat role="attendee" />} />
           </>
@@ -96,12 +84,29 @@ function App() {
 
         {/* Admin and fallback */}
         <Route path="/admin" element={<Admin />} />
-        <Route path="/adminuser" element={<Admin_User />} />
-        <Route path="/adminorganizer" element={<Admin_Org />} />
-        <Route path="/adminup" element={<VdEvent_Up />} />
-        <Route path="/adminon" element={<VdEvent_On />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/admin/user" element={<Admin_User />} />
+        <Route path="/admin/organizer" element={<Admin_Org />} />
+        <Route path="/admin/events/:eventId" element={<AdminEvents />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  const [userRole, setUserRole] = useState((localStorage.getItem('userRole') || "").toLowerCase());
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUserRole(localStorage.getItem('userRole'));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <AppRoutes userRole={userRole} setUserRole={setUserRole} />
     </BrowserRouter>
   );
 }
