@@ -52,8 +52,7 @@ function Organizers() {
                 })}
 
             </div>
-            </div>
-            </div>
+        </div>
 
 
         </div>
