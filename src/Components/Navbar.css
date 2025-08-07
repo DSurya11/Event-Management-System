@@ -22,11 +22,22 @@
     position: absolute;
     right: 140px;
 }
+
 .nb-button-guest {
     position: absolute;
     right: 50px;
 }
 
+.btn-signin {
+    background-color: lightseagreen !important;
+    color: white !important;
+    border: none;
+    transition: background 0.2s;
+}
+
+.btn-signin:hover {
+    background-color: #159c8c !important;
+}
 
 
 .chaticon {
@@ -101,7 +112,7 @@
 
 .nb-button-guest .btn:hover {
     color: lightseagreen;
-    
+
     cursor: pointer;
     transform: scale(1.08);
     transition-duration: .2s;
