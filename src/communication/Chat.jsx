@@ -144,7 +144,7 @@ function Chat({ role }) {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") sendMessage();
   };
-  
+
 
   if (!eventId) {
     return (

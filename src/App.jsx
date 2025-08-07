@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
+
 import Admin from './Admin/Admin.jsx';
 import Admin_User from './Admin/Admin_User.jsx';
 import Admin_Org from './Admin/Admin_Org.jsx';
@@ -21,10 +22,12 @@ import Profile from './Users/Profile.jsx';
 import Razerpay from './Payments/Razerpay.jsx';
 import AdminEvents from './Admin/AdminEvents.jsx';
 
+
+import BrowseOrg from './Users/BrowseOrg.jsx';
 import OrgHome from './Organisers/Home.jsx';
 import Host from './Organisers/Host.jsx';
 import Email from './Organisers/Email.jsx';
-import BrowseOrg from './Users/BrowseOrg.jsx';
+
 import Navbar from './Components/Navbar.jsx';
 import OrgNav from './Components/OrgNav.jsx';
 import AdminNavbar from './Components/AdminNavbar';
@@ -58,7 +61,7 @@ function AppRoutes({ userRole, setUserRole }) {
             <Route path="/profile" element={<Profile />} />
             <Route path="/register/:eventId/fillform" element={<Razerpay />} />
             <Route path="/organizers" element={<Organizers />} />
-            <Route path='/browse-organizer/:org_id' element={<BrowseOrg />} />
+            <Route path="/browse-organizer/:org_id" element={<BrowseOrg />} />
             <Route path="/chat" element={<Chat role="attendee" />} />
             <Route path="/chat/attendees/:eventId/:organizerId" element={<Chat role="attendee" />} />
           </>
