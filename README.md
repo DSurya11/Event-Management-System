@@ -198,8 +198,3 @@ node server.js
 
 ---
 
-# Author
-
-Surya
-
-GitHub: https://github.com/DSurya11
