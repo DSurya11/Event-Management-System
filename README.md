@@ -187,14 +187,3 @@ node server.js
 
 ---
 
-# Future Improvements
-
-* JWT authentication
-* Role-based access control
-* Email notifications for event registration
-* Event analytics dashboard
-* Cloud deployment
-* API rate limiting
-
----
-
